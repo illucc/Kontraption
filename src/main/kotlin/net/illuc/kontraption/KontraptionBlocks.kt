@@ -1,39 +1,35 @@
 package net.illuc.kontraption
 
-import net.illuc.kontraption.blocks.pilotSeatBlock
-import net.minecraft.core.Registry
-import net.minecraft.world.item.BlockItem
+import mekanism.common.block.interfaces.IHasDescription
+import mekanism.common.block.prefab.BlockTile.BlockTileModel
+import mekanism.common.content.blocktype.BlockTypeTile
+import mekanism.common.content.blocktype.Machine
+import mekanism.common.item.block.ItemBlockTooltip
+import mekanism.common.item.block.machine.ItemBlockMachine
+import mekanism.common.registration.impl.BlockDeferredRegister
+import mekanism.common.registration.impl.BlockRegistryObject
+import mekanism.common.tile.base.TileEntityMekanism
+import net.illuc.kontraption.blockEntities.TileIonThruster
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraft.world.level.material.Material
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
-import net.minecraftforge.registries.DeferredRegister
-import thedarkcolour.kotlinforforge.forge.registerObject
+import java.util.function.Supplier
+
+/*
+public object KontraptionBlocks {
+    private fun KontraptionBlocks() {}
+
+    val BLOCKS = BlockDeferredRegister(Kontraption.MODID)
 
 
-object KontraptionBlocks {
-    val BLOCKS = DeferredRegister.create(Registry.BLOCK_REGISTRY, KontraptionMod.ID)
+    //val TURBINE_CASING: BlockRegistryObject<BlockBasicMultiblock<TileIonThruster>, ItemBlockTooltip<BlockBasicMultiblock<TileIonThruster>>> = registerTooltipBlock("turbine_casing") { BlockBasicMultiblock<TILE>(KontraptionBlocks.ION_THRUSTER) }
 
+    //val ION_THRUSTER = BLOCKS.register("ion_thruster", { BlockTileModel(KontraptionBlockTypes.ION_THRUSTER) }) { block: BlockTileModel<TileIonThruster?, Machine<TileIonThruster?>?>? -> ItemBlockMachine(block) }
 
-    // the returned ObjectHolderDelegate can be used as a property delegate
-    // this is automatically registered by the deferred registry at the correct times
-    val PILOT_SEAT by BLOCKS.registerObject("pilot_seat") {
-        pilotSeatBlock()
-        //Block(BlockBehaviour.Properties.of(Material.METAL).strength(1f, 6f))
+    //val ION_THRUSTER: BlockRegistryObject<BlockTile<TileIonThruster?, Machine<TileIonThruster?>?>, ItemBlockMachine> = BLOCKS.register<BlockTile<TileIonThruster?, Machine<TileIonThruster?>?>, ItemBlockMachine>("ion_thruster", Supplier<BlockTile<TileIonThruster?, Machine<TileIonThruster?>?>> { BlockTile<TileEntityMekanism, BlockTypeTile<TileEntityMekanism>>(KontraptionBlockTypes., UnaryOperator<BlockBehaviour.Properties> { properties: BlockBehaviour.Properties -> properties.mapColor(BlockResourceInfo.STEEL.getMapColor()) }) }, Function<BlockTile<TileEntityDimensionalStabilizer?, Machine<TileEntityDimensionalStabilizer?>?>, ItemBlockMachine> { block: BlockTile<TileEntityDimensionalStabilizer?, Machine<TileEntityDimensionalStabilizer?>?>? -> ItemBlockMachine(block) })
+    //val ION_THRUSTER: BlockRegistryObject<BlockTileModel<TileIonThruster?, Machine<TileIonThruster?>>, ItemBlockMachine>? = BLOCKS.register<BlockTileModel<TileIonThruster?, Machine<TileIonThruster?>>, ItemBlockMachine>("ion_thruster", { BlockTileModel<TileEntityMekanism?, BlockTypeTile<TileEntityMekanism>>(KontraptionBlockTypes.ION_THRUSTER) }) { block: BlockTileModel<TileIonThruster?, Machine<TileIonThruster?>>? -> ItemBlockMachine(block) }
+
+    private fun <BLOCK> registerTooltipBlock(name: String, blockCreator: Supplier<BLOCK>): BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>>? where BLOCK : Block?, BLOCK : IHasDescription? {
+        return BLOCKS.registerDefaultProperties(name, blockCreator) { block: BLOCK, properties: Item.Properties? -> ItemBlockTooltip(block, properties) }
     }
 
-    fun register() {
-        BLOCKS.register(FMLJavaModLoadingContext.get().modEventBus)
-    }
-
-    //val PILOT_SEAT = BLOCKS.register<Block>("pilot_seat") { Block(BlockBehaviour.Properties.of(Material.METAL).strength(1f, 6f)) }
-
-    fun registerItems(items: DeferredRegister<Item>) {
-        for (it in BLOCKS.entries) {
-            //items.register(it.get().name.toString()) { BlockItem(it.get(), Item.Properties().tab(KontraptionItems.TAB)) }
-        }
-    }
-
-
-}
+}*/

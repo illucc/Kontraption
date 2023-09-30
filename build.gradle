@@ -144,10 +144,18 @@ repositories {
         name = "Valkyrien Skies Internal"
         url = 'https://maven.valkyrienskies.org'
     }
+    //RAAAAAAAAHHHHHHHHHHHhh
+    // update when the fuck did i add it and why
+    /*maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }*/
 
 
 
-    maven {
+        maven {
         name = "ParchmentMC"
         url = "https://maven.parchmentmc.org"
     }
@@ -177,9 +185,23 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
+    //implementation("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}")
 
+
+    //implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}") { transitive = false }
     implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-forge:${rootProject.vs2_version}") { transitive = false }
-    implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
+    //implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
+    //implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
+    implementation("org.valkyrienskies.core:api:1.1.0+6f373832e9") { transitive = false }
+    implementation("org.valkyrienskies.core:impl:1.1.0+6f373832e9") { transitive = false }
+    implementation("org.valkyrienskies.core:api-game:1.1.0+6f373832e9") { transitive = false }
+    implementation("org.valkyrienskies.core:util:1.1.0+6f373832e9") { transitive = false }
+
+    implementation("org.valkyrienskies:physics_api:1.0.0+94304c13aa") { transitive = false }
+    implementation("org.valkyrienskies:physics_api_krunch:1.0.0+c56602855f") { transitive = false }
+    //implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
+
+
     implementation "org.joml:joml:1.10.5"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     // Adds KFF as dependency and Kotlin libs
@@ -187,13 +209,13 @@ dependencies {
 
 
     //mekanismin
-    compileOnly "mekanism:Mekanism:${mekanism_version}:api"
+    //compileOnly "mekanism:Mekanism:${mekanism_version}:api"
 
     // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
 
 
