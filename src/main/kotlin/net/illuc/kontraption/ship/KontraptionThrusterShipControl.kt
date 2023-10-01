@@ -7,19 +7,12 @@ import net.minecraft.core.Direction
 import net.minecraft.world.entity.player.Player
 import org.joml.Vector3d
 import org.joml.Vector3i
-import org.valkyrienskies.core.api.ships.PhysShip
-import org.valkyrienskies.core.api.ships.ServerShip
-import org.valkyrienskies.core.impl.api.ServerShipUser
-import org.valkyrienskies.core.impl.api.ShipForcesInducer
-import org.valkyrienskies.core.impl.api.Ticked
-import org.valkyrienskies.core.impl.api.shipValue
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import java.util.concurrent.CopyOnWriteArrayList
 import org.valkyrienskies.mod.common.util.*
 import org.valkyrienskies.*
-import org.valkyrienskies.core.api.ships.getAttachment
-import org.valkyrienskies.core.api.ships.saveAttachment
+import org.valkyrienskies.core.api.ships.*
 
 
 class KontraptionThrusterShipControl : ShipForcesInducer, ServerShipUser, Ticked {
@@ -81,9 +74,6 @@ class KontraptionThrusterShipControl : ShipForcesInducer, ServerShipUser, Ticked
 
     }
 
-    override fun tick() {
-
-    }
 
     fun addThruster(pos: BlockPos, tier: Double, force: Vector3d) {
         thrusters.add(Triple(Vector3i(pos.x, pos.y, pos.z), force, tier))

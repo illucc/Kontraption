@@ -1,22 +1,23 @@
 package net.illuc.kontraption
 
+import mekanism.api.math.FloatingLong
 import mekanism.common.MekanismLang
-import mekanism.common.block.attribute.Attributes.AttributeMobSpawn
-import mekanism.common.block.attribute.Attributes.AttributeMultiblock
 import mekanism.common.content.blocktype.BlockTypeTile
-import mekanism.common.content.blocktype.BlockTypeTile.BlockTileBuilder
+import mekanism.common.content.blocktype.Machine
 import mekanism.common.content.blocktype.Machine.MachineBuilder
-import mekanism.common.tile.base.TileEntityMekanism
-import net.illuc.kontraption.blockEntities.TileIonThruster
+import net.illuc.kontraption.blockType.Thruster
+import net.illuc.kontraption.blockType.Thruster.ThrusterBuilder
 import java.util.*
 
 
-public object KontraptionBlockTypes {
+public object KontraptionBlockTypess {
     private fun KontraptionBlockTypes() {}
 
-    val ION_THRUSTER: BlockTypeTile<TileIonThruster> = MachineBuilder
-            .createMachine({ KontraptionTileEntityTypes.ION_THRUSTER }, MekanismLang.HOLD_FOR_DESCRIPTION)
+    private val RESISTIVE_HEATER_BASE_USAGE = FloatingLong.createConst(100)
+
+
+    public val ION_THRUSTER: BlockTypeTile<*> = ThrusterBuilder
+            .createBlock({ KontraptionTileEntityTypes.ION_THRUSTER }, MekanismLang.HOLD_FOR_DESCRIPTION)
+            .withEnergyConfig { RESISTIVE_HEATER_BASE_USAGE }
             .build()
-
-
 }

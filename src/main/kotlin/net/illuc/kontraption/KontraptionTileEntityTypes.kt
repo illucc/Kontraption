@@ -8,12 +8,11 @@ package net.illuc.kontraption
 
 import mekanism.common.registration.impl.TileEntityTypeDeferredRegister
 import net.illuc.kontraption.blockEntities.TileIonThruster
-import net.illuc.kontraption.network.to_server.KontraptionBlocks
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState
 
 
-public object KontraptionTileEntityTypes {
+public object KontraptionTileEntityTypess {
 
     private fun KontraptionTileEntityTypes() {}
 

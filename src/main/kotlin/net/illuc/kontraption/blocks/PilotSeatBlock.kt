@@ -14,9 +14,7 @@ import net.minecraft.world.level.material.Material
 import net.minecraft.world.phys.BlockHitResult
 import org.joml.Vector3d
 import org.joml.Vector3dc
-import org.valkyrienskies.core.impl.util.x
-import org.valkyrienskies.core.impl.util.y
-import org.valkyrienskies.core.impl.util.z
+
 import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 
 class PilotSeatBlock :
@@ -33,10 +31,11 @@ class PilotSeatBlock :
             hand: InteractionHand,
             blockHitResult: BlockHitResult
     ): InteractionResult {
+        ValkyrienSkiesMod.SHIP_MOUNTING_ENTITY_TYPE
         if (level.isClientSide) return InteractionResult.SUCCESS
         val seatEntity = ValkyrienSkiesMod.SHIP_MOUNTING_ENTITY_TYPE.create(level)!!.apply {
             val seatEntityPos: Vector3dc = Vector3d(pos.x + .5, pos.y.toDouble(), pos.z + .5)
-            moveTo(seatEntityPos.x, seatEntityPos.y, seatEntityPos.z)
+            moveTo(seatEntityPos.x(), seatEntityPos.y(), seatEntityPos.z())
             //lookAt(EntityAnchorArgument.Anchor.EYES, state.getValue(FACING).normal.subtract.subtract(position()) )   //.toDoubles().add(position()))
             //player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3(1.0, 0.0, 0.0))
             player.xRot = 0F
