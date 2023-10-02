@@ -31,7 +31,7 @@ public class KontraptionBlocks {
     //public static final BlockRegistryObject<BlockTileModel<TileIonThruster, Thruster<TileIonThruster>>, ItemBlockMachine> ION_THRUSTER = BLOCKS.register("ion_thruster", () -> new BlockTileModel<>(KontraptionBlockTypes.ION_THRUSTER), ItemBlockMachine::new);
 
     public static final BlockRegistryObject<BlockTileModel<TileIonThruster, BlockTypeTile<TileIonThruster>>, BlockItem> ION_THRUSTER = BLOCKS.register("ion_thruster", () -> new BlockTileModel<>(KontraptionBlockTypes.ION_THRUSTER));
-
+    //public static final BlockRegistryObject<BlockIonThruster, BlockItem> ION_THRUSTER = BLOCKS.register("ion_thruster", () -> new BlockIonThruster(KontraptionBlockTypes.ION_THRUSTER));
 
 
 }

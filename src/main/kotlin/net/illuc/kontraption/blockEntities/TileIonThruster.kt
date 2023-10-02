@@ -11,19 +11,24 @@ import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder
 import mekanism.common.integration.energy.EnergyCompatUtils
 import mekanism.common.tile.base.TileEntityMekanism
 import mekanism.common.util.MekanismUtils
-import org.valkyrienskies.mod.common.getShipManagingPos
 import net.illuc.kontraption.KontraptionBlocks
-import net.illuc.kontraption.ship.KontraptionShipControl
 import net.illuc.kontraption.ship.KontraptionThrusterShipControl
+import net.illuc.kontraption.util.KontraptionVSUtils
+import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.items.IItemHandler
 import org.jetbrains.annotations.Nullable
 import java.util.*
 import javax.annotation.Nonnull
 
-class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state) {
+
+
+class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state)  {
     var enabled = false
 
     private var energyContainer: MachineEnergyContainer<TileIonThruster>? = null
@@ -37,8 +42,15 @@ class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(K
     }
 
 
+
+
+
+
     override fun onUpdateServer() {
         super.onUpdateServer()
+        if (redstone == true and !enabled) {
+            enable()
+        }
         var active = false
 
     }
@@ -78,14 +90,15 @@ class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(K
         return false
     }
 
+
     fun enable() {
         if (level !is ServerLevel) return
         println("enabled: $redstone")
 
         enabled = true
 
-        val ship = (level as ServerLevel).getShipObjectManagingPos(worldPosition)
-                ?: (level as ServerLevel).getShipManagingPos(worldPosition)
+        val ship = KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
+                ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
                 ?: return
 
 
@@ -95,11 +108,12 @@ class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(K
             it.stopThruster(worldPosition)
             it.addThruster(
                     worldPosition,
-                    tier * mult,
-                    facing
+                    1.0,
+                    this.direction
                             .normal
                             .toJOMLD()
-                            .mul(redstone.toDouble())
+
+
             )
         }
     }

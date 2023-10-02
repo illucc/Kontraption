@@ -6,6 +6,9 @@ buildscript {
     }
     dependencies {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
+
     }
 }
 
@@ -20,7 +23,10 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 group = mod_version
 version = mod_group_id
@@ -192,19 +198,23 @@ dependencies {
 
     //compileOnly fg.deobf("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}") //{ transitive = false } //adds the missing thing but breaks everything else, update the missing thing doesnt even work
     //implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-forge:${rootProject.vs2_version}") //{ transitive = false }
-    implementation fg.deobf("curse.maven:valkyrienskies-258371:4654272")
+    //implementation fg.deobf("curse.maven:valkyrienskies-258371:4654272")
 
     implementation("org.valkyrienskies.core:api:1.1.0+6f373832e9") //{ transitive = false }
     implementation("org.valkyrienskies.core:impl:1.1.0+6f373832e9") //{ transitive = false }
     implementation("org.valkyrienskies.core:api-game:1.1.0+6f373832e9") //{ transitive = false }
-    implementation("org.valkyrienskies.core:util:1.1.0+6f373832e9") //{ transitive = false }
+    implementation("org.valkyrienskies.core:util:1.1.0+6f373832e9") //{ transitive = false }*/ //die
 
-    //implementation("org.valkyrienskies:physics_api:1.0.0+94304c13aa") { transitive = false }
-    //implementation("org.valkyrienskies:physics_api_krunch:1.0.0+c56602855f") { transitive = false }
+    implementation("org.valkyrienskies:physics_api:1.0.0+94304c13aa") { transitive = false }
+    implementation("org.valkyrienskies:physics_api_krunch:1.0.0+c56602855f") { transitive = false }
 
 
     //implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
     //implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
+
+    implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.13+3450e9e705') { transitive = false }
+    //implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
+
 
 
     implementation "org.joml:joml:1.10.5"
@@ -240,8 +250,20 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
+
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.shade.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
+}
+
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
@@ -277,7 +299,7 @@ tasks.named('jar', Jar).configure {
     }
 
     // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
+    //finalizedBy 'reobfJar'
 }
 
 tasks.withType(JavaCompile).configureEach {

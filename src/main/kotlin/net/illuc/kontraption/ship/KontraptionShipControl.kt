@@ -1,4 +1,3 @@
 package net.illuc.kontraption.ship
 
-class KontraptionShipControl {
-}
+class KontraptionShipControl {}

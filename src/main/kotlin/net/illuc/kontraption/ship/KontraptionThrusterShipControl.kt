@@ -16,6 +16,7 @@ import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.api.ServerShipUser
 import org.valkyrienskies.core.impl.api.Ticked
 import org.valkyrienskies.core.impl.api.shipValue
+import org.valkyrienskies.core.impl.api.ShipForcesInducer
 
 
 class KontraptionThrusterShipControl : ShipForcesInducer, ServerShipUser, Ticked {
@@ -91,9 +92,9 @@ class KontraptionThrusterShipControl : ShipForcesInducer, ServerShipUser, Ticked
     }
 
     companion object {
-        fun getOrCreate(ship: ServerShip): KontraptionShipControl {
-            return ship.getAttachment<KontraptionShipControl>()
-                    ?: KontraptionShipControl().also { ship.saveAttachment(it) }
+        fun getOrCreate(ship: ServerShip): KontraptionThrusterShipControl {
+            return ship.getAttachment<KontraptionThrusterShipControl>()
+                    ?: KontraptionThrusterShipControl().also { ship.saveAttachment(it) }
         }
     }
 
