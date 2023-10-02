@@ -12,7 +12,6 @@ import mekanism.common.integration.energy.EnergyCompatUtils
 import mekanism.common.tile.base.TileEntityMekanism
 import mekanism.common.util.MekanismUtils
 import org.valkyrienskies.mod.common.getShipManagingPos
-import org.valkyrienskies.mod.common.
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.ship.KontraptionShipControl
 import net.illuc.kontraption.ship.KontraptionThrusterShipControl

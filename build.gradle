@@ -146,12 +146,13 @@ repositories {
     }
     //RAAAAAAAAHHHHHHHHHHHhh
     // update when the fuck did i add it and why
-    /*maven {
+    // update update thank you god :thumbs up:
+    maven {
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
-    }*/
+    }
 
 
 
@@ -189,8 +190,9 @@ dependencies {
     //Our Father, who art in heaven, hallowed be thy name; thy kingdom come; thy will be done; on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation; but deliver us from evil. Amen.
     //god why are you ignoring me
 
-    //implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}") //{ transitive = false } //adds the missing thing but breaks everything else
-    implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-forge:${rootProject.vs2_version}") //{ transitive = false }
+    //compileOnly fg.deobf("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}") //{ transitive = false } //adds the missing thing but breaks everything else, update the missing thing doesnt even work
+    //implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-forge:${rootProject.vs2_version}") //{ transitive = false }
+    implementation fg.deobf("curse.maven:valkyrienskies-258371:4654272")
 
     implementation("org.valkyrienskies.core:api:1.1.0+6f373832e9") //{ transitive = false }
     implementation("org.valkyrienskies.core:impl:1.1.0+6f373832e9") //{ transitive = false }

@@ -13,6 +13,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 import org.valkyrienskies.mod.common.util.*
 import org.valkyrienskies.*
 import org.valkyrienskies.core.api.ships.*
+import org.valkyrienskies.core.impl.api.ServerShipUser
+import org.valkyrienskies.core.impl.api.Ticked
+import org.valkyrienskies.core.impl.api.shipValue
 
 
 class KontraptionThrusterShipControl : ShipForcesInducer, ServerShipUser, Ticked {
@@ -92,6 +95,10 @@ class KontraptionThrusterShipControl : ShipForcesInducer, ServerShipUser, Ticked
             return ship.getAttachment<KontraptionShipControl>()
                     ?: KontraptionShipControl().also { ship.saveAttachment(it) }
         }
+    }
+
+    override fun tick() {
+        TODO("Not yet implemented")
     }
 
 
