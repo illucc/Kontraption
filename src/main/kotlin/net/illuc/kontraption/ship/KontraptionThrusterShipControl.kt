@@ -13,7 +13,7 @@ import org.valkyrienskies.core.api.ships.PhysShip
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
-import org.valkyrienskies.core.impl.api.ShipForcesInducer
+import org.valkyrienskies.core.api.ships.ShipForcesInducer
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import java.util.concurrent.CopyOnWriteArrayList
@@ -21,19 +21,11 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class KontraptionThrusterShipControl : ShipForcesInducer {
 
-    // for compat only!!
-    private val Thrusters = mutableListOf<Triple<Vector3i, Vector3d, Double>>()
-
+    //thank vs tournament for inspiration :heart:
     private val thrusters = CopyOnWriteArrayList<Triple<Vector3i, Vector3d, Double>>()
 
     override fun applyForces(physShip: PhysShip) {
         physShip as PhysShipImpl
-
-        Thrusters.forEach {
-            thrusters.add(it)
-        }
-        Thrusters.clear()
-
         thrusters.forEach {
             val (pos, force, tier) = it
 

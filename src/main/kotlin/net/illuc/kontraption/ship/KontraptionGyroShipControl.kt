@@ -13,7 +13,7 @@ import org.valkyrienskies.core.api.ships.PhysShip
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
-import org.valkyrienskies.core.impl.api.ShipForcesInducer
+import org.valkyrienskies.core.api.ships.ShipForcesInducer
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import java.util.concurrent.CopyOnWriteArrayList
