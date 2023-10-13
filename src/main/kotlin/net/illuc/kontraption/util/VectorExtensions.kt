@@ -26,6 +26,8 @@ import org.joml.primitives.AABBdc
 import org.valkyrienskies.mod.mixin.accessors.util.math.Matrix4fAccessor
 import com.mojang.math.Matrix4f as Matrix4fMC
 
+//credit to the vs2 source code, would just import it if gradle worked and didnt forgor it existed
+
 fun Vector3i.toDouble() : Vector3d {
     return Vector3d(x.toDouble(), y.toDouble(), z.toDouble())
 }

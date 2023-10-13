@@ -15,11 +15,23 @@ public class KontraptionVSUtils {
         return VSGameUtilsKt.getShipManagingPos(serverLevel, chunkX, chunkZ);
     }
 
+    public static org.valkyrienskies.core.api.ships.Ship getShipManagingPos(Level level, BlockPos blockPos){
+        return VSGameUtilsKt.getShipManagingPos(level, blockPos);
+    }
+
     public static org.valkyrienskies.core.api.ships.ServerShip getShipManagingPos(ServerLevel serverLevel, BlockPos blockPos){
         return VSGameUtilsKt.getShipManagingPos(serverLevel, blockPos);
     }
 
+
+
+
+
     public static org.valkyrienskies.core.api.ships.ServerShip getShipObjectManagingPos(ServerLevel serverLevel, BlockPos blockPos){
         return VSGameUtilsKt.getShipObjectManagingPos(serverLevel, blockPos);
+    }
+
+    public static org.valkyrienskies.core.api.ships.Ship getShipObjectManagingPos(Level level, BlockPos blockPos){
+        return VSGameUtilsKt.getShipObjectManagingPos(level, blockPos);
     }
 }

@@ -7,6 +7,7 @@ import mekanism.common.content.blocktype.BlockTypeTile;
 import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
 import mekanism.common.tile.base.TileEntityMekanism;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 
@@ -17,7 +18,7 @@ public class Thruster<TILE extends TileEntityMekanism> extends BlockTypeTile<TIL
 
     public Thruster(Supplier<TileEntityTypeRegistryObject<TILE>> tileEntityRegistrar, ILangEntry description) {
         super(tileEntityRegistrar, description);
-        add(Attributes.ACTIVE_LIGHT, new AttributeStateFacing(), Attributes.SECURITY, Attributes.INVENTORY, Attributes.REDSTONE, Attributes.COMPARATOR);
+        add(Attributes.ACTIVE_LIGHT, new AttributeStateFacing(BlockStateProperties.FACING), Attributes.SECURITY, Attributes.INVENTORY, Attributes.REDSTONE, Attributes.COMPARATOR);
     }
 
 

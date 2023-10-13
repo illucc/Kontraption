@@ -4,12 +4,26 @@ import mekanism.common.Mekanism;
 import mekanism.common.base.IModModule;
 import mekanism.common.config.MekanismModConfig;
 import mekanism.common.lib.Version;
+import net.illuc.kontraption.config.KontraptionKeyBindings
+import net.illuc.kontraption.config.KontraptionKeyBindings.clientSetup
+import net.illuc.kontraption.entity.KontraptionShipMountingEntity
 import net.illuc.kontraption.network.KontraptionPacketHandler
+import net.illuc.kontraption.network.KontraptionVSGamePackets
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobCategory
+import net.minecraftforge.client.ClientRegistry
+import net.minecraftforge.client.event.EntityRenderersEvent
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.registries.DeferredRegister
+import net.minecraftforge.registries.ForgeRegistries
+import net.minecraftforge.registries.RegistryObject
+import org.valkyrienskies.mod.client.EmptyRenderer
 import thedarkcolour.kotlinforforge.forge.*
 
 
@@ -23,6 +37,8 @@ import thedarkcolour.kotlinforforge.forge.*
 @Mod(Kontraption.MODID)
 
 class Kontraption : IModModule {
+
+
     /**
      * MekanismGenerators version number
      */
@@ -33,17 +49,37 @@ class Kontraption : IModModule {
      */
     private val packetHandler: KontraptionPacketHandler
 
+    private val KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY: RegistryObject<EntityType<KontraptionShipMountingEntity>>
+    private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Kontraption.MODID)
+
     init {
+
+
+
         //Mekanism.addModule(also { instance = it })
         //MekanismGeneratorsConfig.registerConfigs(ModLoadingContext.get())
+
+
         val modEventBus = MOD_BUS
         modEventBus.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
         modEventBus.addListener { configEvent: ModConfigEvent -> onConfigLoad(configEvent) }
         modEventBus.addListener { event: InterModEnqueueEvent -> imcQueue(event) }
         KontraptionItems.ITEMS.register(modEventBus)
         KontraptionBlocks.BLOCKS.register(modEventBus)
+        ENTITIES.register(modEventBus)
         KontraptionContainerTypes.CONTAINER_TYPES.register(modEventBus)
         KontraptionTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus)
+        KontraptionVSGamePackets.register()
+        KontraptionVSGamePackets.registerHandlers()
+
+
+
+        modEventBus.addListener(::clientSetup)
+        modEventBus.addListener(::entityRenderers)
+        modEventBus.addListener(::loadComplete)
+
+
+
         /*GeneratorsFluids.FLUIDS.register(modEventBus)
         GeneratorsSounds.SOUND_EVENTS.register(modEventBus)
         GeneratorsGases.GASES.register(modEventBus)
@@ -51,6 +87,15 @@ class Kontraption : IModModule {
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber =Version(0, 0, 1)
         packetHandler = KontraptionPacketHandler()
+
+        KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY = ENTITIES.register("kontraption_ship_mounting_entity") {
+            EntityType.Builder.of(
+                    ::KontraptionShipMountingEntity,
+                    MobCategory.MISC
+            ).sized(.3f, .3f)
+                    .build(ResourceLocation(Kontraption.MODID, "kontraption_ship_mounting_entity").toString())
+        }
+
     }
 
     private fun commonSetup(event: FMLCommonSetupEvent) {
@@ -86,6 +131,20 @@ class Kontraption : IModModule {
         return versionNumber
     }
 
+    private fun clientSetup(event: FMLClientSetupEvent) {
+        KontraptionKeyBindings.clientSetup {
+            ClientRegistry.registerKeyBinding(it)
+        }
+    }
+
+    private fun entityRenderers(event: EntityRenderersEvent.RegisterRenderers) {
+        event.registerEntityRenderer(KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY.get(), ::EmptyRenderer)
+        //event.registerEntityRenderer(PHYSICS_ENTITY_TYPE_REGISTRY.get(), ::VSPhysicsEntityRenderer)
+    }
+
+
+
+
     override fun getName(): String {
         return "Kontraption"
     }
@@ -104,9 +163,18 @@ class Kontraption : IModModule {
         }
     }
 
-    companion object {
+    private fun loadComplete(event: FMLLoadCompleteEvent) {
+        KONTRAPTION_SHIP_MOUNTING_ENTITY_TYPE = KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY.get()
+    }
+
+
+        companion object {
+
+         lateinit var KONTRAPTION_SHIP_MOUNTING_ENTITY_TYPE: EntityType<KontraptionShipMountingEntity>
         const val MODID = "kontraption"
         var instance: Kontraption? = null
+
+
         //val turbineManager: MultiblockManager<TurbineMultiblockData> = MultiblockManager<TurbineMultiblockData>("industrialTurbine", Supplier<MultiblockCache<TurbineMultiblockData>> { TurbineCache() }, Supplier<IStructureValidator<TurbineMultiblockData>> { TurbineValidator() })
         //val fissionReactorManager: MultiblockManager<FissionReactorMultiblockData> = MultiblockManager<FissionReactorMultiblockData>("fissionReactor", Supplier<MultiblockCache<FissionReactorMultiblockData>> { FissionReactorCache() }, Supplier<IStructureValidator<FissionReactorMultiblockData>> { FissionReactorValidator() })
         //val fusionReactorManager: MultiblockManager<FusionReactorMultiblockData> = MultiblockManager<FusionReactorMultiblockData>("fusionReactor", Supplier<MultiblockCache<FusionReactorMultiblockData>> { FusionReactorCache() }, Supplier<IStructureValidator<FusionReactorMultiblockData>> { FusionReactorValidator() })

@@ -5,6 +5,7 @@ import mekanism.api.AutomationType
 import mekanism.api.IContentsListener
 import mekanism.api.RelativeSide
 import mekanism.api.energy.IStrictEnergyHandler
+import mekanism.api.math.FloatingLong
 import mekanism.common.capabilities.energy.MachineEnergyContainer
 import mekanism.common.capabilities.holder.energy.EnergyContainerHelper
 import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder
@@ -17,9 +18,6 @@ import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.items.IItemHandler
 import org.jetbrains.annotations.Nullable
@@ -27,32 +25,46 @@ import java.util.*
 import javax.annotation.Nonnull
 
 
-
-class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state)  {
+class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state)  {
     var enabled = false
 
-    private var energyContainer: MachineEnergyContainer<TileIonThruster>? = null
+    private var clientEnergyUsed = FloatingLong.ZERO
+
+
+    private var energyContainer: MachineEnergyContainer<TileEntityIonThruster>? = null
 
     @Nonnull
     override fun getInitialEnergyContainers(listener: IContentsListener?): IEnergyContainerHolder? {
         val builder = EnergyContainerHelper.forSide { this.direction }
-        builder.addContainer(MachineEnergyContainer.input(this, listener).also { energyContainer = it }, RelativeSide.BACK, RelativeSide.BOTTOM)
+        builder.addContainer(MachineEnergyContainer.input(this, listener).also { energyContainer = it }, RelativeSide.BACK)
         return builder.build()
 
     }
 
 
-
-
-
-
     override fun onUpdateServer() {
         super.onUpdateServer()
-        if (redstone == true and !enabled) {
-            enable()
-        }
-        var active = false
+        var toUse = FloatingLong.ZERO
+        if (MekanismUtils.canFunction(this)) {
+            toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
+            //println("energy usage" + toUse)
+            //println("energy amount" + energyContainer!!.energy)
+            if (!toUse.isZero) {
+                println("active")
+                energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
+                if (enabled == false) {
+                    enable()
+                }
 
+            } else {
+                if (enabled == true) {
+                    disable()
+                }
+
+            }
+        }
+        setActive(!toUse.isZero());
+        clientEnergyUsed = toUse
     }
 
     private fun chargeHandler(itemHandlerCap: Optional<out IItemHandler>): Boolean {
@@ -93,7 +105,7 @@ class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(K
 
     fun enable() {
         if (level !is ServerLevel) return
-        println("enabled: $redstone")
+        println("ENABLED")
 
         enabled = true
 
@@ -109,7 +121,7 @@ class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(K
             it.addThruster(
                     worldPosition,
                     1.0,
-                    this.direction
+                    this.direction.opposite
                             .normal
                             .toJOMLD()
 
@@ -117,6 +129,21 @@ class TileIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(K
             )
         }
     }
+
+
+    fun disable() {
+        println("DISABLED")
+        if (level !is ServerLevel) return
+
+        enabled = false
+
+        KontraptionThrusterShipControl.getOrCreate(
+                KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
+                        ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
+                        ?: return
+        ).stopThruster(worldPosition)
+    }
+
 
 
 

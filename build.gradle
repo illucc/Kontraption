@@ -211,8 +211,11 @@ dependencies {
 
     //implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
     //implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
+    //sdadwadwwa
+    implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.14+acba7d4175') { transitive = false }
+    //implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.13+3450e9e705') { transitive = false }
+    //implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.15+15518313c1') { transitive = false }
 
-    implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.13+3450e9e705') { transitive = false }
     //implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
 
 

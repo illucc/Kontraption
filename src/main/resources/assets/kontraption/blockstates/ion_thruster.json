@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "kontraption:block/ion_thruster",
+      "x": 90
+    },
+    "facing=up": {
+      "model": "kontraption:block/ion_thruster",
+      "x": -90
+    },
+    "facing=north": {
+      "model": "kontraption:block/ion_thruster"
+    },
+    "facing=south": {
+      "model": "kontraption:block/ion_thruster",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kontraption:block/ion_thruster",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "kontraption:block/ion_thruster",
+      "y": 90
+    }
+  }
+}
