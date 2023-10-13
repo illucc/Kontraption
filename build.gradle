@@ -150,9 +150,7 @@ repositories {
         name = "Valkyrien Skies Internal"
         url = 'https://maven.valkyrienskies.org'
     }
-    //RAAAAAAAAHHHHHHHHHHHhh
-    // update when the fuck did i add it and why
-    // update update thank you god :thumbs up:
+
     maven {
         url "https://cursemaven.com"
         content {
@@ -172,88 +170,32 @@ repositories {
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
 
-
-
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-    // flatDir {
-    //     dir 'libs'
-    // }
 }
 
 dependencies {
-    // Specify the version of Minecraft to use.
-    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
-    // The "userdev" classifier will be requested and setup by ForgeGradle.
-    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
-    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    //implementation("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}")
-    //Our Father, who art in heaven, hallowed be thy name; thy kingdom come; thy will be done; on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation; but deliver us from evil. Amen.
-    //god why are you ignoring me
+    implementation         ("org.valkyrienskies.core:api:${vs_core_version}")
+    implementation         ("org.valkyrienskies.core:impl:${vs_core_version}")
+    implementation         ("org.valkyrienskies.core:api-game:${vs_core_version}")
+    implementation         ("org.valkyrienskies.core:util:${vs_core_version}")
+    implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-forge:${vs2_version}")
 
-    //compileOnly fg.deobf("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}") //{ transitive = false } //adds the missing thing but breaks everything else, update the missing thing doesnt even work
-    //implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-forge:${rootProject.vs2_version}") //{ transitive = false }
-    //implementation fg.deobf("curse.maven:valkyrienskies-258371:4654272")
-
-    implementation("org.valkyrienskies.core:api:1.1.0+6f373832e9") //{ transitive = false }
-    implementation("org.valkyrienskies.core:impl:1.1.0+6f373832e9") //{ transitive = false }
-    implementation("org.valkyrienskies.core:api-game:1.1.0+6f373832e9") //{ transitive = false }
-    implementation("org.valkyrienskies.core:util:1.1.0+6f373832e9") //{ transitive = false }*/ //die
-
-    implementation("org.valkyrienskies:physics_api:1.0.0+94304c13aa") { transitive = false }
-    implementation("org.valkyrienskies:physics_api_krunch:1.0.0+c56602855f") { transitive = false }
-
-
-    //implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
-    //implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
-    //sdadwadwwa
-    implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.14+acba7d4175') { transitive = false }
-    //implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.13+3450e9e705') { transitive = false }
-    //implementation fg.deobf('org.valkyrienskies:valkyrienskies-118-forge:2.1.0-beta.15+15518313c1') { transitive = false }
-
-    //implementation("org.valkyrienskies.core:api:1.1.0+c92814e9b7") { transitive = false }
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")
+    runtimeOnly    fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
 
 
 
     implementation "org.joml:joml:1.10.5"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
-    // Adds KFF as dependency and Kotlin libs
     implementation 'thedarkcolour:kotlinforforge:3.9.1'
 
-
-    //mekanismin
-    //compileOnly "mekanism:Mekanism:${mekanism_version}:api"
-
-    // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    //for figuring out what is laggy
+    runtimeOnly("curse.maven:spark-361579:4533222")
 
 
 
-
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
-
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info:
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 configurations {
