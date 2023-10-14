@@ -28,6 +28,22 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
+publishing {
+    repositories {
+        if (System.getenv("GITHUB_ACTOR") != null) {
+            println "Publishing to Github Packages ($version)"
+            maven {
+                name = "GitHubPackages"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}
+
+
 group = mod_version
 version = mod_group_id
 
