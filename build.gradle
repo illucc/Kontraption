@@ -29,6 +29,15 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 publishing {
+    publications {
+        mavenCommon(MavenPublication) {
+            groupId = "net.illuc.kontraption"
+            version = project.version
+            artifactId = archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+
     repositories {
         if (System.getenv("GITHUB_ACTOR") != null) {
             println "Publishing to Github Packages ($version)"
