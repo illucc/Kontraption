@@ -33,6 +33,6 @@ jobs:
         uses: "./.github/actions/setup-gradle"
 
       - name: Test Server
-        uses: Kontraption/Minecraft-Architectury-Testing@v1.9
+        uses: ValkyrienSkies/Minecraft-Architectury-Testing@v1.9
         with:
           serverType: ${{ matrix.serverType }}
