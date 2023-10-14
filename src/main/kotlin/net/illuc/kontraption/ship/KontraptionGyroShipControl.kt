@@ -1,12 +1,6 @@
 package net.illuc.kontraption.ship
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import net.illuc.kontraption.util.toBlockPos
-import net.illuc.kontraption.util.toDouble
-import net.illuc.kontraption.util.toJOML
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
-import net.minecraft.world.entity.player.Player
+
 import org.joml.Vector3d
 import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.PhysShip
@@ -15,7 +9,6 @@ import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
 import org.valkyrienskies.core.api.ships.ShipForcesInducer
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
-import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import java.util.concurrent.CopyOnWriteArrayList
 
 

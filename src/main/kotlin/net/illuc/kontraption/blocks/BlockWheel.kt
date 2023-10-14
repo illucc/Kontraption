@@ -1,6 +1,5 @@
 package net.illuc.kontraption.blocks
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import mekanism.common.block.prefab.BlockTile
 import mekanism.common.content.blocktype.BlockTypeTile
 import net.illuc.kontraption.blockEntities.TileEntityWheel
@@ -8,8 +7,6 @@ import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.network.syncher.EntityDataSerializers
-import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import org.joml.Matrix3d
@@ -19,9 +16,6 @@ import org.valkyrienskies.core.api.ships.properties.ShipInertiaData
 import org.valkyrienskies.core.api.ships.properties.ShipTransform
 import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
 import org.valkyrienskies.core.impl.game.ships.ShipInertiaDataImpl
-import org.valkyrienskies.core.impl.util.serialization.VSJacksonUtil
-import org.valkyrienskies.mod.common.entity.VSPhysicsEntity
-import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.server.level.ServerLevel
 import org.joml.Vector3dc
 import org.valkyrienskies.core.apigame.physics.VSWheelCollisionShapeData
