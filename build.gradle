@@ -28,6 +28,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
+String gitRevision = "git rev-parse HEAD".execute().text.trim()
+version = mod_version + '+' + gitRevision.substring(0, 10)
+
 publishing {
     publications {
         mavenCommon(MavenPublication) {
@@ -55,8 +58,6 @@ publishing {
 
 
 //group = mod_version
-String gitRevision = "git rev-parse HEAD".execute().text.trim()
-version = mod_version + '+' + gitRevision.substring(0, 10)
 
 base {
     archivesName = mod_id //+ version
