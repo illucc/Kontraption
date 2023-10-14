@@ -38,26 +38,14 @@ import thedarkcolour.kotlinforforge.forge.*
 
 class Kontraption : IModModule {
 
-
-    /**
-     * MekanismGenerators version number
-     */
     val versionNumber: Version
 
-    /**
-     * Mekanism Generators Packet Pipeline
-     */
     private val packetHandler: KontraptionPacketHandler
-
     private val KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY: RegistryObject<EntityType<KontraptionShipMountingEntity>>
     private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Kontraption.MODID)
 
     init {
 
-
-
-        //Mekanism.addModule(also { instance = it })
-        //MekanismGeneratorsConfig.registerConfigs(ModLoadingContext.get())
 
 
         val modEventBus = MOD_BUS
@@ -99,22 +87,9 @@ class Kontraption : IModModule {
     }
 
     private fun commonSetup(event: FMLCommonSetupEvent) {
-        //1mB hydrogen + 2*bioFuel/tick*200ticks/100mB * 20x efficiency bonus
-        /*MekanismGases.ETHENE.get().addAttribute(Fuel(MekanismConfig.general.ETHENE_BURN_TIME,
-                FloatingLongSupplier {
-                    MekanismConfig.general.FROM_H2.get().add(MekanismGeneratorsConfig.generators.bioGeneration.get()
-                            .multiply(2L * MekanismConfig.general.ETHENE_BURN_TIME.get()))
-                }))*/
+
         event.enqueueWork {
 
-            //Ensure our tags are all initialized
-            //KontraptionTags.init()
-            //Register dispenser behaviors
-            //GeneratorsFluids.FLUIDS.registerBucketDispenserBehavior()
-            //Register extended build commands (in enqueue as it is not thread safe)
-            /*BuildCommand.register("turbine", GeneratorsLang.TURBINE, TurbineBuilder())
-            BuildCommand.register("fission", GeneratorsLang.FISSION_REACTOR, FissionReactorBuilder())
-            BuildCommand.register("fusion", GeneratorsLang.FUSION_REACTOR, FusionReactorBuilder())*/
         }
         packetHandler.initialize()
 
@@ -123,8 +98,7 @@ class Kontraption : IModModule {
     }
 
     private fun imcQueue(event: InterModEnqueueEvent) {
-        //MekanismIMC.addMekaSuitHelmetModules(GeneratorsModules.SOLAR_RECHARGING_UNIT)
-        //MekanismIMC.addMekaSuitPantsModules(GeneratorsModules.GEOTHERMAL_GENERATOR_UNIT)
+
     }
 
     override fun getVersion(): Version {
@@ -174,11 +148,7 @@ class Kontraption : IModModule {
         const val MODID = "kontraption"
         var instance: Kontraption? = null
 
-
-        //val turbineManager: MultiblockManager<TurbineMultiblockData> = MultiblockManager<TurbineMultiblockData>("industrialTurbine", Supplier<MultiblockCache<TurbineMultiblockData>> { TurbineCache() }, Supplier<IStructureValidator<TurbineMultiblockData>> { TurbineValidator() })
-        //val fissionReactorManager: MultiblockManager<FissionReactorMultiblockData> = MultiblockManager<FissionReactorMultiblockData>("fissionReactor", Supplier<MultiblockCache<FissionReactorMultiblockData>> { FissionReactorCache() }, Supplier<IStructureValidator<FissionReactorMultiblockData>> { FissionReactorValidator() })
-        //val fusionReactorManager: MultiblockManager<FusionReactorMultiblockData> = MultiblockManager<FusionReactorMultiblockData>("fusionReactor", Supplier<MultiblockCache<FusionReactorMultiblockData>> { FusionReactorCache() }, Supplier<IStructureValidator<FusionReactorMultiblockData>> { FusionReactorValidator() })
-        fun packetHandler(): KontraptionPacketHandler {
+fun packetHandler(): KontraptionPacketHandler {
             return instance!!.packetHandler
         }
 
