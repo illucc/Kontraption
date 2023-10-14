@@ -33,7 +33,7 @@ publishing {
         mavenCommon(MavenPublication) {
             groupId = "net.illuc.kontraption"
             version = project.version
-            artifactId = archives_base_name + "-" + project.name
+            artifactId = archives_base_name + "-" + project.name.toLowerCase()
             from components.java
         }
     }
