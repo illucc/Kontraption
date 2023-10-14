@@ -6,6 +6,7 @@ import mekanism.common.block.attribute.AttributeStateFacing;
 import mekanism.common.content.blocktype.BlockTypeTile;
 import net.illuc.kontraption.blockEntities.TileEntityIonThruster;
 import net.illuc.kontraption.blockEntities.TileEntityPilotSeat;
+import net.illuc.kontraption.blockEntities.TileEntityWheel;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class KontraptionBlockTypes {
@@ -26,5 +27,12 @@ public class KontraptionBlockTypes {
             .createBlock(() -> KontraptionTileEntityTypes.PILOT_SEAT, MekanismLang.HOLD_FOR_DESCRIPTION)
             .withEnergyConfig(() -> ION_THRUSTER_USAGE, () -> ION_THRUSTER_STORAGE)
             .with(new AttributeStateFacing(BlockStateProperties.HORIZONTAL_FACING))
+            .build();
+
+    public static final BlockTypeTile<TileEntityWheel> WHEEL = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.WHEEL, MekanismLang.HOLD_FOR_DESCRIPTION)
+            .withEnergyConfig(() -> ION_THRUSTER_USAGE, () -> ION_THRUSTER_STORAGE)
+            //.withCustomShape(KontraptionBlockShapes.INSTANCE.getWHEEL())
+            .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
 }

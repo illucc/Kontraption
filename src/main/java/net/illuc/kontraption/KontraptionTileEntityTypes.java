@@ -4,6 +4,7 @@ import mekanism.common.registration.impl.TileEntityTypeDeferredRegister;
 import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
 import net.illuc.kontraption.blockEntities.TileEntityIonThruster;
 import net.illuc.kontraption.blockEntities.TileEntityPilotSeat;
+import net.illuc.kontraption.blockEntities.TileEntityWheel;
 
 public class KontraptionTileEntityTypes {
     private KontraptionTileEntityTypes() {
@@ -13,6 +14,7 @@ public class KontraptionTileEntityTypes {
 
     public static final TileEntityTypeRegistryObject<TileEntityIonThruster> ION_THRUSTER = TILE_ENTITY_TYPES.register(KontraptionBlocks.ION_THRUSTER, TileEntityIonThruster::new);
     public static final TileEntityTypeRegistryObject<TileEntityPilotSeat> PILOT_SEAT = TILE_ENTITY_TYPES.register(KontraptionBlocks.PILOT_SEAT, TileEntityPilotSeat::new);
+    public static final TileEntityTypeRegistryObject<TileEntityWheel> WHEEL = TILE_ENTITY_TYPES.register(KontraptionBlocks.WHEEL, TileEntityWheel::new);
 
 
 

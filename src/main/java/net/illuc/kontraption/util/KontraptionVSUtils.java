@@ -6,7 +6,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.valkyrienskies.core.apigame.world.ServerShipWorldCore;
+import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
+import org.valkyrienskies.core.impl.game.ships.ShipObjectWorld;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
+
 
 
 // BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE BRAIN DAMAGE
@@ -33,5 +37,9 @@ public class KontraptionVSUtils {
 
     public static org.valkyrienskies.core.api.ships.Ship getShipObjectManagingPos(Level level, BlockPos blockPos){
         return VSGameUtilsKt.getShipObjectManagingPos(level, blockPos);
+    }
+
+    public static ServerShipWorldCore getShipObjectWorld(ServerLevel level){
+        return VSGameUtilsKt.getShipObjectWorld(level);
     }
 }
