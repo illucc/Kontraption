@@ -54,11 +54,12 @@ publishing {
 }
 
 
-group = mod_version
-version = mod_group_id
+//group = mod_version
+String gitRevision = "git rev-parse HEAD".execute().text.trim()
+version = mod_version + '+' + gitRevision.substring(0, 10)
 
 base {
-    archivesName = mod_id
+    archivesName = mod_id //+ version
 }
 
 java {
