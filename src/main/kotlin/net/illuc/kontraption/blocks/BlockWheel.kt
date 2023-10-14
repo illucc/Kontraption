@@ -1,13 +1,10 @@
 package net.illuc.kontraption.blocks
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mojang.math.Vector3f
 import mekanism.common.block.prefab.BlockTile
 import mekanism.common.content.blocktype.BlockTypeTile
-import net.illuc.kontraption.blockEntities.TileEntityIonThruster
 import net.illuc.kontraption.blockEntities.TileEntityWheel
 import net.illuc.kontraption.util.KontraptionVSUtils
-import net.illuc.kontraption.util.toJOML
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -21,13 +18,9 @@ import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.api.ships.properties.ShipInertiaData
 import org.valkyrienskies.core.api.ships.properties.ShipTransform
 import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
-import org.valkyrienskies.core.apigame.physics.VSCollisionShapes
-import org.valkyrienskies.core.apigame.physics.VSSphereCollisionShapeData
 import org.valkyrienskies.core.impl.game.ships.ShipInertiaDataImpl
 import org.valkyrienskies.core.impl.util.serialization.VSJacksonUtil
 import org.valkyrienskies.mod.common.entity.VSPhysicsEntity
-import org.valkyrienskies.physics_api.CollisionShapeFactory
-import org.valkyrienskies.physics_api.WheelShapeReference
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.server.level.ServerLevel
 import org.joml.Vector3dc
@@ -36,17 +29,13 @@ import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl.Companion.creat
 import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 
 class BlockWheel(type: BlockTypeTile<TileEntityWheel?>?) : BlockTile<TileEntityWheel?, BlockTypeTile<TileEntityWheel?>?>(type) {
+    @SuppressWarnings
     override fun onPlace(state: BlockState, world: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
         val level = world as ServerLevel
         if (!world.isClientSide) {
             val entity = ValkyrienSkiesMod.PHYSICS_ENTITY_TYPE.create(level)!!
             val shipOn = KontraptionVSUtils.getShipManagingPos(level, pos)
             val offsetInLocal: Vector3dc = Direction.SOUTH.normal.toJOMLD().mul(0.25)
-            val offsetInGlobal = if (shipOn != null) {
-                shipOn.transform.shipToWorldRotation.transform(offsetInLocal, Vector3d())
-            } else {
-                offsetInLocal
-            }
 
             val entityPos: Vector3dc = pos.toJOMLD() //if (shipOn != null) {
                 //shipOn.transform.shipToWorld.transformPosition(pos as Vector3).add(offsetInGlobal)
@@ -65,18 +54,6 @@ class BlockWheel(type: BlockTypeTile<TileEntityWheel?>?) : BlockTile<TileEntityW
     }
 
     companion object {
-        private const val PHYS_DATA_NBT_KEY = "phys_entity_data"
-        private const val CLIENT_INTERP_STEPS = 3
-
-        // Use string because there is no LONG serializer by default SMH my head!
-        private val SHIP_ID_DATA: EntityDataAccessor<String> =
-                SynchedEntityData.defineId(VSPhysicsEntity::class.java, EntityDataSerializers.STRING)
-
-        private fun getMapper(): ObjectMapper {
-            return VSJacksonUtil.defaultMapper
-        }
-
-
         fun createBasicSphereData(
                 shipId: ShipId, transform: ShipTransform, radius: Double = 0.25, mass: Double = 10000.0
         ): PhysicsEntityData {

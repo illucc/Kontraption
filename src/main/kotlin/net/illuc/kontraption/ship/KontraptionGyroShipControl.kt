@@ -19,6 +19,7 @@ import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import java.util.concurrent.CopyOnWriteArrayList
 
 
+//TODO: make the gyro actually gyro
 class KontraptionGyroShipControl : ShipForcesInducer {
     private val Spinners = mutableListOf<Pair<Vector3i, Vector3d>>()
 

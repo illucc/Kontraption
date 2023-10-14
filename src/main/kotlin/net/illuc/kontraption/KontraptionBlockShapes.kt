@@ -5,7 +5,6 @@ import mekanism.common.util.EnumUtils
 import mekanism.common.util.VoxelShapeUtils
 import mekanism.common.util.VoxelShapeUtils.setShape
 import net.minecraft.world.level.block.Block.box
-import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.phys.shapes.VoxelShape
 
 

@@ -6,8 +6,6 @@ import net.illuc.kontraption.blocks.BlockIonThruster;
 import net.illuc.kontraption.blocks.BlockWheel;
 import net.illuc.kontraption.blocks.PilotSeatBlock;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 
 public class KontraptionBlocks {
     private KontraptionBlocks() {
