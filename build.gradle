@@ -216,7 +216,7 @@ dependencies {
 
     implementation "org.joml:joml:1.10.5"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
-    implementation 'thedarkcolour:kotlinforforge:3.9.1'
+    implementation 'thedarkcolour:kotlinforforge:3.12.0'
 
     //for figuring out what is laggy
     runtimeOnly("curse.maven:spark-361579:4533222")
