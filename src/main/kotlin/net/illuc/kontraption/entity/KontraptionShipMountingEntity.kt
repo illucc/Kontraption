@@ -12,6 +12,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 import org.joml.Vector3f
 import org.valkyrienskies.core.api.ships.LoadedServerShip
+import org.valkyrienskies.core.api.ships.Ship
 import org.valkyrienskies.core.api.ships.setAttachment
 import org.valkyrienskies.core.impl.networking.simple.sendToServer
 import org.valkyrienskies.mod.api.SeatedControllingPlayer
@@ -41,8 +42,8 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
             kill()
             return
         }
-
-        if (getShipObjectManagingPos(level, blockPosition()!!) != null)
+        if (getShipObjectManagingPos(level, blockPosition()) != null)
+            println("sending packets :D")
             sendDrivingPacket()
     }
 
@@ -64,7 +65,7 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
 
     private fun sendDrivingPacket() {
         if (!level.isClientSide) return
-        // todo: custom keybinds for going up down and all around but for now lets just use the mc defaults
+        // qhar
         val opts = Minecraft.getInstance().options
         val forward   = opts.keyUp.isDown
         val backward  = opts.keyDown.isDown
@@ -79,15 +80,17 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
         val rollUp    = KontraptionKeyBindings.rollUp.get().isDown
         val rollDown  = KontraptionKeyBindings.rollDown.get().isDown
 
+
         val impulse = Vector3f()
         impulse.z = if (forward == backward) 0.0f else if (forward) 1.0f else -1.0f
         impulse.x = if (left == right) 0.0f else if (left) 1.0f else -1.0f
         impulse.y = if (up == down) 0.0f else if (up) 1.0f else -1.0f
 
         val rotation = Vector3f()
-        impulse.x = if (pitchUp == pitchDown) 0.0f else if (pitchUp) 1.0f else -1.0f
-        impulse.y = if (yawUp == yawDown) 0.0f else if (yawUp) 1.0f else -1.0f
-        impulse.z = if (rollUp == rollDown) 0.0f else if (rollUp) 1.0f else -1.0f
+        rotation.x = if (pitchUp == pitchDown) 0.0f else if (pitchUp) 1.0f else -1.0f
+        rotation.y = if (yawUp == yawDown) 0.0f else if (yawUp) 1.0f else -1.0f
+        rotation.z = if (rollUp == rollDown) 0.0f else if (rollUp) 1.0f else -1.0f
+
 
         KontraptionPacketPlayerDriving(impulse, rotation).sendToServer()
     }

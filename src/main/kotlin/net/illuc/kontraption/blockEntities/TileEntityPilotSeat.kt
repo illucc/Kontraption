@@ -25,6 +25,7 @@ import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 import org.valkyrienskies.mod.common.entity.ShipMountingEntity
 import net.illuc.kontraption.Kontraption
 import org.valkyrienskies.core.api.ships.getAttachment
+import org.valkyrienskies.core.api.ships.saveAttachment
 
 class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.PILOT_SEAT, pos, state){
     private val ship: ServerShip? get() = getShipObjectManagingPos((level as ServerLevel), this.blockPos)
@@ -52,6 +53,7 @@ class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekani
             isController = true
         }
 
+        ship?.saveAttachment<KontraptionSeatedControllingPlayer>(KontraptionSeatedControllingPlayer(Direction.SOUTH))
         level.addFreshEntityWithPassengers(entity)
         return entity
     }
@@ -60,11 +62,18 @@ class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekani
     fun tick(){
         //is this a good way to do this?
         seatedControllingPlayer = ship?.getAttachment(KontraptionSeatedControllingPlayer::class.java)
-        println("balsl")
-        println(ship?.getAttachment(KontraptionSeatedControllingPlayer::class.java))
+        //ship?.getAttachment(KontraptionSeatedControllingPlayer::class.java)?.let { println(it.forwardImpulse) }
         //println(ship?.getAttachment(KontraptionThrusterShipControl::class.java))
         if (seatedControllingPlayer != null) {
+            //println(Vector3d(seatedControllingPlayer?.forwardImpulse!!.toDouble(), seatedControllingPlayer?.upImpulse!!.toDouble(), seatedControllingPlayer?.leftImpulse!!.toDouble()))
+            //ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(seatedControllingPlayer?.forwardImpulse!!.toDouble(), seatedControllingPlayer?.upImpulse!!.toDouble(), seatedControllingPlayer?.leftImpulse!!.toDouble()), seatedControllingPlayer?.leftImpulse!!.toDouble() + seatedControllingPlayer?.forwardImpulse!!.toDouble() + seatedControllingPlayer?.upImpulse!!.toDouble())
+            //it looks so fucking bad
+            ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(1.0, 0.0, 0.0), seatedControllingPlayer?.forwardImpulse!!.toDouble())
+            ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(-1.0, 0.0, 0.0), -seatedControllingPlayer?.forwardImpulse!!.toDouble())
             ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.upImpulse!!.toDouble())
+            ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(0.0, -1.0, 0.0), -seatedControllingPlayer?.upImpulse!!.toDouble())
+            ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(0.0, 0.0, 1.0), seatedControllingPlayer?.leftImpulse!!.toDouble())
+            ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(0.0, 0.0, -1.0), -seatedControllingPlayer?.leftImpulse!!.toDouble())
         }
 
         //seatedControllingPlayer?.upImpulse?.let { ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(0.0, 1.0, 0.0), it.toDouble()) }
@@ -91,6 +100,11 @@ class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekani
 
 
         return ride
+    }
+
+    fun enable() {
+        //idc if its against your will or not you WILL exist and you WILL like it
+
     }
 
     fun sit(player: Player, force: Boolean = false): Boolean {

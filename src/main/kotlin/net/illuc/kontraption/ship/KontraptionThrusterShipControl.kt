@@ -20,6 +20,8 @@ class KontraptionThrusterShipControl : ShipForcesInducer {
     //thank vs tournament for inspiration :heart:
     private val thrusters = CopyOnWriteArrayList<Triple<Vector3i, Vector3d, Double>>()
 
+    val forcee = 100000.0
+
     override fun applyForces(physShip: PhysShip) {
         physShip as PhysShipImpl
         thrusters.forEach {
@@ -29,7 +31,7 @@ class KontraptionThrusterShipControl : ShipForcesInducer {
             val tPos = pos.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
 
             if (force.isFinite) {
-                physShip.applyInvariantForceToPos(tForce.mul(10000 * tier), tPos)
+                physShip.applyInvariantForceToPos(tForce.mul(tier*forcee), tPos)
             }
         }
     }
@@ -41,7 +43,6 @@ class KontraptionThrusterShipControl : ShipForcesInducer {
     fun controlAll(forceDirection: Vector3d, power: Double) {
         println(thrusters)
         thrusters.forEach {
-            //println("g" + it.second + " vs " + forceDirection)
             if (it.second == forceDirection){
                 //println("yoinky")
                 val (pos, force, tier) = it
