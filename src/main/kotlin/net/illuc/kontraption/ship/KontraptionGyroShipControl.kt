@@ -1,6 +1,10 @@
 package net.illuc.kontraption.ship
 
 
+import net.illuc.kontraption.util.toBlockPos
+import net.illuc.kontraption.util.toDouble
+import net.illuc.kontraption.util.toJOML
+import net.minecraft.core.BlockPos
 import org.joml.Vector3d
 import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.PhysShip
@@ -14,47 +18,46 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 //TODO: make the gyro actually gyro
 class KontraptionGyroShipControl : ShipForcesInducer {
-    private val Spinners = mutableListOf<Pair<Vector3i, Vector3d>>()
 
-    private val spinners = CopyOnWriteArrayList<Pair<Vector3i, Vector3d>>()
+    //thank vs tournament for inspiration :heart:
+    private val gyros = CopyOnWriteArrayList<Triple<Vector3i, Vector3d, Double>>()
+
+    val forcee = 100000.0
 
     override fun applyForces(physShip: PhysShip) {
         physShip as PhysShipImpl
-
-        Spinners.forEach {
-            spinners.add(it)
-        }
-        spinners.clear()
-
-        spinners.forEach {
-            val (_, torque) = it
+        gyros.forEach {
+            val (_, torque, power) = it
 
             val torqueGlobal = physShip.transform.shipToWorldRotation.transform(torque, Vector3d())
 
-            physShip.applyInvariantTorque(torqueGlobal.mul(1000.0))
+            println("yoinkers: " + power*forcee)
+
+            physShip.applyInvariantTorque(torqueGlobal.mul(power*forcee))
 
         }
     }
 
     fun controlAll(forceDirection: Vector3d, power: Double) {
-        println(spinners)
-        spinners.forEach {
-            println("g" + it.second + " vs " + forceDirection)
-            if (it.second == forceDirection){
-                println("yoinky")
-                val (pos, force) = it
-                removeSpinner(pos, force)
-                addSpinner(pos, forceDirection.mul(power))
-            }
-
+        gyros.forEach {
+            val (pos, direction, tier) = it
+            stopGyro(pos.toBlockPos())
+            addGyro(pos.toBlockPos(), power, forceDirection)
         }
     }
 
-    fun addSpinner(pos: Vector3i, torque: Vector3d) {
-        spinners.add(pos to torque)
+
+    fun addGyro(pos: BlockPos, tier: Double, direction: Vector3d) {
+        gyros.add(Triple(pos.toJOML(), direction, tier))
     }
-    fun removeSpinner(pos: Vector3i, torque: Vector3d) {
-        spinners.remove(pos to torque)
+
+    fun removeGyro(pos: BlockPos, tier: Double, direction: Vector3d) {
+        gyros.removeAll { it.first == pos.toJOML() }
+        //gyros.remove(Triple(pos.toJOML(), direction, tier))
+    }
+
+    fun stopGyro(pos: BlockPos) {
+        gyros.removeAll { it.first == pos.toJOML() }
     }
 
     companion object {

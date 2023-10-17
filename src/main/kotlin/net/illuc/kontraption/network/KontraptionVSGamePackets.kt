@@ -47,9 +47,9 @@ object KontraptionVSGamePackets { //yoinkered from the vs2 github
                 attachment.pitch            = driving.rotation.x
                 attachment.yaw              = driving.rotation.y
                 attachment.roll             = driving.rotation.z
+                println(attachment.yaw)
             }
         }
-        println("AAAAAAAAAAAAAAAAAA")
 
         // Syncs the entity handlers to the client
         PacketSyncVSEntityTypes::class.registerClientHandler { syncEntities ->

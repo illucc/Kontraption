@@ -41,10 +41,8 @@ class KontraptionThrusterShipControl : ShipForcesInducer {
     }
 
     fun controlAll(forceDirection: Vector3d, power: Double) {
-        println(thrusters)
         thrusters.forEach {
             if (it.second == forceDirection){
-                //println("yoinky")
                 val (pos, force, tier) = it
                 removeThruster(pos.toBlockPos(), tier, force)
                 

@@ -13,6 +13,7 @@ import mekanism.common.integration.energy.EnergyCompatUtils
 import mekanism.common.tile.base.TileEntityMekanism
 import mekanism.common.util.MekanismUtils
 import net.illuc.kontraption.KontraptionBlocks
+import net.illuc.kontraption.ship.KontraptionGyroShipControl
 import net.illuc.kontraption.ship.KontraptionThrusterShipControl
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.toJOMLD
@@ -24,19 +25,18 @@ import org.jetbrains.annotations.Nullable
 import java.util.*
 import javax.annotation.Nonnull
 
-
-class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state)  {
+class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.GYRO, pos, state) {
     var enabled = false
 
     private var clientEnergyUsed = FloatingLong.ZERO
 
 
-    private var energyContainer: MachineEnergyContainer<TileEntityIonThruster>? = null
+    private var energyContainer: MachineEnergyContainer<TileEntityGyro>? = null
 
     @Nonnull
     override fun getInitialEnergyContainers(listener: IContentsListener?): IEnergyContainerHolder? {
         val builder = EnergyContainerHelper.forSide { this.direction }
-        builder.addContainer(MachineEnergyContainer.input(this, listener).also { energyContainer = it }, RelativeSide.BACK)
+        builder.addContainer(MachineEnergyContainer.input(this, listener).also { energyContainer = it })
         return builder.build()
 
     }
@@ -115,11 +115,11 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
 
 
 
-        KontraptionThrusterShipControl.getOrCreate(ship).let {
-            it.stopThruster(worldPosition)
-            it.addThruster(
+        KontraptionGyroShipControl.getOrCreate(ship).let {
+            it.stopGyro(worldPosition)
+            it.addGyro(
                     worldPosition,
-                    1.0,
+                    0.0,
                     this.direction.opposite
                             .normal
                             .toJOMLD()
@@ -136,14 +136,12 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
 
         enabled = false
 
-        KontraptionThrusterShipControl.getOrCreate(
+        KontraptionGyroShipControl.getOrCreate(
                 KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
                         ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
                         ?: return
-        ).stopThruster(worldPosition)
+        ).stopGyro(worldPosition)
     }
-
-
 
 
 }

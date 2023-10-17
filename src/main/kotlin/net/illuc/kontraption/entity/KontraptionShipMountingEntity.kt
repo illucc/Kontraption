@@ -83,7 +83,7 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
 
         val impulse = Vector3f()
         impulse.z = if (forward == backward) 0.0f else if (forward) 1.0f else -1.0f
-        impulse.x = if (left == right) 0.0f else if (left) 1.0f else -1.0f
+        impulse.x = if (left == right) 0.0f else if (left) -1.0f else 1.0f
         impulse.y = if (up == down) 0.0f else if (up) 1.0f else -1.0f
 
         val rotation = Vector3f()
