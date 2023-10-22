@@ -4,7 +4,6 @@ import mekanism.common.tile.base.TileEntityMekanism
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.controls.KontraptionSeatedControllingPlayer
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
-import net.illuc.kontraption.ship.KontraptionThrusterShipControl
 import net.illuc.kontraption.util.KontraptionVSUtils.getShipObjectManagingPos
 import net.illuc.kontraption.util.toDoubles
 import net.minecraft.commands.arguments.EntityAnchorArgument
@@ -13,19 +12,13 @@ import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
-import net.minecraft.world.level.block.state.properties.Half
 import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
-import org.valkyrienskies.mod.api.SeatedControllingPlayer
-import org.valkyrienskies.mod.common.ValkyrienSkiesMod
-import org.valkyrienskies.mod.common.entity.ShipMountingEntity
 import net.illuc.kontraption.Kontraption
-import net.illuc.kontraption.ship.KontraptionGyroShipControl
-import org.valkyrienskies.core.api.ships.getAttachment
+import net.illuc.kontraption.ship.KontraptionShipControl
 import org.valkyrienskies.core.api.ships.saveAttachment
 
 class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.PILOT_SEAT, pos, state){
@@ -61,6 +54,7 @@ class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekani
 
 
     fun tick(){
+        //todo: fix everything
         //is this a good way to do this?
         seatedControllingPlayer = ship?.getAttachment(KontraptionSeatedControllingPlayer::class.java)
         //ship?.getAttachment(KontraptionSeatedControllingPlayer::class.java)?.let { println(it.forwardImpulse) }
@@ -68,16 +62,17 @@ class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekani
         if (seatedControllingPlayer != null) {
             //it looks so fucking bad
             //i am so sorry whoever is reading this
-            val thrusterController = ship?.getAttachment(KontraptionThrusterShipControl::class.java)
-            val gyroController     = ship?.getAttachment(KontraptionGyroShipControl::class.java)
-            thrusterController?.controlAll(Vector3d(1.0, 0.0, 0.0), seatedControllingPlayer?.forwardImpulse!!.toDouble())
-            thrusterController?.controlAll(Vector3d(-1.0, 0.0, 0.0), -seatedControllingPlayer?.forwardImpulse!!.toDouble())
-            thrusterController?.controlAll(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.upImpulse!!.toDouble())
-            thrusterController?.controlAll(Vector3d(0.0, -1.0, 0.0), -seatedControllingPlayer?.upImpulse!!.toDouble())
-            thrusterController?.controlAll(Vector3d(0.0, 0.0, 1.0), seatedControllingPlayer?.leftImpulse!!.toDouble())
-            thrusterController?.controlAll(Vector3d(0.0, 0.0, -1.0), -seatedControllingPlayer?.leftImpulse!!.toDouble())
+            //val thrusterController = ship?.getAttachment(KontraptionThrusterShipControl::class.java)
+            //val gyroController     = ship?.getAttachment(KontraptionGyroShipControl::class.java)
+            val controller = ship?.getAttachment(KontraptionShipControl::class.java)
+            controller?.thrusterControlAll(Vector3d(1.0, 0.0, 0.0), seatedControllingPlayer?.forwardImpulse!!.toDouble())
+            controller?.thrusterControlAll(Vector3d(-1.0, 0.0, 0.0), -seatedControllingPlayer?.forwardImpulse!!.toDouble())
+            controller?.thrusterControlAll(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.upImpulse!!.toDouble())
+            controller?.thrusterControlAll(Vector3d(0.0, -1.0, 0.0), -seatedControllingPlayer?.upImpulse!!.toDouble())
+            controller?.thrusterControlAll(Vector3d(0.0, 0.0, 1.0), seatedControllingPlayer?.leftImpulse!!.toDouble())
+            controller?.thrusterControlAll(Vector3d(0.0, 0.0, -1.0), -seatedControllingPlayer?.leftImpulse!!.toDouble())
 
-            gyroController?.controlAll(Vector3d(seatedControllingPlayer?.roll!!.toDouble(), seatedControllingPlayer?.yaw!!.toDouble(), seatedControllingPlayer?.pitch!!.toDouble()), 1.0)
+            controller?.gyroControlAll(Vector3d(seatedControllingPlayer?.roll!!.toDouble(), seatedControllingPlayer?.yaw!!.toDouble(), seatedControllingPlayer?.pitch!!.toDouble()), 1.0)
 
         }
 

@@ -13,7 +13,7 @@ import mekanism.common.integration.energy.EnergyCompatUtils
 import mekanism.common.tile.base.TileEntityMekanism
 import mekanism.common.util.MekanismUtils
 import net.illuc.kontraption.KontraptionBlocks
-import net.illuc.kontraption.ship.KontraptionThrusterShipControl
+import net.illuc.kontraption.ship.KontraptionShipControl
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
@@ -26,7 +26,8 @@ import javax.annotation.Nonnull
 
 
 class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state)  {
-    var enabled = false
+    var enabled   = false
+    var activated = false
 
     private var clientEnergyUsed = FloatingLong.ZERO
 
@@ -47,8 +48,6 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
         var toUse = FloatingLong.ZERO
         if (MekanismUtils.canFunction(this)) {
             toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
-            //println("energy usage" + toUse)
-            //println("energy amount" + energyContainer!!.energy)
             if (!toUse.isZero) {
                 energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
                 if (enabled == false) {
@@ -67,6 +66,7 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
     }
 
     private fun chargeHandler(itemHandlerCap: Optional<out IItemHandler>): Boolean {
+        println("yuhuh we using it")
         //Ensure that we have an item handler capability, because if for example the player is dead we will not
         if (itemHandlerCap.isPresent()) {
             val itemHandler: IItemHandler = itemHandlerCap.get()
@@ -105,9 +105,7 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
     fun enable() {
         if (level !is ServerLevel) return
         println("ENABLED")
-
         enabled = true
-
         val ship = KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
                 ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
                 ?: return
@@ -115,14 +113,15 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
 
 
 
-        KontraptionThrusterShipControl.getOrCreate(ship).let {
+        KontraptionShipControl.getOrCreate(ship).let {
             it.stopThruster(worldPosition)
             it.addThruster(
                     worldPosition,
-                    1.0,
                     this.direction.opposite
                             .normal
-                            .toJOMLD()
+                            .toJOMLD(),
+                    1.0,
+                    this
 
 
             )
@@ -136,7 +135,7 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
 
         enabled = false
 
-        KontraptionThrusterShipControl.getOrCreate(
+        KontraptionShipControl.getOrCreate(
                 KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
                         ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
                         ?: return

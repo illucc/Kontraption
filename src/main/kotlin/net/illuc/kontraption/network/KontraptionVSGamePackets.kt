@@ -13,6 +13,7 @@ import org.valkyrienskies.mod.common.entity.handling.VSEntityManager
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.controls.KontraptionSeatedControllingPlayer
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
+import org.valkyrienskies.core.impl.networking.simple.SimplePacketNetworking
 import org.valkyrienskies.mod.common.networking.PacketRestartChunkUpdates
 import org.valkyrienskies.mod.common.networking.PacketStopChunkUpdates
 import org.valkyrienskies.mod.common.networking.PacketSyncVSEntityTypes
@@ -23,8 +24,8 @@ object KontraptionVSGamePackets { //yoinkered from the vs2 github
     fun register() {
         KontraptionPacketPlayerDriving::class.register()
         /*PacketStopChunkUpdates        ::class.register()
-        PacketRestartChunkUpdates     ::class.register()
-        */PacketSyncVSEntityTypes       ::class.register()
+        PacketRestartChunkUpdates     ::class.register()*/
+        PacketSyncVSEntityTypes       ::class.register()
     }
 
     fun registerHandlers() {
