@@ -25,6 +25,7 @@ import javax.annotation.Nonnull
 
 class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.GYRO, pos, state) {
     var enabled = false
+    var powered = false
 
     private var clientEnergyUsed = FloatingLong.ZERO
 
@@ -44,20 +45,22 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
         super.onUpdateServer()
         var toUse = FloatingLong.ZERO
         if (MekanismUtils.canFunction(this)) {
-            toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
-            //println("energy usage" + toUse)
-            //println("energy amount" + energyContainer!!.energy)
-            if (!toUse.isZero) {
-                energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
-                if (enabled == false) {
-                    enable()
-                }
+            if(powered == true) {
+                toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
+                //println("energy usage" + toUse)
+                //println("energy amount" + energyContainer!!.energy)
+                if (!toUse.isZero) {
+                    energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
+                    if (enabled == false) {
+                        enable()
+                    }
 
-            } else {
-                if (enabled == true) {
-                    disable()
-                }
+                } else {
+                    if (enabled == true) {
+                        disable()
+                    }
 
+                }
             }
         }
         setActive(!toUse.isZero());

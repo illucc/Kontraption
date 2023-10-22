@@ -27,7 +27,7 @@ import javax.annotation.Nonnull
 
 class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state)  {
     var enabled   = false
-    var activated = false
+    var powered = false
 
     private var clientEnergyUsed = FloatingLong.ZERO
 
@@ -47,25 +47,27 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
         super.onUpdateServer()
         var toUse = FloatingLong.ZERO
         if (MekanismUtils.canFunction(this)) {
-            toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
-            if (!toUse.isZero) {
-                energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
-                if (enabled == false) {
-                    enable()
-                }
+            if(powered == true) {
+                toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
+                if (!toUse.isZero) {
+                    energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
+                    if (enabled == false) {
+                        enable()
+                    }
 
-            } else {
-                if (enabled == true) {
-                    disable()
-                }
+                } else {
+                    if (enabled == true) {
+                        disable()
+                    }
 
+                }
             }
         }
         setActive(!toUse.isZero());
         clientEnergyUsed = toUse
     }
 
-    private fun chargeHandler(itemHandlerCap: Optional<out IItemHandler>): Boolean {
+    /*private fun chargeHandler(itemHandlerCap: Optional<out IItemHandler>): Boolean {
         println("yuhuh we using it")
         //Ensure that we have an item handler capability, because if for example the player is dead we will not
         if (itemHandlerCap.isPresent()) {
@@ -80,7 +82,7 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
             }
         }
         return false
-    }
+    }*/
 
 
     private fun provideEnergy(@Nullable energyHandler: IStrictEnergyHandler?): Boolean {

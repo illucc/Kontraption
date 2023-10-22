@@ -33,18 +33,28 @@ class KontraptionShipControl  : ShipForcesInducer {
         physShip as PhysShipImpl
         gyros.forEach {
             val (position, forceDirection, forceStrength, be) = it
-            //be.enable()
-            val torqueGlobal = physShip.transform.shipToWorldRotation.transform(forceDirection, Vector3d())
-            physShip.applyInvariantTorque(torqueGlobal.mul(forceStrength*gyroStrength))
+            if (forceStrength != 0.0){
+                val torqueGlobal = physShip.transform.shipToWorldRotation.transform(forceDirection, Vector3d())
+                physShip.applyInvariantTorque(torqueGlobal.mul(forceStrength*gyroStrength))
+                be.powered = true
+            }else{
+                be.powered = false
+            }
+
         }
         thrusters.forEach {
             val (position, forceDirection, forceStrength, be) = it
             //be.enable()
-            val tForce = physShip.transform.shipToWorld.transformDirection(forceDirection, Vector3d())
-            val tPos = position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
+            if (forceStrength != 0.0){
+                be.powered = true
+                val tForce = physShip.transform.shipToWorld.transformDirection(forceDirection, Vector3d())
+                val tPos = position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
 
-            if (forceDirection.isFinite) {
-                physShip.applyInvariantForceToPos(tForce.mul(forceStrength*thrusterStrength), tPos)
+                if (forceDirection.isFinite) {
+                    physShip.applyInvariantForceToPos(tForce.mul(forceStrength*thrusterStrength), tPos)
+                }
+            }else{
+                be.powered = false
             }
         }
     }
