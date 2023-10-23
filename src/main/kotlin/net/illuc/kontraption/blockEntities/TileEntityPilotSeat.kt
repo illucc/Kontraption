@@ -19,6 +19,9 @@ import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
 import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.ship.KontraptionShipControl
+import net.illuc.kontraption.util.toJOML
+import net.illuc.kontraption.util.toJOMLD
+import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.saveAttachment
 
 class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.PILOT_SEAT, pos, state){
@@ -60,24 +63,26 @@ class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekani
         //ship?.getAttachment(KontraptionSeatedControllingPlayer::class.java)?.let { println(it.forwardImpulse) }
         //println(ship?.getAttachment(KontraptionThrusterShipControl::class.java))
         if (seatedControllingPlayer != null) {
+            this.direction
             //it looks so fucking bad
             //i am so sorry whoever is reading this
-            //val thrusterController = ship?.getAttachment(KontraptionThrusterShipControl::class.java)
-            //val gyroController     = ship?.getAttachment(KontraptionGyroShipControl::class.java)
             val controller = ship?.getAttachment(KontraptionShipControl::class.java)
-            controller?.thrusterControlAll(Vector3d(1.0, 0.0, 0.0), seatedControllingPlayer?.forwardImpulse!!.toDouble())
-            controller?.thrusterControlAll(Vector3d(-1.0, 0.0, 0.0), -seatedControllingPlayer?.forwardImpulse!!.toDouble())
-            controller?.thrusterControlAll(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.upImpulse!!.toDouble())
-            controller?.thrusterControlAll(Vector3d(0.0, -1.0, 0.0), -seatedControllingPlayer?.upImpulse!!.toDouble())
-            controller?.thrusterControlAll(Vector3d(0.0, 0.0, 1.0), seatedControllingPlayer?.leftImpulse!!.toDouble())
-            controller?.thrusterControlAll(Vector3d(0.0, 0.0, -1.0), -seatedControllingPlayer?.leftImpulse!!.toDouble())
+            //var bals = Direction.SOUTH.normal.(this.direction.toYRot().toInt()).toJOMLD()
+            //println(bals)
+            //Direction.SOUTH.normal.north()
+                    //.rotateY(this.direction.toYRot().toDouble())
+            //TODO: fix rotation being funky
+            controller?.thrusterControlAll(Direction.SOUTH.normal.toJOMLD(),  seatedControllingPlayer?.forwardImpulse!!.toDouble())
+            controller?.thrusterControlAll(Direction.NORTH.normal.toJOMLD(), -seatedControllingPlayer?.forwardImpulse!!.toDouble())
+            controller?.thrusterControlAll(Direction.UP.normal.toJOMLD(),     seatedControllingPlayer?.upImpulse!!.toDouble())
+            controller?.thrusterControlAll(Direction.DOWN.normal.toJOMLD(),  -seatedControllingPlayer?.upImpulse!!.toDouble())
+            controller?.thrusterControlAll(Direction.WEST.normal.toJOMLD(),   seatedControllingPlayer?.leftImpulse!!.toDouble())
+            controller?.thrusterControlAll(Direction.EAST.normal.toJOMLD(),  -seatedControllingPlayer?.leftImpulse!!.toDouble())
 
             controller?.gyroControlAll(Vector3d(seatedControllingPlayer?.roll!!.toDouble(), seatedControllingPlayer?.yaw!!.toDouble(), seatedControllingPlayer?.pitch!!.toDouble()), 1.0)
 
         }
 
-        //seatedControllingPlayer?.upImpulse?.let { ship?.getAttachment(KontraptionThrusterShipControl::class.java)?.controlAll(Vector3d(0.0, 1.0, 0.0), it.toDouble()) }
-        //check if it exists
     }
 
     fun startRiding(player: Player, force: Boolean, blockPos: BlockPos, state: BlockState, level: ServerLevel): Boolean {
