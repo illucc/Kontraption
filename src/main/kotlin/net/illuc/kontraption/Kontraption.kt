@@ -4,8 +4,14 @@ import mekanism.common.Mekanism
 import mekanism.common.base.IModModule
 import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
+import mekanism.common.lib.multiblock.IStructureValidator
+import mekanism.common.lib.multiblock.MultiblockCache
+import mekanism.common.lib.multiblock.MultiblockManager
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterCache
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterValidator
 import net.illuc.kontraption.network.KontraptionPacketHandler
 import net.illuc.kontraption.network.KontraptionVSGamePackets
 import net.minecraft.resources.ResourceLocation
@@ -24,6 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import org.valkyrienskies.mod.client.EmptyRenderer
 import thedarkcolour.kotlinforforge.forge.*
+import java.util.function.Supplier
 
 
 /**
@@ -43,7 +50,10 @@ class Kontraption : IModModule {
     private val KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY: RegistryObject<EntityType<KontraptionShipMountingEntity>>
     private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Kontraption.MODID)
 
+
+
     init {
+
 
 
 
@@ -144,10 +154,12 @@ class Kontraption : IModModule {
         companion object {
 
          lateinit var KONTRAPTION_SHIP_MOUNTING_ENTITY_TYPE: EntityType<KontraptionShipMountingEntity>
-        const val MODID = "kontraption"
-        var instance: Kontraption? = null
+            val hydrogenThrusterManager: MultiblockManager<HydrogenThrusterMultiblockData?> = MultiblockManager("hydrogenThruster", { MultiblockCache<HydrogenThrusterMultiblockData?>() }, { HydrogenThrusterValidator() })
+         const val MODID = "kontraption"
 
-fun packetHandler(): KontraptionPacketHandler {
+            var instance: Kontraption? = null
+
+        fun packetHandler(): KontraptionPacketHandler {
             return instance!!.packetHandler
         }
 

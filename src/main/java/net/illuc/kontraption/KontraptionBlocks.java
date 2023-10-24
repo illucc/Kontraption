@@ -1,5 +1,6 @@
 package net.illuc.kontraption;
 
+import mekanism.common.block.prefab.BlockBasicMultiblock;
 import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
 import net.illuc.kontraption.blocks.BlockGyro;
@@ -20,4 +21,5 @@ public class KontraptionBlocks {
     public static final BlockRegistryObject<BlockGyro, BlockItem> GYRO = BLOCKS.register("gyro", () -> new BlockGyro(KontraptionBlockTypes.GYRO));
     //needs work
     public static final BlockRegistryObject<BlockWheel, BlockItem> WHEEL = BLOCKS.register("wheel", () -> new BlockWheel(KontraptionBlockTypes.WHEEL));
+    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> HYDROGEN_THRUSTER_CASING = BLOCKS.register("hydrogen_thruster_casing", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.HYDROGEN_THRUSTER_CASING));
 }

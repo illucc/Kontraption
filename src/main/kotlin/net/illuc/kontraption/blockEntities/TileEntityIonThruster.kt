@@ -29,7 +29,6 @@ import javax.annotation.Nonnull
 class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityThruster(KontraptionBlocks.ION_THRUSTER, pos, state) {
     private var clientEnergyUsed = FloatingLong.ZERO
 
-
     private var energyContainer: MachineEnergyContainer<TileEntityIonThruster>? = null
 
     @Nonnull

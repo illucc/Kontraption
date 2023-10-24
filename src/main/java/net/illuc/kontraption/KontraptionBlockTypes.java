@@ -3,11 +3,9 @@ package net.illuc.kontraption;
 import mekanism.api.math.FloatingLong;
 import mekanism.common.MekanismLang;
 import mekanism.common.block.attribute.AttributeStateFacing;
+import mekanism.common.content.blocktype.BlockType;
 import mekanism.common.content.blocktype.BlockTypeTile;
-import net.illuc.kontraption.blockEntities.TileEntityGyro;
-import net.illuc.kontraption.blockEntities.TileEntityIonThruster;
-import net.illuc.kontraption.blockEntities.TileEntityPilotSeat;
-import net.illuc.kontraption.blockEntities.TileEntityWheel;
+import net.illuc.kontraption.blockEntities.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class KontraptionBlockTypes {
@@ -42,4 +40,11 @@ public class KontraptionBlockTypes {
             //.withCustomShape(KontraptionBlockShapes.INSTANCE.getWHEEL())
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
+
+    public static final BlockTypeTile<TileEntityHydrogenThrusterCasing> HYDROGEN_THRUSTER_CASING = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.HYDROGEN_THRUSTER_CASING, MekanismLang.HOLD_FOR_DESCRIPTION)
+            //.withGui(() -> GeneratorsContainerTypes.INDUSTRIAL_TURBINE, GeneratorsLang.TURBINE)
+            .externalMultiblock()
+            .build();
+
 }
