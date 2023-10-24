@@ -223,6 +223,10 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     implementation 'thedarkcolour:kotlinforforge:3.12.0'
 
+    //using lodestone for now until vsfx comes out
+    //nvm packets mald
+    //implementation fg.deobf("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestoneVersion}")
+
     //for figuring out what is laggy
     //okay so this causes it to fnuuy itself
     //runtimeOnly("curse.maven:spark-361579:4505375")

@@ -7,6 +7,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
+import team.lodestar.lodestone.systems.screenshake.*;
+import thedarkcolour.kotlinforforge.forge.vectorutil.toVec3
 
 
 class BlockIonThruster(type: BlockTypeTile<TileEntityIonThruster?>?) : BlockTile<TileEntityIonThruster?, BlockTypeTile<TileEntityIonThruster?>?>(type) {
@@ -15,6 +17,7 @@ class BlockIonThruster(type: BlockTypeTile<TileEntityIonThruster?>?) : BlockTile
         val be = world.getBlockEntity(pos) as TileEntityIonThruster
         be.enable()
         super.onPlace(state, world, pos, oldState, isMoving)
+        //PositionedScreenshakeInstance(5, pos.toVec3(), 5f, 10f)
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
