@@ -15,6 +15,8 @@ public class KontraptionTileEntityTypes {
     public static final TileEntityTypeRegistryObject<TileEntityGyro> GYRO = TILE_ENTITY_TYPES.register(KontraptionBlocks.GYRO, TileEntityGyro::new);
     public static final TileEntityTypeRegistryObject<TileEntityWheel> WHEEL = TILE_ENTITY_TYPES.register(KontraptionBlocks.WHEEL, TileEntityWheel::new);
     public static final TileEntityTypeRegistryObject<TileEntityHydrogenThrusterCasing> HYDROGEN_THRUSTER_CASING = TILE_ENTITY_TYPES.register(KontraptionBlocks.HYDROGEN_THRUSTER_CASING, TileEntityHydrogenThrusterCasing::new);
+    public static final TileEntityTypeRegistryObject<TileEntityHydrogenThrusterValve> HYDROGEN_THRUSTER_VALVE = TILE_ENTITY_TYPES.register(KontraptionBlocks.HYDROGEN_THRUSTER_VALVE, TileEntityHydrogenThrusterValve::new);
+    public static final TileEntityTypeRegistryObject<TileEntityHydrogenThrusterExhaust> HYDROGEN_THRUSTER_EXHAUST = TILE_ENTITY_TYPES.register(KontraptionBlocks.HYDROGEN_THRUSTER_EXHAUST, TileEntityHydrogenThrusterExhaust::new);
 
 
 

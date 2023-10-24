@@ -22,4 +22,6 @@ public class KontraptionBlocks {
     //needs work
     public static final BlockRegistryObject<BlockWheel, BlockItem> WHEEL = BLOCKS.register("wheel", () -> new BlockWheel(KontraptionBlockTypes.WHEEL));
     public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> HYDROGEN_THRUSTER_CASING = BLOCKS.register("hydrogen_thruster_casing", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.HYDROGEN_THRUSTER_CASING));
+    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> HYDROGEN_THRUSTER_VALVE = BLOCKS.register("hydrogen_thruster_valve", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.HYDROGEN_THRUSTER_VALVE));
+    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> HYDROGEN_THRUSTER_EXHAUST = BLOCKS.register("hydrogen_thruster_exhaust", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.HYDROGEN_THRUSTER_EXHAUST));
 }

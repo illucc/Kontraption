@@ -47,4 +47,16 @@ public class KontraptionBlockTypes {
             .externalMultiblock()
             .build();
 
+    public static final BlockTypeTile<TileEntityHydrogenThrusterValve> HYDROGEN_THRUSTER_VALVE = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.HYDROGEN_THRUSTER_VALVE, MekanismLang.HOLD_FOR_DESCRIPTION)
+            //.withGui(() -> GeneratorsContainerTypes.INDUSTRIAL_TURBINE, GeneratorsLang.TURBINE)
+            .externalMultiblock()
+            .build();
+
+    public static final BlockTypeTile<TileEntityHydrogenThrusterExhaust> HYDROGEN_THRUSTER_EXHAUST = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.HYDROGEN_THRUSTER_EXHAUST, MekanismLang.HOLD_FOR_DESCRIPTION)
+            //.withGui(() -> GeneratorsContainerTypes.INDUSTRIAL_TURBINE, GeneratorsLang.TURBINE)
+            .externalMultiblock()
+            .build();
+
 }

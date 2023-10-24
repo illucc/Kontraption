@@ -11,7 +11,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState
 
 
-class TileEntityHydrogenThrusterCasing(blockProvider: IBlockProvider?, pos: BlockPos?, state: BlockState?) : TileEntityMultiblock<HydrogenThrusterMultiblockData?>(blockProvider, pos, state) {
+open class TileEntityHydrogenThrusterCasing(blockProvider: IBlockProvider?, pos: BlockPos?, state: BlockState?) : TileEntityMultiblock<HydrogenThrusterMultiblockData?>(blockProvider, pos, state), IHasGasMode{
     constructor(pos: BlockPos?, state: BlockState?) : this(KontraptionBlocks.HYDROGEN_THRUSTER_CASING, pos, state)
 
 
@@ -21,5 +21,13 @@ class TileEntityHydrogenThrusterCasing(blockProvider: IBlockProvider?, pos: Bloc
 
     override fun getManager(): MultiblockManager<HydrogenThrusterMultiblockData?> {
         return Kontraption.hydrogenThrusterManager
+    }
+
+    override fun nextMode(tank: Int) {
+        if (tank === 0) {
+            val multiblock: HydrogenThrusterMultiblockData? = multiblock
+            //multiblock.setDumpMode(multiblock.dumpMode.getNext())
+        }
+
     }
 }

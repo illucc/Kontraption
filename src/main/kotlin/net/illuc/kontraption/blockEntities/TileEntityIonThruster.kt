@@ -49,7 +49,6 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityThru
                     if (enabled == false) {
                         enable()
                     }
-
                 } else {
                     if (enabled == true) {
                         disable()
