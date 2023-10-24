@@ -25,10 +25,8 @@ import java.util.*
 import javax.annotation.Nonnull
 
 
-class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state)  {
-    var enabled   = false
-    var powered = false
-
+//class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state) {
+class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityThruster(KontraptionBlocks.ION_THRUSTER, pos, state) {
     private var clientEnergyUsed = FloatingLong.ZERO
 
 
@@ -39,9 +37,7 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
         val builder = EnergyContainerHelper.forSide { this.direction }
         builder.addContainer(MachineEnergyContainer.input(this, listener).also { energyContainer = it }, RelativeSide.BACK)
         return builder.build()
-
     }
-
 
     override fun onUpdateServer() {
         super.onUpdateServer()
@@ -66,85 +62,4 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
         setActive(!toUse.isZero());
         clientEnergyUsed = toUse
     }
-
-    /*private fun chargeHandler(itemHandlerCap: Optional<out IItemHandler>): Boolean {
-        println("yuhuh we using it")
-        //Ensure that we have an item handler capability, because if for example the player is dead we will not
-        if (itemHandlerCap.isPresent()) {
-            val itemHandler: IItemHandler = itemHandlerCap.get()
-            val slots = itemHandler.slots
-            for (slot in 0 until slots) {
-                val stack = itemHandler.getStackInSlot(slot)
-                if (!stack.isEmpty && provideEnergy(EnergyCompatUtils.getStrictEnergyHandler(stack))) {
-                    //Only allow charging one item per player each check
-                    return true
-                }
-            }
-        }
-        return false
-    }*/
-
-
-    private fun provideEnergy(@Nullable energyHandler: IStrictEnergyHandler?): Boolean {
-        if (energyHandler == null) {
-            return false
-        }
-        val energyToGive = energyContainer!!.energyPerTick
-        val simulatedRemainder = energyHandler.insertEnergy(energyToGive, Action.SIMULATE)
-        if (simulatedRemainder.smallerThan(energyToGive)) {
-            //We are able to fit at least some energy from our container into the item
-            val extractedEnergy = energyContainer!!.extract(energyToGive.subtract(simulatedRemainder), Action.EXECUTE, AutomationType.INTERNAL)
-            if (!extractedEnergy.isZero) {
-                //If we were able to actually extract it from our energy container, then insert it into the item
-                MekanismUtils.logExpectedZero(energyHandler.insertEnergy(extractedEnergy, Action.EXECUTE))
-                return true
-            }
-        }
-        return false
-    }
-
-
-    fun enable() {
-        if (level !is ServerLevel) return
-        println("ENABLED")
-        enabled = true
-        val ship = KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
-                ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
-                ?: return
-
-
-
-
-        KontraptionShipControl.getOrCreate(ship).let {
-            it.stopThruster(worldPosition)
-            it.addThruster(
-                    worldPosition,
-                    this.direction.opposite
-                            .normal
-                            .toJOMLD(),
-                    1.0,
-                    this
-
-
-            )
-        }
-    }
-
-
-    fun disable() {
-        println("DISABLED")
-        if (level !is ServerLevel) return
-
-        enabled = false
-
-        KontraptionShipControl.getOrCreate(
-                KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
-                        ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
-                        ?: return
-        ).stopThruster(worldPosition)
-    }
-
-
-
-
 }

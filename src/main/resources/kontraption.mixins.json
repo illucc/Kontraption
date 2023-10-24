@@ -2,9 +2,10 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.illuc.kontraption.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "Kontraption.refmap.json",
   "mixins": [
+    "MixinLaser"
   ],
   "client": [
   ],

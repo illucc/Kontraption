@@ -2,6 +2,7 @@ package net.illuc.kontraption.ship
 
 import net.illuc.kontraption.blockEntities.TileEntityGyro
 import net.illuc.kontraption.blockEntities.TileEntityIonThruster
+import net.illuc.kontraption.blockEntities.TileEntityThruster
 import net.illuc.kontraption.util.toBlockPos
 import net.illuc.kontraption.util.toDouble
 import net.illuc.kontraption.util.toJOML
@@ -21,7 +22,7 @@ class KontraptionShipControl  : ShipForcesInducer {
     //actual ship control stuffs
 
     //Doing the list thingies
-    private val thrusters =   CopyOnWriteArrayList<Controllable<Vector3i, Vector3d, Double, TileEntityIonThruster>>()
+    private val thrusters =   CopyOnWriteArrayList<Controllable<Vector3i, Vector3d, Double, TileEntityThruster>>()
     private val gyros =       CopyOnWriteArrayList<Controllable<Vector3i, Vector3d, Double, TileEntityGyro>>()
     private val attachments = CopyOnWriteArrayList<Controllable<Vector3i, Vector3d, Double, BlockEntity>>()
 
@@ -62,10 +63,10 @@ class KontraptionShipControl  : ShipForcesInducer {
 
 
     //<----------------------------------(THRUSTER STUFF)-------------------------------------->
-    fun addThruster(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityIonThruster) {
+    fun addThruster(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityThruster) {
         thrusters.add(Controllable(pos.toJOML(), force, tier, be))
     }
-    fun removeThruster(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityIonThruster) {
+    fun removeThruster(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityThruster) {
         thrusters.remove(Controllable(pos.toJOML(), force, tier, be))
     }
     fun stopThruster(pos: BlockPos) {
