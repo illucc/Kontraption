@@ -1,6 +1,5 @@
 # Kontraption
-Mekanism + VS2 + A hint of space engineers
-Aims to add a way to control ships that's easier than clockwork but not as simple as eureka.
+A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2
 
 ## Features
 todo
