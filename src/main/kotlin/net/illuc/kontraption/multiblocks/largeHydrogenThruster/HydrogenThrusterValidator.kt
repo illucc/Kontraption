@@ -55,12 +55,6 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
         val innerX = (structure.width() - 3)/2
         val innerY = (structure.height() - 3)/2
         val innerZ = (structure.length() - 3)/2
-        println("EPIC RAP BATTLES OF HISTORY")
-        println(innerRadius)
-        println("VS")
-        println(innerX)
-        println("BEGIN")
-
 
         val exhausts: Set<BlockPos> = ObjectOpenHashSet()
 
@@ -78,7 +72,6 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
             if (tile != null){
                 centerExhaust = tile
                 direction = dir
-                println("yippeeee")
             }
         }
         if (centerExhaust != null) {
@@ -136,7 +129,6 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
         mutablePos.set(centerX, structure.minPos.y, centerZ);
         var tile = WorldUtils.getTileEntity(TileEntityHydrogenThrusterExhaust::class.java, world, chunkMap!!, mutablePos)
         if (tile == null){
-            println("boowomp :(")
             //return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
 
         }
