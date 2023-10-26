@@ -1,7 +1,10 @@
 package net.illuc.kontraption.entity
 
+import mekanism.common.Mekanism
+import mekanism.common.network.to_server.PacketKey
+import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.config.KontraptionKeyBindings
-import net.illuc.kontraption.network.KontraptionPacketPlayerDriving
+import net.illuc.kontraption.network.to_server.PacketKontraptionDriving
 import net.illuc.kontraption.util.KontraptionVSUtils.getShipObjectManagingPos
 import net.minecraft.client.Minecraft
 import net.minecraft.nbt.CompoundTag
@@ -10,16 +13,10 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
-import org.joml.Vector3f
+import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.LoadedServerShip
-import org.valkyrienskies.core.api.ships.Ship
 import org.valkyrienskies.core.api.ships.setAttachment
-import org.valkyrienskies.core.impl.networking.simple.sendToServer
 import org.valkyrienskies.mod.api.SeatedControllingPlayer
-import org.valkyrienskies.mod.common.config.VSKeyBindings
-import org.valkyrienskies.mod.common.entity.ShipMountingEntity
-import org.valkyrienskies.mod.common.networking.PacketPlayerDriving
-
 
 
 open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountingEntity>, level: Level) : Entity(type, level) {
@@ -81,18 +78,22 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
         val rollDown  = KontraptionKeyBindings.rollDown.get().isDown
 
 
-        val impulse = Vector3f()
-        impulse.z = if (forward == backward) 0.0f else if (forward) 1.0f else -1.0f
-        impulse.x = if (left == right) 0.0f else if (left) -1.0f else 1.0f
-        impulse.y = if (up == down) 0.0f else if (up) 1.0f else -1.0f
+        val impulse = Vector3d()
+        impulse.z = if (forward == backward) 0.0 else if (forward) 1.0 else -1.0
+        impulse.x = if (left == right) 0.0 else if (left) -1.0 else 1.0
+        impulse.y = if (up == down) 0.0 else if (up) 1.0 else -1.0
 
-        val rotation = Vector3f()
-        rotation.x = if (pitchUp == pitchDown) 0.0f else if (pitchUp) 1.0f else -1.0f
-        rotation.y = if (yawUp == yawDown) 0.0f else if (yawUp) 1.0f else -1.0f
-        rotation.z = if (rollUp == rollDown) 0.0f else if (rollUp) 1.0f else -1.0f
+        val rotation = Vector3d()
+        rotation.x = if (pitchUp == pitchDown) 0.0 else if (pitchUp) 1.0 else -1.0
+        rotation.y = if (yawUp == yawDown) 0.0 else if (yawUp) 1.0 else -1.0
+        rotation.z = if (rollUp == rollDown) 0.0 else if (rollUp) 1.0 else -1.0
 
 
-        KontraptionPacketPlayerDriving(impulse, rotation).sendToServer()
+
+        Kontraption.packetHandler().sendToServer(PacketKontraptionDriving(impulse.x(), impulse.x(), impulse.x(), impulse.x(), impulse.x(), impulse.x()))
+
+
+        //KontraptionPacketPlayerDriving(impulse, rotation).sendToServer()
     }
 
     override fun getControllingPassenger(): Entity? {

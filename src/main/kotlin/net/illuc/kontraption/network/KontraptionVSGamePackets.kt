@@ -22,14 +22,15 @@ import org.valkyrienskies.mod.common.util.MinecraftPlayer
 object KontraptionVSGamePackets { //yoinkered from the vs2 github
 
     fun register() {
-        KontraptionPacketPlayerDriving::class.register()
-        /*PacketStopChunkUpdates        ::class.register()
-        PacketRestartChunkUpdates     ::class.register()*/
-        PacketSyncVSEntityTypes       ::class.register()
+
+        /*KontraptionPacketPlayerDriving::class.register()
+        PacketStopChunkUpdates        ::class.register()
+        PacketRestartChunkUpdates     ::class.register()
+        PacketSyncVSEntityTypes       ::class.register()*/
     }
 
     fun registerHandlers() {
-        KontraptionPacketPlayerDriving::class.registerServerHandler { driving, iPlayer ->
+        /*KontraptionPacketPlayerDriving::class.registerServerHandler { driving, iPlayer ->
             println("registeringHandlers")
             val player = (iPlayer as MinecraftPlayer).player as ServerPlayer
             val seat = player.vehicle as? KontraptionShipMountingEntity
@@ -50,7 +51,7 @@ object KontraptionVSGamePackets { //yoinkered from the vs2 github
                 attachment.roll             = driving.rotation.z
                 println(attachment.yaw)
             }
-        }
+        }*/
 
         // Syncs the entity handlers to the client
         PacketSyncVSEntityTypes::class.registerClientHandler { syncEntities ->
