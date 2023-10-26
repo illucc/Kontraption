@@ -90,7 +90,7 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
 
 
 
-        Kontraption.packetHandler().sendToServer(PacketKontraptionDriving(impulse.x(), impulse.x(), impulse.x(), impulse.x(), impulse.x(), impulse.x()))
+        Kontraption.packetHandler().sendToServer(PacketKontraptionDriving(impulse.x(), impulse.y(), impulse.z(), rotation.x(), impulse.y(), impulse.z()))
 
 
         //KontraptionPacketPlayerDriving(impulse, rotation).sendToServer()
