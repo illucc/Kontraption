@@ -25,7 +25,6 @@ public class PacketKontraptionDriving implements IMekanismPacket {
     public void handle(NetworkEvent.Context context) {
         Player player = context.getSender();
         if (player != null) {
-            System.out.println(impulse.x());
             KontraptionShipMountingEntity seat = player.getVehicle() instanceof KontraptionShipMountingEntity ? (KontraptionShipMountingEntity) player.getVehicle() : null;
             if (seat == null) {
                 return;

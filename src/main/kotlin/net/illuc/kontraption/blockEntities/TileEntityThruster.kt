@@ -24,6 +24,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import thedarkcolour.kotlinforforge.forge.vectorutil.toVec3
 
 
 public open class TileEntityThruster(blockProvider: IBlockProvider, pos: BlockPos?, state: BlockState?): TileEntityMekanism(blockProvider, pos, state) {

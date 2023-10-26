@@ -16,7 +16,7 @@ class BlockIonThruster(type: BlockTypeTile<TileEntityIonThruster?>?) : BlockTile
         val be = world.getBlockEntity(pos) as TileEntityIonThruster
         be.enable()
         super.onPlace(state, world, pos, oldState, isMoving)
-        //PositionedScreenshakeInstance(5, pos.toVec3(), 5f, 10f)
+
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
