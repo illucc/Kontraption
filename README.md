@@ -1,3 +1,6 @@
+# DO NOT DOWNLOAD FROM THE GITHUB PACKAGES
+The packages are broken at the moment for some reason.
+
 # Kontraption
 A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2.
 
@@ -14,6 +17,3 @@ A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2.
 > Gatling gun(NYI) - A static gun that uses various metals as ammunition
 
 > Mining Drill(NYI) - A mining drill, gives 1.5x more ores
-
-## Build instructions
-todo
