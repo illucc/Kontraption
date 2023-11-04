@@ -5,6 +5,8 @@ import mekanism.common.MekanismLang;
 import mekanism.common.block.attribute.AttributeStateFacing;
 import mekanism.common.content.blocktype.BlockType;
 import mekanism.common.content.blocktype.BlockTypeTile;
+import mekanism.common.content.blocktype.Machine;
+import mekanism.common.registries.MekanismSounds;
 import net.illuc.kontraption.blockEntities.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -19,6 +21,8 @@ public class KontraptionBlockTypes {
     public static final BlockTypeTile<TileEntityIonThruster> ION_THRUSTER = BlockTypeTile.BlockTileBuilder
             .createBlock(() -> KontraptionTileEntityTypes.ION_THRUSTER, MekanismLang.HOLD_FOR_DESCRIPTION)
             .withEnergyConfig(() -> ION_THRUSTER_USAGE, () -> ION_THRUSTER_STORAGE)
+            .withSound(MekanismSounds.CHARGEPAD) //change this
+            //.withCustomShape(KontraptionBlockShapes.ION_THRUSTER)
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
 

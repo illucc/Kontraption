@@ -1,44 +1,42 @@
 package net.illuc.kontraption
 
-import mekanism.api.MekanismAPI
-import mekanism.api.MekanismIMC
-import mekanism.api.chemical.gas.attribute.GasAttributes.Fuel
-import mekanism.api.math.FloatingLongSupplier
 import mekanism.common.Mekanism
 import mekanism.common.base.IModModule
-import mekanism.common.command.builders.BuildCommand
-import mekanism.common.config.MekanismConfig
 import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
-import mekanism.common.lib.multiblock.IStructureValidator
 import mekanism.common.lib.multiblock.MultiblockCache
 import mekanism.common.lib.multiblock.MultiblockManager
-import mekanism.common.registries.MekanismGases
+import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
+import net.illuc.kontraption.client.ThrusterParticle
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
-import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterCache
 import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
 import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterValidator
 import net.illuc.kontraption.network.KontraptionPacketHandler
+import net.minecraft.client.Minecraft
+import net.minecraft.client.particle.SpriteSet
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
+import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.ClientRegistry
 import net.minecraftforge.client.event.EntityRenderersEvent
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber
 import net.minecraftforge.fml.event.config.ModConfigEvent
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import org.valkyrienskies.mod.client.EmptyRenderer
-import thedarkcolour.kotlinforforge.forge.*
-import java.util.function.Supplier
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
 
 /**
@@ -79,6 +77,8 @@ class Kontraption : IModModule {
         KontraptionItems.ITEMS.register(modEventBus)
         KontraptionBlocks.BLOCKS.register(modEventBus)
         ENTITIES.register(modEventBus)
+        MinecraftForge.EVENT_BUS.register(this)
+        KontraptionParticleTypes.PARTICLE_TYPES.register(modEventBus)
         //GeneratorsFluids.FLUIDS.register(modEventBus)
         //GeneratorsSounds.SOUND_EVENTS.register(modEventBus)
         KontraptionContainerTypes.CONTAINER_TYPES.register(modEventBus)
@@ -163,10 +163,6 @@ class Kontraption : IModModule {
         }
     }
 
-
-
-
-
     private fun onConfigLoad(configEvent: ModConfigEvent) {
         //Note: We listen to both the initial load and the reload, to make sure that we fix any accidentally
         // cached values from calls before the initial loading
@@ -194,4 +190,16 @@ class Kontraption : IModModule {
             return ResourceLocation(MODID, path)
         }
     }
+
+
+    @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
+    object ClientRegistryHandler {
+        @SubscribeEvent
+        fun onParticlesRegistry(e: ParticleFactoryRegisterEvent?) {
+            println("bal")
+            Minecraft.getInstance().particleEngine.register(THRUSTER.get()) { spriteSet: SpriteSet? -> ThrusterParticle.Factory(spriteSet) }
+        }
+    }
+
+
 }

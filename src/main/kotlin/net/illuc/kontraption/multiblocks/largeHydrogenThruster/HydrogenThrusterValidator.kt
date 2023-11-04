@@ -8,12 +8,10 @@ import mekanism.common.lib.multiblock.CuboidStructureValidator
 import mekanism.common.lib.multiblock.FormationProtocol
 import mekanism.common.lib.multiblock.FormationProtocol.CasingType
 import mekanism.common.lib.multiblock.FormationProtocol.FormationResult
-import mekanism.common.tile.TileEntityPressureDisperser
 import mekanism.common.util.WorldUtils
 import net.illuc.kontraption.KontraptionBlockTypes
 import net.illuc.kontraption.KontraptionLang
 import net.illuc.kontraption.blockEntities.TileEntityHydrogenThrusterExhaust
-import net.illuc.kontraption.util.toDoubles
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.core.BlockPos.MutableBlockPos
@@ -21,7 +19,6 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
-import thedarkcolour.kotlinforforge.forge.vectorutil.toVec3
 
 
 class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMultiblockData>(VoxelCuboid(3, 3, 3), VoxelCuboid(17, 18, 17)) {
@@ -58,13 +55,14 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
         val innerY = (structure.height() - 3)/2
         val innerZ = (structure.length() - 3)/2
 
+
         var exhausts: MutableSet<BlockPos> = ObjectOpenHashSet()
         var validExhausts: MutableSet<BlockPos> = ObjectOpenHashSet()
 
 
         //Get Direction
         var centerExhaust :TileEntityHydrogenThrusterExhaust? = null
-        var direction: Direction? = null
+        var exhaustDirection: Direction? = null
 
         val mutablePos = MutableBlockPos()
         for (dir in Direction.values()){
@@ -80,17 +78,18 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
                 }
                 validExhausts.add(mutablePos.immutable())
                 centerExhaust = tile
-                direction = dir
+                exhaustDirection = dir
             }
         }
         if (centerExhaust != null) {
-            if (direction == Direction.UP || direction == Direction.DOWN) {
+            if (exhaustDirection == Direction.UP || exhaustDirection == Direction.DOWN) {
                 for (x in centerExhaust.blockPos.getX() - innerX..centerExhaust.blockPos.getX() + innerX) {
                     for (z in centerExhaust.blockPos.getZ() - innerZ..centerExhaust.blockPos.getZ() + innerZ) {
                         if (x != centerX || z != centerZ) {
                             mutablePos.set(x, centerExhaust.blockPos.getY(), z)
                             val tile = WorldUtils.getTileEntity(TileEntityHydrogenThrusterExhaust::class.java, world, chunkMap!!, mutablePos)
                             validExhausts.add(mutablePos.immutable())
+                            structure.exhaustDiameter=structure.height()-2
                             if (tile == null){
                                 return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
                             }
@@ -99,12 +98,13 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
                 }
             }
 
-            if (direction == Direction.EAST || direction == Direction.WEST) {
+            if (exhaustDirection == Direction.EAST || exhaustDirection == Direction.WEST) {
                 for (z in centerExhaust.blockPos.getZ() - innerZ ..centerExhaust.blockPos.getZ() + innerZ) {
                     for (y in centerExhaust.blockPos.getY() - innerY..centerExhaust.blockPos.getY() + innerY) {
                         if (z != centerZ || y != centerY) {
                             mutablePos.set(centerExhaust.blockPos.getX(), y, z)
                             val tile = WorldUtils.getTileEntity(TileEntityHydrogenThrusterExhaust::class.java, world, chunkMap!!, mutablePos)
+                            structure.exhaustDiameter=structure.width()-2
                             validExhausts.add(mutablePos.immutable())
                             if (tile == null){
                                 return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
@@ -114,13 +114,14 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
                 }
             }
 
-            if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+            if (exhaustDirection == Direction.NORTH || exhaustDirection == Direction.SOUTH) {
                 for (x in centerExhaust.blockPos.getX() - innerX ..centerExhaust.blockPos.getX() + innerX) {
                     for (y in centerExhaust.blockPos.getY() - innerY..centerExhaust.blockPos.getY() + innerY) {
                         if (x != centerX || y != centerY) {
                             mutablePos.set(x, y, centerExhaust.blockPos.z)
                             val tile = WorldUtils.getTileEntity(TileEntityHydrogenThrusterExhaust::class.java, world, chunkMap!!, mutablePos)
                             validExhausts.add(mutablePos.immutable())
+                            structure.exhaustDiameter=structure.length()-2
                             if (tile == null){
                                 return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
                             }
@@ -160,6 +161,11 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
 
         }
         println("yahhooo")
+
+        if (exhaustDirection != null) {
+            structure.exhaustDirection = exhaustDirection
+        }
+        structure.centerExhaust = centerExhaust
         return FormationResult.SUCCESS
     }
 }

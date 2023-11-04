@@ -8,6 +8,7 @@ import net.illuc.kontraption.util.toDouble
 import net.illuc.kontraption.util.toJOML
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.entity.BlockEntity
+import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.*
@@ -37,9 +38,9 @@ class KontraptionShipControl  : ShipForcesInducer {
             if (forceStrength != 0.0){
                 val torqueGlobal = physShip.transform.shipToWorldRotation.transform(forceDirection, Vector3d())
                 physShip.applyInvariantTorque(torqueGlobal.mul(forceStrength*gyroStrength))
-                be.powered = true
             }else{
-                be.powered = false
+                //val torqueGlobal = physShip.transform.shipToWorldRotation.transform(physShip.poseVel.omega.negate(Vector3d()), Vector3d())
+                //physShip.applyInvariantTorque(torqueGlobal.mul(gyroStrength))
             }
 
         }
@@ -90,7 +91,6 @@ class KontraptionShipControl  : ShipForcesInducer {
     }
     fun removeGyro(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityGyro) {
         gyros.remove(Controllable(pos.toJOML(), force, tier, be))
-        //gyros.remove(Triple(pos.toJOML(), direction, tier))
     }
     fun stopGyro(pos: BlockPos) {
         gyros.removeAll { it.position == pos.toJOML() }

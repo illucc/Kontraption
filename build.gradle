@@ -229,8 +229,7 @@ dependencies {
 
 
     //using lodestone for now until vsfx comes out
-    //nvm packets mald
-    //implementation fg.deobf("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestoneVersion}")
+    implementation fg.deobf("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}")
 
     //for figuring out what is laggy
     //okay so this causes it to fnuuy itself

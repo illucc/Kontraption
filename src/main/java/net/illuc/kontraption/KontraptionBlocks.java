@@ -1,8 +1,12 @@
 package net.illuc.kontraption;
 
 import mekanism.common.block.prefab.BlockBasicMultiblock;
+import mekanism.common.block.prefab.BlockTile;
+import mekanism.common.content.blocktype.Machine;
+import mekanism.common.item.block.machine.ItemBlockMachine;
 import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
+import net.illuc.kontraption.blockEntities.TileEntityIonThruster;
 import net.illuc.kontraption.blocks.BlockGyro;
 import net.illuc.kontraption.blocks.BlockIonThruster;
 import net.illuc.kontraption.blocks.BlockWheel;
@@ -16,6 +20,7 @@ public class KontraptionBlocks {
     public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(Kontraption.MODID);
 
     // <-----BLOCKS----->
+    //public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityIonThruster, Machine<TileEntityIonThruster>>, ItemBlockMachine> ION_THRUSTER = BLOCKS.register("ion_thruster", () -> new BlockTile.BlockTileModel<>(KontraptionBlockTypes.ION_THRUSTER), ItemBlockMachine::new);
     public static final BlockRegistryObject<BlockIonThruster, BlockItem> ION_THRUSTER = BLOCKS.register("ion_thruster", () -> new BlockIonThruster(KontraptionBlockTypes.ION_THRUSTER));
     public static final BlockRegistryObject<PilotSeatBlock, BlockItem> PILOT_SEAT = BLOCKS.register("pilot_seat", () -> new PilotSeatBlock(KontraptionBlockTypes.PILOT_SEAT));
     public static final BlockRegistryObject<BlockGyro, BlockItem> GYRO = BLOCKS.register("gyro", () -> new BlockGyro(KontraptionBlockTypes.GYRO));
