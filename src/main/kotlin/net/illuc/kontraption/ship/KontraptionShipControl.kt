@@ -50,7 +50,8 @@ class KontraptionShipControl  : ShipForcesInducer {
             if (forceStrength != 0.0){
                 be.powered = true
                 val tForce = physShip.transform.shipToWorld.transformDirection(forceDirection, Vector3d())
-                val tPos = position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
+                //val tPos2 = position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
+                val tPos = Vector3d(0.0, 0.0, 0.0) //position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
 
                 if (forceDirection.isFinite) {
                     physShip.applyInvariantForceToPos(tForce.mul(forceStrength*thrusterStrength), tPos)
