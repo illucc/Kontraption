@@ -1,7 +1,11 @@
 # DO NOT DOWNLOAD FROM THE GITHUB PACKAGES
 The packages are broken at the moment for some reason.
 
-# Kontraption
+<p align="center">
+  <img width="128" height="128" src="./icon.png">
+  <h1 align="center">Kontraption</h1>
+</p>
+
 A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2.
 
 ## Features
