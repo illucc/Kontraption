@@ -10,9 +10,9 @@ name: Gradle Package
 on:
   release:
     types: [created]
-  push:
-    branches:
-      - '1.18.2/main'
+  #push:
+    #branches:
+      #- '1.18.2/main'
 
 jobs:
   build:
