@@ -6,7 +6,7 @@ The packages are broken at the moment for some reason.
   <h1 align="center">Kontraption</h1>
 </p>
 
-A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2.
+A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2. Aims to add numerous new blocks to create and pilot airships but also new factories to produce high efficiency fuels.
 
 ## Features
 
