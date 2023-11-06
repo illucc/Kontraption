@@ -16,7 +16,7 @@ A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2. Aims 
 
 > Ion Thruster - A simple weak thruster that uses energy
 
-> Hydrogen Thruster(WIP) - A 3x3x3 to 17x17x17 multiblock thruster
+> Liquid Fuel Thruster(WIP) - A 3x3x3 to 17x17x17 multiblock thruster
 
 > Gatling gun(NYI) - A static gun that uses various metals as ammunition
 
