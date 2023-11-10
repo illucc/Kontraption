@@ -19,6 +19,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
+import net.minecraft.world.phys.Vec3
 
 
 class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMultiblockData>(VoxelCuboid(3, 3, 3), VoxelCuboid(17, 18, 17)) {
@@ -49,6 +50,8 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
         val centerY = structure!!.minPos.y + (structure!!.height() - 1) / 2
         val centerZ = structure!!.minPos.z + (structure!!.width() - 1) / 2
 
+        structure.center = BlockPos(centerX.toDouble(), centerY.toDouble(), centerZ.toDouble())
+
         val innerRadius = (Math.min(structure.length(), structure.width()) - 3) / 2
 
         val innerX = (structure.width() - 3)/2
@@ -78,7 +81,9 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
                 }
                 validExhausts.add(mutablePos.immutable())
                 centerExhaust = tile
+                structure.centerExhaust = centerExhaust
                 exhaustDirection = dir
+                structure.exhaustDirection = exhaustDirection
             }
         }
         if (centerExhaust != null) {
@@ -162,10 +167,8 @@ class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMulti
         }
         println("yahhooo")
 
-        if (exhaustDirection != null) {
-            structure.exhaustDirection = exhaustDirection
-        }
-        structure.centerExhaust = centerExhaust
+
+
         return FormationResult.SUCCESS
     }
 }

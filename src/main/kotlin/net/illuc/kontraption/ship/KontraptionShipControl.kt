@@ -1,8 +1,9 @@
 package net.illuc.kontraption.ship
 
+import net.illuc.kontraption.ThrusterInterface
 import net.illuc.kontraption.blockEntities.TileEntityGyro
 import net.illuc.kontraption.blockEntities.TileEntityIonThruster
-import net.illuc.kontraption.blockEntities.TileEntityThruster
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
 import net.illuc.kontraption.util.toBlockPos
 import net.illuc.kontraption.util.toDouble
 import net.illuc.kontraption.util.toJOML
@@ -18,12 +19,13 @@ import java.util.concurrent.CopyOnWriteArrayList
 class KontraptionShipControl  : ShipForcesInducer {
 
     data class Controllable<Vector3i, Vector3d, Double, BlockEntity>(val position: Vector3i, val forceDirection: Vector3d, val forceStrength: Double, val be: BlockEntity)
+    data class Thruster<Vector3i, Vector3d, Double, BlockEntity>(val position: Vector3i, val forceDirection: Vector3d, val forceStrength: Double, val thruster: ThrusterInterface)
 
 
     //actual ship control stuffs
 
     //Doing the list thingies
-    private val thrusters =   CopyOnWriteArrayList<Controllable<Vector3i, Vector3d, Double, TileEntityThruster>>()
+    private val thrusters =   CopyOnWriteArrayList<Thruster<Vector3i, Vector3d, Double, ThrusterInterface>>()
     private val gyros =       CopyOnWriteArrayList<Controllable<Vector3i, Vector3d, Double, TileEntityGyro>>()
     private val attachments = CopyOnWriteArrayList<Controllable<Vector3i, Vector3d, Double, BlockEntity>>()
 
@@ -54,7 +56,8 @@ class KontraptionShipControl  : ShipForcesInducer {
                 val tPos = Vector3d(0.0, 0.0, 0.0) //position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
 
                 if (forceDirection.isFinite) {
-                    physShip.applyInvariantForceToPos(tForce.mul(forceStrength*thrusterStrength), tPos)
+                    val forceFinal = forceStrength*thrusterStrength
+                    physShip.applyInvariantForceToPos(tForce.mul(if (forceFinal > 0) forceFinal else 0.0), tPos)
                 }
             }else{
                 be.powered = false
@@ -65,11 +68,21 @@ class KontraptionShipControl  : ShipForcesInducer {
 
 
     //<----------------------------------(THRUSTER STUFF)-------------------------------------->
-    fun addThruster(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityThruster) {
+    /*fun addThruster(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityThruster) {
         thrusters.add(Controllable(pos.toJOML(), force, tier, be))
     }
     fun removeThruster(pos: BlockPos, force: Vector3d, tier: Double, be: TileEntityThruster) {
         thrusters.remove(Controllable(pos.toJOML(), force, tier, be))
+    }
+    fun stopThruster(pos: BlockPos) {
+        thrusters.removeAll { it.position == pos.toJOML() }
+    }*/
+
+    fun addThruster(pos: BlockPos, force: Vector3d, tier: Double, thruster: ThrusterInterface) {
+        thrusters.add(Thruster(pos.toJOML(), force, tier, thruster))
+    }
+    fun removeThruster(pos: BlockPos, force: Vector3d, tier: Double, thruster: ThrusterInterface) {
+        thrusters.remove(Thruster(pos.toJOML(), force, tier, thruster))
     }
     fun stopThruster(pos: BlockPos) {
         thrusters.removeAll { it.position == pos.toJOML() }
