@@ -4,11 +4,11 @@ import mekanism.common.lib.multiblock.MultiblockData
 import net.illuc.kontraption.ThrusterInterface
 import net.illuc.kontraption.particles.ThrusterParticleData
 import net.illuc.kontraption.util.KontraptionVSUtils
+import net.illuc.kontraption.util.toDoubles
 import net.illuc.kontraption.util.toJOMLD
 import net.illuc.kontraption.util.toMinecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -16,10 +16,9 @@ import net.minecraft.world.phys.Vec3
 import net.minecraftforge.api.distmarker.Dist
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.Ship
-import thedarkcolour.kotlinforforge.forge.vectorutil.toVec3
 
 
-class HydrogenThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile), ThrusterInterface {
+class LiquidFuelThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile), ThrusterInterface {
 
     // :cri:
     val te = tile
@@ -28,6 +27,7 @@ class HydrogenThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile),
     var exhaustDiameter = 0
     var offset: Vec3 = Vec3(0.0, 0.0, 0.0)
     var center: BlockPos = BlockPos(0, 0, 0)
+    var innerVolume = 1
 
     var particleDir = exhaustDirection.normal.multiply(3+exhaustDiameter).toJOMLD()
     var pos = centerExhaust?.blockPos?.offset(exhaustDirection.normal.multiply(2))
@@ -41,8 +41,8 @@ class HydrogenThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile),
     override var worldPosition: BlockPos? = center
     override var forceDirection: Direction = exhaustDirection.opposite
     override var powered: Boolean = true
-    override val thrusterPower: Double = 12.0
-    override val basePower: Double = 12.0
+    override var thrusterPower: Double = 24.0
+    override val basePower: Double = 24.0
 
 
     //----------------stuff-----------------------
@@ -58,6 +58,7 @@ class HydrogenThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile),
         worldPosition = center
         forceDirection = exhaustDirection.opposite
         pos = centerExhaust?.blockPos?.offset(exhaustDirection.normal.multiply(1))
+        thrusterPower = (24*innerVolume).toDouble()
         offset = Vector3d(1.0, 1.0, 1.0)
                 .add(exhaustDirection.normal.toJOMLD().normalize().negate())
                 .mul(0.25*exhaustDiameter)
@@ -77,7 +78,7 @@ class HydrogenThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile),
                 }
 
                 thrusterLevel as ServerLevel
-                pos?.let { sendParticleData(thrusterLevel as ServerLevel, it.toVec3(), particleDir) }
+                pos?.let { sendParticleData(thrusterLevel as ServerLevel, it.toDoubles(), particleDir) }
             }
         }
         return super.tick(world)

@@ -1,19 +1,13 @@
 package net.illuc.kontraption.blockEntities
 
-import mekanism.api.IContentsListener
-import mekanism.api.fluid.IExtendedFluidTank
-import mekanism.common.capabilities.holder.fluid.IFluidTankHolder
 import mekanism.common.tile.base.SubstanceType
-import mekanism.common.util.FluidUtils
 import net.illuc.kontraption.KontraptionBlocks
-import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThrusterMultiblockData
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.world.level.block.state.BlockState
-import javax.annotation.Nonnull
 
 
-class TileEntityHydrogenThrusterExhaust(pos: BlockPos?, state: BlockState?) : TileEntityHydrogenThrusterCasing(KontraptionBlocks.HYDROGEN_THRUSTER_EXHAUST, pos, state) {
+class TileEntityLiquidFuelThrusterExhaust(pos: BlockPos?, state: BlockState?) : TileEntityLiquidFuelThrusterCasing(KontraptionBlocks.LIQUID_FUEL_THRUSTER_EXHAUST, pos, state) {
    /* @Nonnull
     protected override fun getInitialFluidTanks(listener: IContentsListener?): IFluidTankHolder {
         return IFluidTankHolder { side: Direction? ->
@@ -22,7 +16,7 @@ class TileEntityHydrogenThrusterExhaust(pos: BlockPos?, state: BlockState?) : Ti
         }
     }*/
 
-    protected override fun onUpdateServer(multiblock: HydrogenThrusterMultiblockData?): Boolean {
+    protected override fun onUpdateServer(multiblock: LiquidFuelThrusterMultiblockData?): Boolean {
         val needsPacket: Boolean = super.onUpdateServer(multiblock)
         if (multiblock != null) {
             if (multiblock.isFormed()) {

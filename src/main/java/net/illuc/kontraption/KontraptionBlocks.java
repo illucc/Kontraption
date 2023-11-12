@@ -1,12 +1,8 @@
 package net.illuc.kontraption;
 
 import mekanism.common.block.prefab.BlockBasicMultiblock;
-import mekanism.common.block.prefab.BlockTile;
-import mekanism.common.content.blocktype.Machine;
-import mekanism.common.item.block.machine.ItemBlockMachine;
 import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
-import net.illuc.kontraption.blockEntities.TileEntityIonThruster;
 import net.illuc.kontraption.blocks.BlockGyro;
 import net.illuc.kontraption.blocks.BlockIonThruster;
 import net.illuc.kontraption.blocks.BlockWheel;
@@ -26,7 +22,7 @@ public class KontraptionBlocks {
     public static final BlockRegistryObject<BlockGyro, BlockItem> GYRO = BLOCKS.register("gyro", () -> new BlockGyro(KontraptionBlockTypes.GYRO));
     //needs work
     public static final BlockRegistryObject<BlockWheel, BlockItem> WHEEL = BLOCKS.register("wheel", () -> new BlockWheel(KontraptionBlockTypes.WHEEL));
-    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> HYDROGEN_THRUSTER_CASING = BLOCKS.register("hydrogen_thruster_casing", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.HYDROGEN_THRUSTER_CASING));
-    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> HYDROGEN_THRUSTER_VALVE = BLOCKS.register("hydrogen_thruster_valve", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.HYDROGEN_THRUSTER_VALVE));
-    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> HYDROGEN_THRUSTER_EXHAUST = BLOCKS.register("hydrogen_thruster_exhaust", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.HYDROGEN_THRUSTER_EXHAUST));
+    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> LIQUID_FUEL_THRUSTER_CASING = BLOCKS.register("liquid_fuel_thruster_casing", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.LIQUID_FUEL_THRUSTER_CASING));
+    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> LIQUID_FUEL_THRUSTER_VALVE = BLOCKS.register("liquid_fuel_thruster_valve", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.LIQUID_FUEL_THRUSTER_VALVE));
+    public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> LIQUID_FUEL_THRUSTER_EXHAUST = BLOCKS.register("liquid_fuel_thruster_exhaust", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.LIQUID_FUEL_THRUSTER_EXHAUST));
 }

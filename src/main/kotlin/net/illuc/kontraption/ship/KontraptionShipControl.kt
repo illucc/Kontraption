@@ -2,20 +2,15 @@ package net.illuc.kontraption.ship
 
 import net.illuc.kontraption.ThrusterInterface
 import net.illuc.kontraption.blockEntities.TileEntityGyro
-import net.illuc.kontraption.blockEntities.TileEntityIonThruster
-import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
 import net.illuc.kontraption.util.toBlockPos
-import net.illuc.kontraption.util.toDouble
 import net.illuc.kontraption.util.toJOML
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.entity.BlockEntity
-import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.time.times
 
 class KontraptionShipControl  : ShipForcesInducer {
 
@@ -51,14 +46,16 @@ class KontraptionShipControl  : ShipForcesInducer {
             val (position, forceDirection, forceStrength, be) = it
             //be.enable()
             if (forceStrength != 0.0){
-                be.powered = true
                 val tForce = physShip.transform.shipToWorld.transformDirection(forceDirection, Vector3d())
                 //val tPos2 = position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
                 val tPos = Vector3d(0.0, 0.0, 0.0) //position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
 
                 if (forceDirection.isFinite) {
                     val forceFinal = forceStrength*thrusterStrength
-                    physShip.applyInvariantForceToPos(tForce.mul(if (forceFinal > 0) forceFinal else 0.0), tPos)
+                    if (forceFinal > 0){
+                        be.powered = true
+                        physShip.applyInvariantForceToPos(tForce.mul(forceFinal), tPos)
+                    }
                 }
             }else{
                 be.powered = false
@@ -94,7 +91,7 @@ class KontraptionShipControl  : ShipForcesInducer {
                 val (pos, forceDir, tier, be) = it
                 stopThruster(pos.toBlockPos())
                 addThruster(pos.toBlockPos(), forceDir, power*it.thruster.thrusterPower, be)
-                println("INSANITY " + tier + " " + power*it.thruster.thrusterPower)
+                //println("INSANITY " + tier + " " + power*it.thruster.thrusterPower)
             }
         }
     }

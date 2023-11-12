@@ -6,23 +6,22 @@ import mekanism.common.tile.interfaces.IHasGasMode
 import mekanism.common.tile.prefab.TileEntityMultiblock
 import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.KontraptionBlocks
-import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThrusterMultiblockData
 import net.minecraft.core.BlockPos
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 
 
-open class TileEntityHydrogenThrusterCasing(blockProvider: IBlockProvider?, pos: BlockPos?, state: BlockState?) : TileEntityMultiblock<HydrogenThrusterMultiblockData?>(blockProvider, pos, state), IHasGasMode{
-    constructor(pos: BlockPos?, state: BlockState?) : this(KontraptionBlocks.HYDROGEN_THRUSTER_CASING, pos, state)
+open class TileEntityLiquidFuelThrusterCasing(blockProvider: IBlockProvider?, pos: BlockPos?, state: BlockState?) : TileEntityMultiblock<LiquidFuelThrusterMultiblockData?>(blockProvider, pos, state), IHasGasMode{
+    constructor(pos: BlockPos?, state: BlockState?) : this(KontraptionBlocks.LIQUID_FUEL_THRUSTER_CASING, pos, state)
 
-    lateinit var prevMultiblock: HydrogenThrusterMultiblockData
+    lateinit var prevMultiblock: LiquidFuelThrusterMultiblockData
 
 
-    override fun createMultiblock(): HydrogenThrusterMultiblockData {
-        return HydrogenThrusterMultiblockData(this)
+    override fun createMultiblock(): LiquidFuelThrusterMultiblockData {
+        return LiquidFuelThrusterMultiblockData(this)
     }
 
-    override fun getManager(): MultiblockManager<HydrogenThrusterMultiblockData?> {
+    override fun getManager(): MultiblockManager<LiquidFuelThrusterMultiblockData?> {
         return Kontraption.hydrogenThrusterManager
     }
 
@@ -30,7 +29,7 @@ open class TileEntityHydrogenThrusterCasing(blockProvider: IBlockProvider?, pos:
         super.blockRemoved()
     }
 
-    override fun getMultiblock(): HydrogenThrusterMultiblockData? {
+    override fun getMultiblock(): LiquidFuelThrusterMultiblockData? {
         return super.getMultiblock()
     }
 
@@ -40,7 +39,7 @@ open class TileEntityHydrogenThrusterCasing(blockProvider: IBlockProvider?, pos:
     }
 
     //actually fuck it let the baller remove the thruster 913482 times
-    override fun structureChanged(multiblock: HydrogenThrusterMultiblockData?) {
+    override fun structureChanged(multiblock: LiquidFuelThrusterMultiblockData?) {
 
         if (multiblock!!.isFormed == false) {
 
@@ -53,7 +52,7 @@ open class TileEntityHydrogenThrusterCasing(blockProvider: IBlockProvider?, pos:
 
     override fun nextMode(tank: Int) {
         if (tank === 0) {
-            val multiblock: HydrogenThrusterMultiblockData? = multiblock
+            val multiblock: LiquidFuelThrusterMultiblockData? = multiblock
             //multiblock.setDumpMode(multiblock.dumpMode.getNext())
         }
 

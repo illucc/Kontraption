@@ -5,18 +5,16 @@ import mekanism.api.chemical.gas.Gas
 import mekanism.api.chemical.gas.GasStack
 import mekanism.api.chemical.gas.IGasTank
 import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder
-import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder
 import mekanism.common.tile.base.SubstanceType
-import mekanism.common.util.CableUtils
 import net.illuc.kontraption.KontraptionBlocks
-import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThrusterMultiblockData
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.block.state.BlockState
 import javax.annotation.Nonnull
 
 
-class TileEntityHydrogenThrusterValve(pos: BlockPos?, state: BlockState?) : TileEntityHydrogenThrusterCasing(KontraptionBlocks.HYDROGEN_THRUSTER_VALVE, pos, state) {
+class TileEntityLiquidFuelThrusterValve(pos: BlockPos?, state: BlockState?) : TileEntityLiquidFuelThrusterCasing(KontraptionBlocks.LIQUID_FUEL_THRUSTER_VALVE, pos, state) {
     @Nonnull
     override fun getInitialGasTanks(listener: IContentsListener?): IChemicalTankHolder<Gas, GasStack, IGasTank> {
         return IChemicalTankHolder<Gas, GasStack, IGasTank> { side: Direction? ->
@@ -29,7 +27,7 @@ class TileEntityHydrogenThrusterValve(pos: BlockPos?, state: BlockState?) : Tile
         return IEnergyContainerHolder { side: Direction? -> getMultiblock()!!.getEnergyContainers(side) }
     }
 */
-    override fun onUpdateServer(multiblock: HydrogenThrusterMultiblockData?): Boolean {
+    override fun onUpdateServer(multiblock: LiquidFuelThrusterMultiblockData?): Boolean {
         val needsPacket: Boolean = super.onUpdateServer(multiblock)
         if (multiblock != null) {
             if (multiblock.isFormed()) {

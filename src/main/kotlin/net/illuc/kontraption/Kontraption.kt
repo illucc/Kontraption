@@ -10,8 +10,8 @@ import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
 import net.illuc.kontraption.client.ThrusterParticle
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
-import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterMultiblockData
-import net.illuc.kontraption.multiblocks.largeHydrogenThruster.HydrogenThrusterValidator
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThrusterMultiblockData
+import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThrusterValidator
 import net.illuc.kontraption.network.KontraptionPacketHandler
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.SpriteSet
@@ -180,7 +180,7 @@ class Kontraption : IModModule {
         //val turbineManager: MultiblockManager<TurbineMultiblockData> = MultiblockManager<TurbineMultiblockData>("industrialTurbine", Supplier<MultiblockCache<TurbineMultiblockData>> { TurbineCache() }, Supplier<IStructureValidator<TurbineMultiblockData>> { TurbineValidator() })
         //val fissionReactorManager: MultiblockManager<FissionReactorMultiblockData> = MultiblockManager<FissionReactorMultiblockData>("fissionReactor", Supplier<MultiblockCache<FissionReactorMultiblockData>> { FissionReactorCache() }, Supplier<IStructureValidator<FissionReactorMultiblockData>> { FissionReactorValidator() })
         //val fusionReactorManager: MultiblockManager<FusionReactorMultiblockData> = MultiblockManager<FusionReactorMultiblockData>("fusionReactor", Supplier<MultiblockCache<FusionReactorMultiblockData>> { FusionReactorCache() }, Supplier<IStructureValidator<FusionReactorMultiblockData>> { FusionReactorValidator() })
-        val hydrogenThrusterManager: MultiblockManager<HydrogenThrusterMultiblockData?> = MultiblockManager("hydrogenThruster", { MultiblockCache<HydrogenThrusterMultiblockData?>() }, { HydrogenThrusterValidator() })
+        val hydrogenThrusterManager: MultiblockManager<LiquidFuelThrusterMultiblockData?> = MultiblockManager("hydrogenThruster", { MultiblockCache<LiquidFuelThrusterMultiblockData?>() }, { LiquidFuelThrusterValidator() })
 
         fun packetHandler(): KontraptionPacketHandler {
             return instance!!.packetHandler

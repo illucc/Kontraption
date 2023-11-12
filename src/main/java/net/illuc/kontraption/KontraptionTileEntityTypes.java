@@ -14,9 +14,9 @@ public class KontraptionTileEntityTypes {
     public static final TileEntityTypeRegistryObject<TileEntityPilotSeat> PILOT_SEAT = TILE_ENTITY_TYPES.register(KontraptionBlocks.PILOT_SEAT, TileEntityPilotSeat::new);
     public static final TileEntityTypeRegistryObject<TileEntityGyro> GYRO = TILE_ENTITY_TYPES.register(KontraptionBlocks.GYRO, TileEntityGyro::new);
     public static final TileEntityTypeRegistryObject<TileEntityWheel> WHEEL = TILE_ENTITY_TYPES.register(KontraptionBlocks.WHEEL, TileEntityWheel::new);
-    public static final TileEntityTypeRegistryObject<TileEntityHydrogenThrusterCasing> HYDROGEN_THRUSTER_CASING = TILE_ENTITY_TYPES.register(KontraptionBlocks.HYDROGEN_THRUSTER_CASING, TileEntityHydrogenThrusterCasing::new);
-    public static final TileEntityTypeRegistryObject<TileEntityHydrogenThrusterValve> HYDROGEN_THRUSTER_VALVE = TILE_ENTITY_TYPES.register(KontraptionBlocks.HYDROGEN_THRUSTER_VALVE, TileEntityHydrogenThrusterValve::new);
-    public static final TileEntityTypeRegistryObject<TileEntityHydrogenThrusterExhaust> HYDROGEN_THRUSTER_EXHAUST = TILE_ENTITY_TYPES.register(KontraptionBlocks.HYDROGEN_THRUSTER_EXHAUST, TileEntityHydrogenThrusterExhaust::new);
+    public static final TileEntityTypeRegistryObject<TileEntityLiquidFuelThrusterCasing> LIQUID_FUEL_THRUSTER_CASING = TILE_ENTITY_TYPES.register(KontraptionBlocks.LIQUID_FUEL_THRUSTER_CASING, TileEntityLiquidFuelThrusterCasing::new);
+    public static final TileEntityTypeRegistryObject<TileEntityLiquidFuelThrusterValve> LIQUID_FUEL_THRUSTER_VALVE = TILE_ENTITY_TYPES.register(KontraptionBlocks.LIQUID_FUEL_THRUSTER_VALVE, TileEntityLiquidFuelThrusterValve::new);
+    public static final TileEntityTypeRegistryObject<TileEntityLiquidFuelThrusterExhaust> LIQUID_FUEL_THRUSTER_EXHAUST = TILE_ENTITY_TYPES.register(KontraptionBlocks.LIQUID_FUEL_THRUSTER_EXHAUST, TileEntityLiquidFuelThrusterExhaust::new);
 
 
 

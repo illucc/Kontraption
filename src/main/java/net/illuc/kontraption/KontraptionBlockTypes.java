@@ -3,9 +3,7 @@ package net.illuc.kontraption;
 import mekanism.api.math.FloatingLong;
 import mekanism.common.MekanismLang;
 import mekanism.common.block.attribute.AttributeStateFacing;
-import mekanism.common.content.blocktype.BlockType;
 import mekanism.common.content.blocktype.BlockTypeTile;
-import mekanism.common.content.blocktype.Machine;
 import mekanism.common.registries.MekanismSounds;
 import net.illuc.kontraption.blockEntities.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -45,20 +43,20 @@ public class KontraptionBlockTypes {
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
 
-    public static final BlockTypeTile<TileEntityHydrogenThrusterCasing> HYDROGEN_THRUSTER_CASING = BlockTypeTile.BlockTileBuilder
-            .createBlock(() -> KontraptionTileEntityTypes.HYDROGEN_THRUSTER_CASING, MekanismLang.HOLD_FOR_DESCRIPTION)
+    public static final BlockTypeTile<TileEntityLiquidFuelThrusterCasing> LIQUID_FUEL_THRUSTER_CASING = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.LIQUID_FUEL_THRUSTER_CASING, MekanismLang.HOLD_FOR_DESCRIPTION)
             //.withGui(() -> GeneratorsContainerTypes.INDUSTRIAL_TURBINE, GeneratorsLang.TURBINE)
             .externalMultiblock()
             .build();
 
-    public static final BlockTypeTile<TileEntityHydrogenThrusterValve> HYDROGEN_THRUSTER_VALVE = BlockTypeTile.BlockTileBuilder
-            .createBlock(() -> KontraptionTileEntityTypes.HYDROGEN_THRUSTER_VALVE, MekanismLang.HOLD_FOR_DESCRIPTION)
+    public static final BlockTypeTile<TileEntityLiquidFuelThrusterValve> LIQUID_FUEL_THRUSTER_VALVE = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.LIQUID_FUEL_THRUSTER_VALVE, MekanismLang.HOLD_FOR_DESCRIPTION)
             //.withGui(() -> GeneratorsContainerTypes.INDUSTRIAL_TURBINE, GeneratorsLang.TURBINE)
             .externalMultiblock()
             .build();
 
-    public static final BlockTypeTile<TileEntityHydrogenThrusterExhaust> HYDROGEN_THRUSTER_EXHAUST = BlockTypeTile.BlockTileBuilder
-            .createBlock(() -> KontraptionTileEntityTypes.HYDROGEN_THRUSTER_EXHAUST, MekanismLang.HOLD_FOR_DESCRIPTION)
+    public static final BlockTypeTile<TileEntityLiquidFuelThrusterExhaust> LIQUID_FUEL_THRUSTER_EXHAUST = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.LIQUID_FUEL_THRUSTER_EXHAUST, MekanismLang.HOLD_FOR_DESCRIPTION)
             //.withGui(() -> GeneratorsContainerTypes.INDUSTRIAL_TURBINE, GeneratorsLang.TURBINE)
             .externalMultiblock()
             .build();
