@@ -15,6 +15,7 @@ import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.time.times
 
 class KontraptionShipControl  : ShipForcesInducer {
 
@@ -91,8 +92,9 @@ class KontraptionShipControl  : ShipForcesInducer {
         thrusters.forEach {
             if (it.forceDirection == forceDirection){
                 val (pos, forceDir, tier, be) = it
-                removeThruster(pos.toBlockPos(), forceDir, tier, be)
-                addThruster(pos.toBlockPos(), forceDir, power, be)
+                stopThruster(pos.toBlockPos())
+                addThruster(pos.toBlockPos(), forceDir, power*it.thruster.thrusterPower, be)
+                println("INSANITY " + tier + " " + power*it.thruster.thrusterPower)
             }
         }
     }

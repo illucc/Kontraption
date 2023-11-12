@@ -14,6 +14,7 @@ interface ThrusterInterface {
     val worldPosition: BlockPos?
     val forceDirection: Direction
     val thrusterPower: Double
+    val basePower: Double
     var powered: Boolean
     fun enable() {
         if (thrusterLevel !is ServerLevel) return

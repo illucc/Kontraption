@@ -24,10 +24,6 @@ import net.minecraft.world.phys.Vec3
 
 class HydrogenThrusterValidator : CuboidStructureValidator<HydrogenThrusterMultiblockData>(VoxelCuboid(3, 3, 3), VoxelCuboid(17, 18, 17)) {
 
-
-
-
-
     override fun getCasingType(state: BlockState?): FormationProtocol.CasingType {
         val block: Block = state!!.block
         if (BlockType.`is`(block, KontraptionBlockTypes.HYDROGEN_THRUSTER_CASING)) {

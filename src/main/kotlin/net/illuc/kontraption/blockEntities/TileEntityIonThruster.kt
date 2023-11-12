@@ -28,6 +28,7 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
     override val forceDirection: Direction = getDirection().opposite
     override var powered: Boolean = true
     override val thrusterPower: Double = 1.0
+    override val basePower: Double = 1.0
 
 
 
