@@ -12,9 +12,8 @@ import mekanism.common.integration.energy.EnergyCompatUtils
 import mekanism.common.tile.base.TileEntityMekanism
 import mekanism.common.util.MekanismUtils
 import net.illuc.kontraption.KontraptionBlocks
-import net.illuc.kontraption.ship.KontraptionShipControl
+import net.illuc.kontraption.ship.KontraptionGyroControl
 import net.illuc.kontraption.util.KontraptionVSUtils
-import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
@@ -116,13 +115,10 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
 
 
 
-        KontraptionShipControl.getOrCreate(ship).let {
+        KontraptionGyroControl.getOrCreate(ship).let {
             it.stopGyro(worldPosition)
             it.addGyro(
                     worldPosition,
-                    this.direction.opposite
-                            .normal
-                            .toJOMLD(),
                     0.0,
                     this
 
@@ -138,7 +134,7 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
 
         enabled = false
 
-        KontraptionShipControl.getOrCreate(
+        KontraptionGyroControl.getOrCreate(
                 KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
                         ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
                         ?: return

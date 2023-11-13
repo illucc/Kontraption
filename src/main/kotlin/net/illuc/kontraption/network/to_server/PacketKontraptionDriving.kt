@@ -20,19 +20,11 @@ import org.valkyrienskies.core.util.writeVec3AsFloat
 import org.valkyrienskies.core.util.writeVec3d
 
 
-public class PacketKontraptionDrivinggg : IMekanismPacket {
-
-    lateinit var impulse: Vector3dc
-    lateinit var rotation: Vector3dc
+class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) : IMekanismPacket {
 
 
     private val key = 0
     private val add = false
-
-    public fun PacketKontraptionDriving(imp: Vector3dc, rot: Vector3dc) {
-        this.impulse = imp
-        this.rotation = rot
-    }
 
     override fun handle(context: NetworkEvent.Context) {
         val player: Player? = context.sender
@@ -60,8 +52,7 @@ public class PacketKontraptionDrivinggg : IMekanismPacket {
         buffer.writeVec3d(rotation)
     }
 
-    fun decode(buffer: FriendlyByteBuf) {
-        return PacketKontraptionDriving(buffer.readVec3d(), buffer.readVec3d())
+    companion object {
+        fun decode(buffer: FriendlyByteBuf) = PacketKontraptionDriving(buffer.readVec3d(), buffer.readVec3d())
     }
-
 }
