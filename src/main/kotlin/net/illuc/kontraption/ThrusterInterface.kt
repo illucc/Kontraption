@@ -1,6 +1,6 @@
 package net.illuc.kontraption
 
-import net.illuc.kontraption.ship.KontraptionShipControl
+import net.illuc.kontraption.ship.KontraptionThrusterControl
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
@@ -25,7 +25,7 @@ interface ThrusterInterface {
                     ?: KontraptionVSUtils.getShipManagingPos((thrusterLevel as ServerLevel), worldPosition)
                     ?: return
 
-            KontraptionShipControl.getOrCreate(ship).let {
+            KontraptionThrusterControl.getOrCreate(ship).let {
                 it.stopThruster(worldPosition!!)
                 it.addThruster(
                         worldPosition!!,
@@ -47,7 +47,7 @@ interface ThrusterInterface {
 
         enabled = false
 
-        KontraptionShipControl.getOrCreate(
+        KontraptionThrusterControl.getOrCreate(
                 KontraptionVSUtils.getShipObjectManagingPos((thrusterLevel as ServerLevel), worldPosition)
                         ?: KontraptionVSUtils.getShipManagingPos((thrusterLevel as ServerLevel), worldPosition)
                         ?: return

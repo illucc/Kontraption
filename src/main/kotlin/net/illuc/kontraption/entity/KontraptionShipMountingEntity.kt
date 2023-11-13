@@ -1,7 +1,5 @@
 package net.illuc.kontraption.entity
 
-import mekanism.common.Mekanism
-import mekanism.common.network.to_server.PacketKey
 import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.network.to_server.PacketKontraptionDriving
@@ -39,8 +37,8 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
             kill()
             return
         }
+
         if (getShipObjectManagingPos(level, blockPosition()) != null)
-            println("sending packets :D")
             sendDrivingPacket()
     }
 
@@ -90,7 +88,10 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
 
 
 
-        Kontraption.packetHandler().sendToServer(PacketKontraptionDriving(impulse.x(), impulse.y(), impulse.z(), rotation.x(), rotation.y(), rotation.z()))
+        Kontraption.packetHandler().sendToServer(PacketKontraptionDriving(
+            Vector3d(impulse.x(), impulse.y(), impulse.z()),
+            Vector3d(rotation.x(), rotation.y(), rotation.z())
+        ))
 
 
         //KontraptionPacketPlayerDriving(impulse, rotation).sendToServer()
