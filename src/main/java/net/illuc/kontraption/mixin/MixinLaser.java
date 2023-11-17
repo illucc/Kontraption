@@ -30,7 +30,7 @@ import static org.valkyrienskies.mod.common.util.VectorConversionsMCKt.*;
 public class MixinLaser {
 
 
-    @ModifyVariable(method = "onUpdateServer()V", at = @At("STORE"), ordinal = 0, remap = false)
+    /*@ModifyVariable(method = "onUpdateServer()V", at = @At("STORE"), ordinal = 0, remap = false)
     private Pos3D MixinPos3DFrom(Pos3D pos3D) {
         TileEntityBasicLaser te = ((TileEntityBasicLaser)(Object)this);
         Ship ship = VSGameUtilsKt.getShipManagingPos(te.getLevel(), te.getBlockPos());
@@ -58,7 +58,7 @@ public class MixinLaser {
         /*if (ship != null){
             Vector3d quatd = ship.getShipToWorld().getNormalizedRotation(new Quaterniond()).getEulerAnglesXYZ(new Vector3d());
             return pos3D.rotate((float) quatd.y, (float) quatd.x, (float) quatd.z); //ship.getShipToWorld().getNormalizedRotation(new Quaterniond())
-        }*/
+        }
 
         return pos3D;
     }
@@ -88,6 +88,5 @@ public class MixinLaser {
         return Direction.UP;
     }
 */
-
 
 }
