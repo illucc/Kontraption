@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "kontraption:block/ship_control_interface"
+    },
+    "facing=south": {
+      "model": "kontraption:block/ship_control_interface",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kontraption:block/ship_control_interface",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "kontraption:block/ship_control_interface",
+      "y": 90
+    }
+  }
+}

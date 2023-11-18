@@ -30,7 +30,6 @@ class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) 
         val player: Player? = context.sender
         if (player != null) {
             val seat = player.vehicle as? KontraptionShipMountingEntity
-            println("seat is controller :thumbsup")
             val ship = KontraptionVSUtils.getShipObjectManagingPos(seat!!.level, seat.blockPosition()) as? LoadedServerShip
                     ?: return
 
@@ -43,7 +42,6 @@ class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) 
             attachment.pitch            = rotation.x()
             attachment.yaw              = rotation.y()
             attachment.roll             = rotation.z()
-            println(attachment.yaw)
         }
     }
 

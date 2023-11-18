@@ -1,13 +1,17 @@
 package net.illuc.kontraption.ship
 
+import com.mojang.math.Quaternion
+import com.mojang.math.Vector3f
 import net.illuc.kontraption.blockEntities.TileEntityGyro
 import net.illuc.kontraption.util.toJOML
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.phys.Vec3
 import org.joml.AxisAngle4d
 import org.joml.Quaterniond
+import org.joml.Quaterniondc
 import org.joml.Vector3d
 import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.*
@@ -23,33 +27,35 @@ class KontraptionGyroControl : ShipForcesInducer {
     val gyroStrength = 100000.0
 
     override fun applyForces(physShip: PhysShip) {
+
         physShip as PhysShipImpl
 
-        // no gravity for testing
-        //physShip.applyInvariantForce(Vector3d(0.0, physShip.inertia.shipMass * 10, 0.0))
 
-/*
-        val totalPower = gyroStrength * gyros.size * targetStrength
+        if (gyros.size != 0){
+            //physShip.applyInvariantForce(Vector3d(0.0, physShip.inertia.shipMass * 10, 0.0))
 
 
-        val rotDif = targetRotation
-            .mul(physShip.transform.shipToWorldRotation.invert(Quaterniond()), Quaterniond())
-            .normalize().invert()
+            val totalPower = gyroStrength * gyros.size * targetStrength
 
-        // Blackmagic ask triode
-        val idealOmega = Vector3d(rotDif.x() * 2.0, rotDif.y() * 2.0, rotDif.z() * 2.0)
-        if (rotDif.w() > 0) idealOmega.mul(-1.0)
 
-        idealOmega.sub(physShip.poseVel.omega)
+            val rotDif = targetRotation
+                    .mul(physShip.transform.shipToWorldRotation.invert(Quaterniond()), Quaterniond())
+                    .normalize().invert()
 
-        val idealTorque = physShip.poseVel.rot.transform(
-            physShip.inertia.momentOfInertiaTensor.transform(
-                physShip.poseVel.rot.transformInverse(idealOmega, Vector3d())))
+            // Blackmagic ask triode
+            val idealOmega = Vector3d(rotDif.x() * 2.0, rotDif.y() * 2.0, rotDif.z() * 2.0)
+            if (rotDif.w() > 0) idealOmega.mul(-1.0)
 
-        idealTorque.mul(1000.0)
+            idealOmega.sub(physShip.poseVel.omega)
 
-        physShip.applyInvariantTorque(idealTorque)
-        */
+            val idealTorque = physShip.poseVel.rot.transform(
+                    physShip.inertia.momentOfInertiaTensor.transform(
+                            physShip.poseVel.rot.transformInverse(idealOmega, Vector3d())))
+
+            idealTorque.mul(100.0)
+
+            physShip.applyInvariantTorque(idealTorque)
+        }
     }
 
     fun addGyro(pos: BlockPos, tier: Double, be: TileEntityGyro) {

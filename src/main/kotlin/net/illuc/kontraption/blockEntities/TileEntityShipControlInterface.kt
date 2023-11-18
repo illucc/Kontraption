@@ -21,11 +21,10 @@ import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.ship.KontraptionGyroControl
 import net.illuc.kontraption.ship.KontraptionThrusterControl
 import net.illuc.kontraption.util.toJOMLD
-import org.joml.AxisAngle4d
 import org.joml.Quaterniond
 import org.valkyrienskies.core.api.ships.saveAttachment
 
-class TileEntityPilotSeat(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.PILOT_SEAT, pos, state){
+class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.SHIP_CONTROL_INTERFACE, pos, state){
     private val ship: ServerShip? get() = getShipObjectManagingPos((level as ServerLevel), this.blockPos)
     private var seatedControllingPlayer: KontraptionSeatedControllingPlayer? = null
     private val seats = mutableListOf<KontraptionShipMountingEntity>()

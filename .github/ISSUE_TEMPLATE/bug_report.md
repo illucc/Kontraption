@@ -6,6 +6,9 @@ labels: bug
 assignees: ''
 
 ---
+**BEFORE REPORTING MAKE SURE:**
+- [ ] You are on the newest version of Kontraption and Valkyrien Skies.
+- [ ] You have tested it with only Kontraption, Valkyrien Skies, Mekanism and Kotlin for Forge installed.
 
 **Describe the bug**
 A clear and concise description of what the bug is.
@@ -24,7 +27,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Logs**
-The game logs
+The game logs (latest.log, debug.log).
 
 **Versions**
  - VS2 version:

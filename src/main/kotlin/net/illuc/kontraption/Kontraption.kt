@@ -141,7 +141,7 @@ class Kontraption : IModModule {
     }
 
     override fun getName(): String {
-        return "Generators"
+        return "Kontraption"
     }
 
     override fun resetClient() {
