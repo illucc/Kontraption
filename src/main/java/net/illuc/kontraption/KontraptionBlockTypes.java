@@ -23,7 +23,7 @@ public class KontraptionBlockTypes {
             .withEnergyConfig(() -> ION_THRUSTER_USAGE, () -> ION_THRUSTER_STORAGE)
             .withSound(MekanismSounds.CHARGEPAD) //change this
             .with(AttributeCustomSelectionBox.JSON)
-            //.withCustomShape(KontraptionBlockShapes.ION_THRUSTER)
+            .withCustomShape(KontraptionBlockShapes.ION_THRUSTER)
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
 
@@ -40,6 +40,8 @@ public class KontraptionBlockTypes {
             .createBlock(() -> KontraptionTileEntityTypes.GYRO, MekanismLang.HOLD_FOR_DESCRIPTION)
             .withEnergyConfig(() -> ION_THRUSTER_USAGE, () -> ION_THRUSTER_STORAGE)
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
+            .with(AttributeCustomSelectionBox.JSON)
+            .withCustomShape(KontraptionBlockShapes.GYRO)
             .build();
 
     public static final BlockTypeTile<TileEntityWheel> WHEEL = BlockTypeTile.BlockTileBuilder

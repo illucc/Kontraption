@@ -14,27 +14,18 @@ public class KontraptionBlockShapes {
     }
 
     public static final VoxelShape[] ION_THRUSTER = new VoxelShape[EnumUtils.DIRECTIONS.length];
+    public static final VoxelShape[] GYRO = new VoxelShape[EnumUtils.DIRECTIONS.length];
     public static final VoxelShape[] SHIP_CONTROL_INTERFACE = new VoxelShape[EnumUtils.HORIZONTAL_DIRECTIONS.length];
 
     static {
         VoxelShapeUtils.setShape(VoxelShapeUtils.combine(
-                box(0, 7, 6, 16, 16, 15), // drum
-                box(0, 0, 0, 16, 6, 16), // base
-                box(3, 6, 5, 5, 15, 16), // ring1
-                box(11, 6, 5, 13, 15, 16), // ring2
-                box(0, 6, 2, 16, 16, 5), // back
-                box(3, 6, 1, 5, 15, 2), // bar1
-                box(11, 6, 1, 13, 15, 2), // bar2
-                box(4, 6, 0, 12, 12, 2), // port
-                box(0, 13, 0, 16, 14, 2), // fin7
-                box(0, 15, 0, 16, 16, 2), // fin8
-                box(0, 11, 0, 4, 12, 2), // fin1
-                box(0, 9, 0, 4, 10, 2), // fin2
-                box(0, 7, 0, 4, 8, 2), // fin3
-                box(12, 11, 0, 16, 12, 2), // fin4
-                box(12, 9, 0, 16, 10, 2), // fin5
-                box(12, 7, 0, 16, 8, 2) // fin6
-        ), ION_THRUSTER);
+                box(2, 0, 2, 14, 16, 14), // cube
+                box(0, 0, 0, 16, 4, 16), // the slab like thing
+                box(2, -12, 2, 14, -3, 14)
+        ), ION_THRUSTER, true);
+        VoxelShapeUtils.setShape(VoxelShapeUtils.combine(
+                box(1, 1, 1, 15, 15, 15) // cube
+        ), GYRO, true);
         VoxelShapeUtils.setShape(VoxelShapeUtils.combine(
                 box(0, 0, 0, 16, 5, 16),
                 box(0, 6, 0, 16, 10, 16),

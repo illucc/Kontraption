@@ -42,8 +42,6 @@ open class TileEntityLiquidFuelThrusterCasing(blockProvider: IBlockProvider?, po
     override fun structureChanged(multiblock: LiquidFuelThrusterMultiblockData?) {
 
         if (multiblock!!.isFormed == false) {
-
-            println("baler")
             prevMultiblock.disable()
         }
         prevMultiblock = multiblock
