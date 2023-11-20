@@ -18,7 +18,7 @@ class ThrusterParticle protected constructor(world: ClientLevel?, posX: Double, 
         xd = velX
         yd = velY
         zd = velZ
-        scale((7f+scale).toFloat())
+        scale((14f+scale).toFloat())
     }
 
     public override fun getLightColor(partialTick: Float): Int {

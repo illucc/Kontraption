@@ -56,17 +56,20 @@ class LiquidFuelThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile
         ship = KontraptionVSUtils.getShipObjectManagingPos((thrusterLevel as ServerLevel), center)
                 ?: KontraptionVSUtils.getShipManagingPos((thrusterLevel as ServerLevel), center)
 
-        thrusterLevel = centerExhaust?.level
-        worldPosition = center
-        forceDirection = exhaustDirection.opposite
-        pos = centerExhaust?.blockPos?.offset(exhaustDirection.normal.multiply(1))
-        thrusterPower = (24*innerVolume).toDouble()
-        offset = Vector3d(1.0, 1.0, 1.0)
-                .add(exhaustDirection.normal.toJOMLD().normalize().negate())
-                .mul(0.25*exhaustDiameter)
-                .add(exhaustDirection.normal.toJOMLD()
-                        .mul(1.5)).toMinecraft()
-        enable()
+        if (ship != null){
+            thrusterLevel = centerExhaust?.level
+            worldPosition = center
+            forceDirection = exhaustDirection.opposite
+            pos = centerExhaust?.blockPos?.offset(exhaustDirection.normal.multiply(1))
+            thrusterPower = (24*innerVolume).toDouble()
+            offset = Vector3d(1.0, 1.0, 1.0)
+                    .add(exhaustDirection.normal.toJOMLD().normalize().negate())
+                    .mul(0.25*exhaustDiameter)
+                    .add(exhaustDirection.normal.toJOMLD()
+                            .mul(1.5)).toMinecraft()
+            enable()
+        }
+
     }
 
 
@@ -91,7 +94,7 @@ class LiquidFuelThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile
         if (!isRemote && level is ServerLevel) {
 
             for (player in level.players()) {
-                level.sendParticles(player, ThrusterParticleData(particleDir.x.toDouble(), particleDir.y.toDouble(), particleDir.z.toDouble(), exhaustDiameter.toDouble()), true, pos.x+0.5, pos.y+0.5, pos.z+0.5, 10*exhaustDiameter, offset.x, offset.y, offset.z, 0.0)
+                level.sendParticles(player, ThrusterParticleData(particleDir.x.toDouble(), particleDir.y.toDouble(), particleDir.z.toDouble(), exhaustDiameter.toDouble()), true, pos.x+0.5, pos.y+0.5, pos.z+0.5, 2*exhaustDiameter, offset.x, offset.y, offset.z, 0.0)
             }
         }
     }
