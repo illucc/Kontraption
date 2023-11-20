@@ -12,6 +12,7 @@ import mekanism.common.tile.base.TileEntityMekanism
 import mekanism.common.util.MekanismUtils
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.ThrusterInterface
+import net.illuc.kontraption.config.KontraptionConfigs
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
@@ -27,8 +28,8 @@ class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMeka
     override val worldPosition: BlockPos? = pos
     override val forceDirection: Direction = getDirection().opposite
     override var powered: Boolean = true
-    override val thrusterPower: Double = 1.0
-    override val basePower: Double = 1.0
+    override val thrusterPower: Double = KontraptionConfigs.kontraption.ionThrust.get()
+    override val basePower: Double = KontraptionConfigs.kontraption.ionThrust.get()
 
 
 

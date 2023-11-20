@@ -3,6 +3,7 @@ package net.illuc.kontraption.ship
 import com.mojang.math.Quaternion
 import com.mojang.math.Vector3f
 import net.illuc.kontraption.blockEntities.TileEntityGyro
+import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.util.toJOML
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
@@ -52,7 +53,7 @@ class KontraptionGyroControl : ShipForcesInducer {
                     physShip.inertia.momentOfInertiaTensor.transform(
                             physShip.poseVel.rot.transformInverse(idealOmega, Vector3d())))
 
-            idealTorque.mul(100.0)
+            idealTorque.mul(KontraptionConfigs.kontraption.gyroTorqueStrength.get())
 
             physShip.applyInvariantTorque(idealTorque)
         }

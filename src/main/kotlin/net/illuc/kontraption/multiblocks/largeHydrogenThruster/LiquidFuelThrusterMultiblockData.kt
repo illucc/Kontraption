@@ -2,6 +2,8 @@ package net.illuc.kontraption.multiblocks.largeHydrogenThruster
 
 import mekanism.common.lib.multiblock.MultiblockData
 import net.illuc.kontraption.ThrusterInterface
+import net.illuc.kontraption.config.KontraptionConfig
+import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.particles.ThrusterParticleData
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.toDoubles
@@ -41,8 +43,8 @@ class LiquidFuelThrusterMultiblockData(tile: BlockEntity?) : MultiblockData(tile
     override var worldPosition: BlockPos? = center
     override var forceDirection: Direction = exhaustDirection.opposite
     override var powered: Boolean = true
-    override var thrusterPower: Double = 24.0
-    override val basePower: Double = 24.0
+    override var thrusterPower: Double = KontraptionConfigs.kontraption.liquidFuelThrust.get()
+    override val basePower: Double = KontraptionConfigs.kontraption.liquidFuelThrust.get()
 
 
     //----------------stuff-----------------------
