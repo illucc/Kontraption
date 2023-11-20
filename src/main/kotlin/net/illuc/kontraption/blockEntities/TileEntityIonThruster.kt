@@ -23,7 +23,7 @@ import javax.annotation.Nonnull
 
 //class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state) {
 class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state), ThrusterInterface {
-    override var enabled = true
+    override var enabled = false
     override var thrusterLevel: Level? = null
     override val worldPosition: BlockPos? = pos
     override val forceDirection: Direction = getDirection().opposite

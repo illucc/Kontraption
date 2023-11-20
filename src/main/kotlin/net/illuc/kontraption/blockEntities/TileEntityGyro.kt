@@ -24,7 +24,7 @@ import javax.annotation.Nonnull
 
 class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.GYRO, pos, state) {
     var enabled = false
-    var powered = false
+    var powered = true
 
     private var clientEnergyUsed = FloatingLong.ZERO
 
