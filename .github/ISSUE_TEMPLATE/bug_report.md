@@ -3,12 +3,13 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: ''
+assignees: 'illucc'
 
 ---
 **BEFORE REPORTING MAKE SURE:**
 - [ ] You are on the newest version of Kontraption and Valkyrien Skies.
 - [ ] You have tested it with only Kontraption, Valkyrien Skies, Mekanism and Kotlin for Forge installed.
+- [ ] The bug hasn't been reported already.
 
 **Describe the bug**
 A clear and concise description of what the bug is.
