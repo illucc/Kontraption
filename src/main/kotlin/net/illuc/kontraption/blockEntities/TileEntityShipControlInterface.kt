@@ -1,5 +1,7 @@
 package net.illuc.kontraption.blockEntities
 
+import com.mojang.blaze3d.platform.InputConstants.CURSOR
+import com.mojang.blaze3d.platform.InputConstants.CURSOR_NORMAL
 import mekanism.common.tile.base.TileEntityMekanism
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.controls.KontraptionSeatedControllingPlayer
@@ -21,7 +23,9 @@ import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.ship.KontraptionGyroControl
 import net.illuc.kontraption.ship.KontraptionThrusterControl
 import net.illuc.kontraption.util.toJOMLD
+import net.minecraft.client.Minecraft
 import org.joml.Quaterniond
+import org.lwjgl.glfw.GLFW
 import org.valkyrienskies.core.api.ships.saveAttachment
 
 class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.SHIP_CONTROL_INTERFACE, pos, state){
@@ -124,6 +128,10 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
         }
 
         val seat = spawnSeat(blockPos, blockState, level)
+        //player.xRot = 0F
+        //player.yRot = 0F
+        //Minecraft.getInstance().options.sensitivity = -1/3.0
+        //GLFW.glfwSetInputMode(Minecraft.getInstance().getWindow().window, CURSOR, CURSOR_NORMAL)
         val ride = player.startRiding(seat, force)
         if (ride) {
             seats.add(seat)
