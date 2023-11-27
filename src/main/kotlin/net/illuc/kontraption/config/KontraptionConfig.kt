@@ -31,7 +31,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
                 .define("gyroTorqueStrength", 100.0),
         )
 
-        thrusterSpeedLimit = CachedDoubleValue.wrap(this, builder.comment("At what speed the thruster starts slowing down (blocks per second)")
+        thrusterSpeedLimit = CachedDoubleValue.wrap(this, builder.comment("At what speed the thruster starts slowing down (wip, currently just stops the thruster)")
                 .define("thrusterSpeedLimit", 100.0),
         )
 
