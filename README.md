@@ -21,3 +21,7 @@ A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2. Aims 
 > Gatling gun(NYI) - A static gun that uses various metals as ammunition.
 
 > Mining Drill(NYI) - A mining drill, gives 1.5x more ores.
+
+## Contributing
+Pull requests are welcome (please help 🥺)
+In a PR list all of the additions, changes and removals of stuff.
