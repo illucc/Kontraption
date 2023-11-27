@@ -10,9 +10,9 @@ A Space Engineers inspired addon for Mekanism utilizing Valkyrien Skies 2. Aims 
 
 ## Features
 
-> Pilot Seat(WIP) - A seat providing Space Engineers like ship controls to players.
+> Ship Control Interface(WIP) - A interface through which the player can control the ship.
 
-> Gyro(WIP) - Ripped straight from Space Engineers, stabilizes the ship rotation and provides rotational controls.
+> Gyro(WIP) - Stabilizes the ship rotation and provides rotational controls.
 
 > Ion Thruster - A simple weak thruster that uses energy.
 
