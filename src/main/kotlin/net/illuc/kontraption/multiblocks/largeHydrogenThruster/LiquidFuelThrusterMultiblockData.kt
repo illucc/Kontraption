@@ -1,14 +1,16 @@
 package net.illuc.kontraption.multiblocks.largeHydrogenThruster
 
+import mekanism.api.Action
 import mekanism.api.AutomationType
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator
 import mekanism.api.chemical.gas.Gas
+import mekanism.api.chemical.gas.IGasTank
 import mekanism.common.capabilities.chemical.multiblock.MultiblockChemicalTankBuilder
-import mekanism.common.capabilities.fluid.MultiblockFluidTank
 import mekanism.common.lib.multiblock.IValveHandler
 import mekanism.common.lib.multiblock.MultiblockData
-import mekanism.common.recipe.lookup.ISingleRecipeLookupHandler.FluidRecipeLookupHandler
 import mekanism.common.registries.MekanismGases
+import mekanism.common.tags.MekanismTags
+import net.illuc.kontraption.KontraptionTags
 import net.illuc.kontraption.ThrusterInterface
 import net.illuc.kontraption.blockEntities.TileEntityLiquidFuelThrusterCasing
 import net.illuc.kontraption.config.KontraptionConfigs
@@ -26,8 +28,6 @@ import net.minecraft.world.phys.Vec3
 import net.minecraftforge.api.distmarker.Dist
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.Ship
-import java.util.function.BiPredicate
-import java.util.function.Predicate
 
 
 class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing) : MultiblockData(tile), ThrusterInterface, IValveHandler {
@@ -58,9 +58,20 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
 
     //----------------stuff-----------------------
 
-    init {
-        fluidTanks.add(MultiblockFluidTank.create(10, tile))
 
+    var fuelTank: IGasTank? = null
+    var burnRemaining = 0.0
+    var lastBurnRate = 0.0
+
+    init {
+        //fluidTanks.add(MultiblockFluidTank.create(10, tile))
+        //fuelTank = MultiblockFluidTank.input(this, tile, { 10 }, { fluid: FluidStack -> MekanismTags.Fluids.LAVA_LOOKUP.contains(fluid.fluid) })
+        fuelTank = MultiblockChemicalTankBuilder.GAS.create(this, tile, { (thrusterPower * 100 * 4).toLong() },
+                { stack: Gas?, automationType: AutomationType -> automationType != AutomationType.EXTERNAL }, { stack: Gas?, automationType: AutomationType? -> isFormed },
+                { gas: Gas -> gas === MekanismGases.HYDROGEN.get() }, ChemicalAttributeValidator.ALWAYS_ALLOW, null)
+
+
+        gasTanks.add(fuelTank);
     }
 
     override fun onCreated(world: Level?) {
@@ -76,11 +87,12 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
                 .add(exhaustDirection.normal.toJOMLD()
                         .mul(1.5)).toMinecraft()
         pos = centerExhaust?.blockPos?.offset(exhaustDirection.normal.multiply(1))
+
+        thrusterPower = (KontraptionConfigs.kontraption.liquidFuelThrust.get() * innerVolume)
         if (ship != null) {
             thrusterLevel = centerExhaust?.level
             worldPosition = center
             forceDirection = exhaustDirection.opposite
-            thrusterPower = (24 * innerVolume).toDouble()
 
             enable()
         }
@@ -88,7 +100,18 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
 
 
     override fun tick(world: Level?): Boolean {
-        if (powered){
+        val needsPacket = super.tick(world)
+
+        if (powered) {
+            if (world != null) {
+                burnFuel(world)
+            }
+        } else {
+            lastBurnRate = 0.0;
+        }
+
+        if (powered and enabled){
+
             if (Dist.DEDICATED_SERVER.isDedicatedServer and (thrusterLevel != null)) {
                 particleDir = if (ship == null){
                     exhaustDirection.normal.multiply(3+exhaustDiameter).toJOMLD()
@@ -100,7 +123,28 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
                 pos?.let { sendParticleData(thrusterLevel as ServerLevel, it.toDoubles(), particleDir) }
             }
         }
-        return super.tick(world)
+        return needsPacket
+    }
+
+    private fun burnFuel(world: Level) {
+        val lastBurnRemaining: Double = burnRemaining
+        var storedFuel: Double = fuelTank!!.stored + burnRemaining
+        val toBurn = thrusterPower * 100 //Math.min(Math.min(1.0, storedFuel), fuelAssemblies * MekanismGeneratorsConfig.generators.burnPerAssembly.get())
+        storedFuel -= toBurn
+        if (storedFuel <= 0.0){
+            if (enabled == true){
+                disable()
+            }
+        }else{
+            if (enabled == false){
+                enable()
+            }
+        }
+        fuelTank!!.setStackSize(storedFuel.toLong(), Action.EXECUTE)
+        burnRemaining = storedFuel % 1
+        //heatCapacitor.handleHeat(toBurn * MekanismGeneratorsConfig.generators.energyPerFissionFuel.get().doubleValue())
+        // update previous burn
+        lastBurnRate = toBurn
     }
 
 

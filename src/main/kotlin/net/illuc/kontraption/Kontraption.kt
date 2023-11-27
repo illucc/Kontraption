@@ -1,15 +1,16 @@
 package net.illuc.kontraption
 
+import mekanism.api.chemical.gas.attribute.GasAttributes.Fuel
 import mekanism.common.Mekanism
 import mekanism.common.base.IModModule
-import mekanism.common.config.MekanismConfigHelper
 import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
 import mekanism.common.lib.multiblock.MultiblockCache
 import mekanism.common.lib.multiblock.MultiblockManager
+import mekanism.common.registries.MekanismFluids
+import mekanism.common.registries.MekanismGases
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
 import net.illuc.kontraption.client.ThrusterParticle
-import net.illuc.kontraption.config.KontraptionConfig
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
@@ -111,6 +112,8 @@ class Kontraption : IModModule {
 
     }
 
+
+
     private fun commonSetup(event: FMLCommonSetupEvent) {
         //1mB hydrogen + 2*bioFuel/tick*200ticks/100mB * 20x efficiency bonus
         /*MekanismGases.ETHENE.get().addAttribute(Fuel(MekanismConfig.general.ETHENE_BURN_TIME,
@@ -119,6 +122,7 @@ class Kontraption : IModModule {
                             .multiply(2L * MekanismConfig.general.ETHENE_BURN_TIME.get()))
                 }))*/
         event.enqueueWork {
+            KontraptionTags.init();
 
             //Ensure our tags are all initialized
             //GeneratorTags.init()

@@ -1,13 +1,19 @@
 package net.illuc.kontraption.ship
 
 import net.illuc.kontraption.ThrusterInterface
+import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.util.toBlockPos
 import net.illuc.kontraption.util.toJOML
 import net.minecraft.core.BlockPos
 import org.joml.Vector3d
 import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.*
+import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
+import org.valkyrienskies.core.util.x
+import org.valkyrienskies.core.util.y
+import org.valkyrienskies.core.util.z
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.absoluteValue
 
 class KontraptionThrusterControl : ShipForcesInducer {
     data class Thruster(val position: Vector3i, val forceDirection: Vector3d, val forceStrength: Double, val thruster: ThrusterInterface)
@@ -17,6 +23,7 @@ class KontraptionThrusterControl : ShipForcesInducer {
     val thrusterStrength = 100000.0
 
     override fun applyForces(physShip: PhysShip) {
+        physShip as PhysShipImpl
         thrusters.forEach {
             val (position, forceDirection, forceStrength, be) = it
             //be.enable()
@@ -29,6 +36,19 @@ class KontraptionThrusterControl : ShipForcesInducer {
                     val forceFinal = forceStrength*thrusterStrength
                     if (forceFinal > 0){
                         be.powered = true
+
+                        if (physShip.poseVel.vel.x.absoluteValue > KontraptionConfigs.kontraption.thrusterSpeedLimit.get()){
+                            if ((physShip.poseVel.vel.x > 0) and (tForce.x > 0)) tForce.x = 0.0
+                            if ((physShip.poseVel.vel.x < 0) and (tForce.x < 0)) tForce.x = 0.0
+                        }
+                        if (physShip.poseVel.vel.y.absoluteValue > KontraptionConfigs.kontraption.thrusterSpeedLimit.get()){
+                            if ((physShip.poseVel.vel.y > 0) and (tForce.y > 0)) tForce.y = 0.0
+                            if ((physShip.poseVel.vel.y < 0) and (tForce.y < 0)) tForce.y = 0.0
+                        }
+                        if (physShip.poseVel.vel.z.absoluteValue > KontraptionConfigs.kontraption.thrusterSpeedLimit.get()){
+                            if ((physShip.poseVel.vel.z > 0) and (tForce.z > 0)) tForce.z = 0.0
+                            if ((physShip.poseVel.vel.z < 0) and (tForce.z < 0)) tForce.z = 0.0
+                        }
                         physShip.applyInvariantForceToPos(tForce.mul(forceFinal), tPos)
                     }
                 }

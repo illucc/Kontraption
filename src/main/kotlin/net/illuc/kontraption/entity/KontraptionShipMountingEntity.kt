@@ -86,8 +86,8 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
         val y = DoubleArray(1)
         GLFW.glfwGetCursorPos(Minecraft.getInstance().getWindow().window, x, y);
         val rotation = Vector3d()
-        rotation.x = if (yawUp == yawDown) 0.0 else if (yawUp) 1.0 else -1.0
-        rotation.y = if (pitchUp == pitchDown) 0.0 else if (pitchUp) 1.0 else -1.0
+        rotation.y = if (yawUp == yawDown) 0.0 else if (yawUp) 1.0 else -1.0
+        rotation.x = if (pitchUp == pitchDown) 0.0 else if (pitchUp) -1.0 else 1.0
 
         //rotation.y = -Math.round((x[0]-Minecraft.getInstance().getWindow().width/2)/Minecraft.getInstance().getWindow().width * 100.0) / 100.0 //
         //rotation.x = Math.round(((y[0]-Minecraft.getInstance().getWindow().height/2)/Minecraft.getInstance().getWindow().height) * 100.0) / 100.0 //

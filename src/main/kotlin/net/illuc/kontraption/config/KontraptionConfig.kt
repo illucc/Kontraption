@@ -14,6 +14,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
     val liquidFuelThrust: CachedDoubleValue
     val ionThrust: CachedDoubleValue
     val gyroTorqueStrength: CachedDoubleValue
+    val thrusterSpeedLimit: CachedDoubleValue
 
     init {
         val builder = ForgeConfigSpec.Builder()
@@ -29,6 +30,11 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
         gyroTorqueStrength = CachedDoubleValue.wrap(this, builder.comment("How powerful the gyro is.")
                 .define("gyroTorqueStrength", 100.0),
         )
+
+        thrusterSpeedLimit = CachedDoubleValue.wrap(this, builder.comment("At what speed the thruster starts slowing down (blocks per second)")
+                .define("thrusterSpeedLimit", 100.0),
+        )
+
 
         configSpec = builder.build()
     }

@@ -28,7 +28,7 @@ class TileEntityLiquidFuelThrusterExhaust(pos: BlockPos?, state: BlockState?) : 
 
     override fun persists(type: SubstanceType): Boolean {
         //Do not handle fluid when it comes to syncing it/saving this tile to disk
-        return if (type == SubstanceType.FLUID) {
+        return if (type == SubstanceType.GAS) {
             false
         } else super.persists(type)
     }

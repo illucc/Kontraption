@@ -4,6 +4,7 @@ import mekanism.api.math.FloatingLong;
 import mekanism.common.MekanismLang;
 import mekanism.common.block.attribute.AttributeCustomSelectionBox;
 import mekanism.common.block.attribute.AttributeStateFacing;
+import mekanism.common.block.attribute.Attributes;
 import mekanism.common.content.blocktype.BlockType;
 import mekanism.common.content.blocktype.BlockTypeTile;
 import mekanism.common.registries.MekanismSounds;
@@ -66,6 +67,7 @@ public class KontraptionBlockTypes {
     public static final BlockTypeTile<TileEntityLiquidFuelThrusterExhaust> LIQUID_FUEL_THRUSTER_EXHAUST = BlockTypeTile.BlockTileBuilder
             .createBlock(() -> KontraptionTileEntityTypes.LIQUID_FUEL_THRUSTER_EXHAUST, MekanismLang.HOLD_FOR_DESCRIPTION)
             //.withGui(() -> GeneratorsContainerTypes.INDUSTRIAL_TURBINE, GeneratorsLang.TURBINE)
+            .with(Attributes.INVENTORY, Attributes.COMPARATOR)
             .externalMultiblock()
             .build();
 
