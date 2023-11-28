@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="128" height="128" src="./icon.png">
+  <img width="256" height="256" src="./icon.png">
   <h1 align="center">Kontraption</h1>
 </p>
 
