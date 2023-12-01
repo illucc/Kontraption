@@ -150,7 +150,6 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
 
     private fun sendParticleData(level: Level, pos: Vec3, particleDir: Vector3d) {
         if (!isRemote && level is ServerLevel) {
-
             for (player in level.players()) {
                 level.sendParticles(player, ThrusterParticleData(particleDir.x.toDouble(), particleDir.y.toDouble(), particleDir.z.toDouble(), exhaustDiameter.toDouble()), true, pos.x+0.5, pos.y+0.5, pos.z+0.5, 2*exhaustDiameter, offset.x, offset.y, offset.z, 0.0)
             }

@@ -1,13 +1,21 @@
 package net.illuc.kontraption.blockEntities
 
-import com.mojang.blaze3d.platform.InputConstants.CURSOR
-import com.mojang.blaze3d.platform.InputConstants.CURSOR_NORMAL
+import mekanism.common.block.attribute.Attribute.isActive
+import mekanism.common.integration.computer.ComputerException
+import mekanism.common.integration.computer.annotation.ComputerMethod
+import mekanism.common.integration.computer.annotation.SyntheticComputerMethod
+import mekanism.common.integration.computer.annotation.WrappingComputerMethod
+import mekanism.common.inventory.container.sync.dynamic.ContainerSync
 import mekanism.common.tile.base.TileEntityMekanism
+import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.controls.KontraptionSeatedControllingPlayer
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
+import net.illuc.kontraption.ship.KontraptionGyroControl
+import net.illuc.kontraption.ship.KontraptionThrusterControl
 import net.illuc.kontraption.util.KontraptionVSUtils.getShipObjectManagingPos
 import net.illuc.kontraption.util.toDoubles
+import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -16,23 +24,21 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
+import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
-import net.illuc.kontraption.Kontraption
-import net.illuc.kontraption.ship.KontraptionGyroControl
-import net.illuc.kontraption.ship.KontraptionThrusterControl
-import net.illuc.kontraption.util.toJOMLD
-import net.minecraft.client.Minecraft
-import org.joml.Quaterniond
-import org.lwjgl.glfw.GLFW
 import org.valkyrienskies.core.api.ships.saveAttachment
+import kotlin.math.absoluteValue
+
 
 class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.SHIP_CONTROL_INTERFACE, pos, state){
     private val ship: ServerShip? get() = getShipObjectManagingPos((level as ServerLevel), this.blockPos)
     private var seatedControllingPlayer: KontraptionSeatedControllingPlayer? = null
     private val seats = mutableListOf<KontraptionShipMountingEntity>()
+
     private var rotTarget = Quaterniond()
+    private var velTarget = Vector3d()
 
     fun spawnSeat(blockPos: BlockPos, state: BlockState, level: ServerLevel): KontraptionShipMountingEntity {
         val newPos = blockPos.relative(state.getValue(HorizontalDirectionalBlock.FACING))
@@ -65,49 +71,60 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
         val ship = this.ship ?: return
 
         seatedControllingPlayer = ship.getAttachment(KontraptionSeatedControllingPlayer::class.java) ?: return
+        if(seatedControllingPlayer!!.forwardImpulse.absoluteValue+seatedControllingPlayer!!.upImpulse.absoluteValue+seatedControllingPlayer!!.leftImpulse.absoluteValue != 0.0){
+            velTarget = Vector3d(seatedControllingPlayer!!.forwardImpulse, seatedControllingPlayer!!.upImpulse, seatedControllingPlayer!!.leftImpulse)
+        }
 
         val thrusters = KontraptionThrusterControl.getOrCreate(ship)
         val gyros = KontraptionGyroControl.getOrCreate(ship)
 
         thrusters.thrusterControlAll(
             this.direction.normal.toJOMLD(),
-            -seatedControllingPlayer?.forwardImpulse!!.toDouble()
+            //-seatedControllingPlayer?.forwardImpulse!!.toDouble()
+            -velTarget.x
         )
 
         thrusters.thrusterControlAll(
             this.direction.opposite.normal.toJOMLD(),
-            seatedControllingPlayer?.forwardImpulse!!.toDouble()
+            //seatedControllingPlayer?.forwardImpulse!!.toDouble(),
+            velTarget.x
         )
 
         thrusters.thrusterControlAll(
             Direction.UP.normal.toJOMLD(),
-            seatedControllingPlayer?.upImpulse!!.toDouble()
+            //seatedControllingPlayer?.upImpulse!!.toDouble()
+            velTarget.y
         )
 
         thrusters.thrusterControlAll(
             Direction.DOWN.normal.toJOMLD(),
-            -seatedControllingPlayer?.upImpulse!!.toDouble()
+            //-seatedControllingPlayer?.upImpulse!!.toDouble()
+            -velTarget.y
         )
 
         thrusters.thrusterControlAll(
             this.direction.counterClockWise.normal.toJOMLD(),
-            seatedControllingPlayer?.leftImpulse!!.toDouble()
+            //seatedControllingPlayer?.leftImpulse!!.toDouble()
+            velTarget.z
         )
 
         thrusters.thrusterControlAll(
             this.direction.clockWise.normal.toJOMLD(),
-            -seatedControllingPlayer?.leftImpulse!!.toDouble()
+           // -seatedControllingPlayer?.leftImpulse!!.toDouble()
+           -velTarget.z
         )
 
+        if(seatedControllingPlayer!!.pitch.absoluteValue+seatedControllingPlayer!!.yaw.absoluteValue+seatedControllingPlayer!!.roll.absoluteValue != 0.0){
+            val sensitivity = 0.1
+            val tmp = Quaterniond()
+            tmp.fromAxisAngleRad(this.direction.clockWise.normal.toJOMLD(), seatedControllingPlayer?.pitch!!.toDouble() * sensitivity)
+            rotTarget.mul(tmp)
+            tmp.fromAxisAngleRad(this.direction.normal.toJOMLD(), seatedControllingPlayer?.roll!!.toDouble() * sensitivity)
+            rotTarget.mul(tmp)
+            tmp.fromAxisAngleRad(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.yaw!!.toDouble() * sensitivity)
+            rotTarget.mul(tmp)
+        }
 
-        val sensitivity = 0.1
-        val tmp = Quaterniond()
-        tmp.fromAxisAngleRad(this.direction.clockWise.normal.toJOMLD(), seatedControllingPlayer?.pitch!!.toDouble() * sensitivity)
-        rotTarget.mul(tmp)
-        tmp.fromAxisAngleRad(this.direction.normal.toJOMLD(), seatedControllingPlayer?.roll!!.toDouble() * sensitivity)
-        rotTarget.mul(tmp)
-        tmp.fromAxisAngleRad(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.yaw!!.toDouble() * sensitivity)
-        rotTarget.mul(tmp)
 
 
         gyros.pointTowards(
@@ -162,7 +179,41 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
 
     }
 
+    @ComputerMethod
+    private fun getRotation(): Map<String, Double> {
+        return(mapOf(
+                Pair("x", rotTarget.x()),
+                Pair("y", rotTarget.y()),
+                Pair("z", rotTarget.z()),
+                Pair("w", rotTarget.w())
+        ))
+    }
+    @ComputerMethod
+    private fun getMovement(): Map<String, Double> {
+        return(mapOf(
+                Pair("x", velTarget.x()),
+                Pair("y", velTarget.y()),
+                Pair("z", velTarget.z())
+        ))
+    }
+    @ComputerMethod
+    private fun setMovement(x: Double, y: Double, z: Double) {
+        velTarget = Vector3d(x, y, z)
+    }
 
+    @ComputerMethod
+    private fun setRotation(x: Double, y: Double, z: Double, w: Double) {
+        rotTarget = Quaterniond(x, y, z, w)
+    }
 
-
+    @ComputerMethod
+    private fun rotateAlongAxis(x: Double, y: Double, z: Double) {
+        val tmp = Quaterniond()
+        tmp.fromAxisAngleRad(this.direction.clockWise.normal.toJOMLD(), z * 0.1)
+        rotTarget.mul(tmp)
+        tmp.fromAxisAngleRad(this.direction.normal.toJOMLD(), x * 0.1)
+        rotTarget.mul(tmp)
+        tmp.fromAxisAngleRad(Vector3d(0.0, 1.0, 0.0), y * 0.1)
+        rotTarget.mul(tmp)
+    }
 }
