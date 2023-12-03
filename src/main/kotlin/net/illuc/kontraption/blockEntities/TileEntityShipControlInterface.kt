@@ -71,12 +71,13 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
         val ship = this.ship ?: return
 
         seatedControllingPlayer = ship.getAttachment(KontraptionSeatedControllingPlayer::class.java) ?: return
-        if(seatedControllingPlayer!!.forwardImpulse.absoluteValue+seatedControllingPlayer!!.upImpulse.absoluteValue+seatedControllingPlayer!!.leftImpulse.absoluteValue != 0.0){
+        if(seats.size != 0){
             velTarget = Vector3d(seatedControllingPlayer!!.forwardImpulse, seatedControllingPlayer!!.upImpulse, seatedControllingPlayer!!.leftImpulse)
         }
 
         val thrusters = KontraptionThrusterControl.getOrCreate(ship)
         val gyros = KontraptionGyroControl.getOrCreate(ship)
+
 
         thrusters.thrusterControlAll(
             this.direction.normal.toJOMLD(),

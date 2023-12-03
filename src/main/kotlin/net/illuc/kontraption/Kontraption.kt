@@ -9,7 +9,9 @@ import mekanism.common.lib.multiblock.MultiblockCache
 import mekanism.common.lib.multiblock.MultiblockManager
 import mekanism.common.registries.MekanismFluids
 import mekanism.common.registries.MekanismGases
+import net.illuc.kontraption.KontraptionParticleTypes.BULLET
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
+import net.illuc.kontraption.client.BulletParticle
 import net.illuc.kontraption.client.ThrusterParticle
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.config.KontraptionKeyBindings
@@ -204,8 +206,8 @@ class Kontraption : IModModule {
     object ClientRegistryHandler {
         @SubscribeEvent
         fun onParticlesRegistry(e: ParticleFactoryRegisterEvent?) {
-            println("bal")
             Minecraft.getInstance().particleEngine.register(THRUSTER.get()) { spriteSet: SpriteSet? -> ThrusterParticle.Factory(spriteSet) }
+            Minecraft.getInstance().particleEngine.register(BULLET.get()) { spriteSet: SpriteSet? -> BulletParticle.Factory(spriteSet) }
         }
     }
 
