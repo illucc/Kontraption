@@ -18,6 +18,7 @@ import org.valkyrienskies.core.api.ships.setAttachment
 import org.valkyrienskies.core.util.readVec3d
 import org.valkyrienskies.core.util.writeVec3AsFloat
 import org.valkyrienskies.core.util.writeVec3d
+import thedarkcolour.kotlinforforge.forge.vectorutil.toVec3i
 
 
 class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) : IMekanismPacket {
@@ -30,7 +31,7 @@ class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) 
         val player: Player? = context.sender
         if (player != null) {
             val seat = player.vehicle as? KontraptionShipMountingEntity
-            val ship = KontraptionVSUtils.getShipObjectManagingPos(seat!!.level, seat.blockPosition()) as? LoadedServerShip
+            val ship = KontraptionVSUtils.getShipObjectManagingPos(seat!!.level, seat.position().toVec3i()) as? LoadedServerShip
                     ?: return
 
             val attachment: KontraptionSeatedControllingPlayer = ship.getAttachment()

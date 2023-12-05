@@ -1,9 +1,12 @@
 package net.illuc.kontraption.util;
 
 
+import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.valkyrienskies.core.apigame.world.ServerShipWorldCore;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
@@ -32,6 +35,10 @@ public class KontraptionVSUtils {
     }
 
     public static org.valkyrienskies.core.api.ships.Ship getShipObjectManagingPos(Level level, BlockPos blockPos){
+        return VSGameUtilsKt.getShipObjectManagingPos(level, blockPos);
+    }
+
+    public static org.valkyrienskies.core.api.ships.Ship getShipObjectManagingPos(Level level, Vec3i blockPos){
         return VSGameUtilsKt.getShipObjectManagingPos(level, blockPos);
     }
 

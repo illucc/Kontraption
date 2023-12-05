@@ -29,6 +29,7 @@ import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.saveAttachment
+import org.valkyrienskies.core.util.x
 import kotlin.math.absoluteValue
 
 
@@ -71,9 +72,12 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
         val ship = this.ship ?: return
 
         seatedControllingPlayer = ship.getAttachment(KontraptionSeatedControllingPlayer::class.java) ?: return
-        if(seats.size != 0){
-            velTarget = Vector3d(seatedControllingPlayer!!.forwardImpulse, seatedControllingPlayer!!.upImpulse, seatedControllingPlayer!!.leftImpulse)
+        if (seats.size != 0){
+            if(seats[0].passengers.size != 0){
+                velTarget = Vector3d(seatedControllingPlayer!!.forwardImpulse, seatedControllingPlayer!!.upImpulse, seatedControllingPlayer!!.leftImpulse)
+            }
         }
+
 
         val thrusters = KontraptionThrusterControl.getOrCreate(ship)
         val gyros = KontraptionGyroControl.getOrCreate(ship)
@@ -195,6 +199,15 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
                 Pair("x", velTarget.x()),
                 Pair("y", velTarget.y()),
                 Pair("z", velTarget.z())
+        ))
+    }
+
+    @ComputerMethod
+    private fun getPosition(): Map<String, Double> {
+        return(mapOf(
+                Pair("x", ship!!.transform.positionInWorld.x()),
+                Pair("y", ship!!.transform.positionInWorld.y()),
+                Pair("z", ship!!.transform.positionInWorld.z())
         ))
     }
     @ComputerMethod
