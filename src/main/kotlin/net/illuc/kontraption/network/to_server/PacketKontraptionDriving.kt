@@ -6,6 +6,7 @@ import mekanism.common.network.to_server.PacketKey
 import net.illuc.kontraption.controls.KontraptionSeatedControllingPlayer
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
 import net.illuc.kontraption.util.KontraptionVSUtils
+import net.illuc.kontraption.util.toJOML
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.entity.player.Player
 import net.minecraftforge.network.NetworkEvent
@@ -31,7 +32,7 @@ class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) 
         val player: Player? = context.sender
         if (player != null) {
             val seat = player.vehicle as? KontraptionShipMountingEntity
-            val ship = KontraptionVSUtils.getShipObjectManagingPos(seat!!.level, seat.position().toVec3i()) as? LoadedServerShip
+            val ship = KontraptionVSUtils.getShipObjectManagingPos(seat!!.level, seat.position().toJOML()) as? LoadedServerShip
                     ?: return
 
             val attachment: KontraptionSeatedControllingPlayer = ship.getAttachment()
