@@ -1,0 +1,22 @@
+[
+ {
+  "block": "mekanism:steel_block",
+  "mass": 7800.0,
+  "friction": 0.3
+ },
+ {
+  "block": "mekanism:bronze_block",
+  "mass": 9500.0,
+  "friction": 0.3
+ },
+ {
+  "block": "minecraft:steel_casing",
+  "mass": 5000.0,
+  "friction": 0.3
+ },
+ {
+  "block": "minecraft:fluorite_block",
+  "mass": 3000.0,
+  "friction": 0.4
+ }
+]
