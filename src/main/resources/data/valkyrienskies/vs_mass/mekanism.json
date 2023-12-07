@@ -10,12 +10,12 @@
   "friction": 0.3
  },
  {
-  "block": "minecraft:steel_casing",
+  "block": "mekanism:steel_casing",
   "mass": 5000.0,
   "friction": 0.3
  },
  {
-  "block": "minecraft:fluorite_block",
+  "block": "mekanism:fluorite_block",
   "mass": 3000.0,
   "friction": 0.4
  }
