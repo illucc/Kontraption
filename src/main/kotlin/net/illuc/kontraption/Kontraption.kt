@@ -84,7 +84,6 @@ class Kontraption : IModModule {
         KontraptionItems.ITEMS.register(modEventBus)
         KontraptionBlocks.BLOCKS.register(modEventBus)
         ENTITIES.register(modEventBus)
-        MinecraftForge.EVENT_BUS.register(this)
         KontraptionParticleTypes.PARTICLE_TYPES.register(modEventBus)
         //GeneratorsFluids.FLUIDS.register(modEventBus)
         //GeneratorsSounds.SOUND_EVENTS.register(modEventBus)
@@ -168,6 +167,7 @@ class Kontraption : IModModule {
     }
 
     private fun clientSetup(event: FMLClientSetupEvent) {
+        MinecraftForge.EVENT_BUS.register(this)
         KontraptionKeyBindings.clientSetup {
             ClientRegistry.registerKeyBinding(it)
         }

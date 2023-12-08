@@ -216,6 +216,7 @@ dependencies {
 
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")
     runtimeOnly    fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
+    runtimeOnly    fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")
 
 
 
