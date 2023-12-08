@@ -1,0 +1,10 @@
+{
+  "ctm": {
+    "ctm_version": 1,
+    "type": "CTM",
+    "layer": "SOLID",
+    "textures": [
+      "kontraption:block/liquid_fuel_thruster_exhaust-ctm"
+    ]
+  }
+}

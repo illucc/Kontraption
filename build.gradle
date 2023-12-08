@@ -229,6 +229,7 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
     runtimeOnly fg.deobf("curse.maven:rubidium-574856:4494903")
     runtimeOnly fg.deobf("curse.maven:cc-tweaked-282001:4630521")
+    runtimeOnly fg.deobf("curse.maven:ctm-267602:3933537")
 
 
     //using lodestone for now until vsfx comes out

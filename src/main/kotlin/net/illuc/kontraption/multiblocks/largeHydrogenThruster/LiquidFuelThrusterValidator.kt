@@ -49,11 +49,13 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
 
         val innerRadius = (Math.min(structure.length(), structure.width()) - 3) / 2
 
+
+        //thats the exhaust center thing i think
         val innerX = (structure.width() - 3)/2
         val innerY = (structure.height() - 3)/2
         val innerZ = (structure.length() - 3)/2
 
-        structure.innerVolume = innerX*innerY*innerZ
+        structure.innerVolume = (structure.width()-2)*(structure.length()-2)*(structure.height()-2)
 
 
         var exhausts: MutableSet<BlockPos> = ObjectOpenHashSet()
@@ -87,7 +89,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
             if (exhaustDirection == Direction.UP || exhaustDirection == Direction.DOWN) {
                 for (x in centerExhaust.blockPos.getX() - innerX..centerExhaust.blockPos.getX() + innerX) {
                     for (z in centerExhaust.blockPos.getZ() - innerZ..centerExhaust.blockPos.getZ() + innerZ) {
-                        if (x != centerX || z != centerZ) {
+                        //if (x != centerX || z != centerZ) {
                             mutablePos.set(x, centerExhaust.blockPos.getY(), z)
                             val tile = WorldUtils.getTileEntity(TileEntityLiquidFuelThrusterExhaust::class.java, world, chunkMap!!, mutablePos)
                             validExhausts.add(mutablePos.immutable())
@@ -95,7 +97,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
                             if (tile == null){
                                 return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
                             }
-                        }
+                        //}
                     }
                 }
             }
@@ -103,7 +105,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
             if (exhaustDirection == Direction.EAST || exhaustDirection == Direction.WEST) {
                 for (z in centerExhaust.blockPos.getZ() - innerZ ..centerExhaust.blockPos.getZ() + innerZ) {
                     for (y in centerExhaust.blockPos.getY() - innerY..centerExhaust.blockPos.getY() + innerY) {
-                        if (z != centerZ || y != centerY) {
+                        //if (z != centerZ || y != centerY) {
                             mutablePos.set(centerExhaust.blockPos.getX(), y, z)
                             val tile = WorldUtils.getTileEntity(TileEntityLiquidFuelThrusterExhaust::class.java, world, chunkMap!!, mutablePos)
                             structure.exhaustDiameter=structure.width()-2
@@ -111,7 +113,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
                             if (tile == null){
                                 return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
                             }
-                        }
+                        //}
                     }
                 }
             }
@@ -119,7 +121,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
             if (exhaustDirection == Direction.NORTH || exhaustDirection == Direction.SOUTH) {
                 for (x in centerExhaust.blockPos.getX() - innerX ..centerExhaust.blockPos.getX() + innerX) {
                     for (y in centerExhaust.blockPos.getY() - innerY..centerExhaust.blockPos.getY() + innerY) {
-                        if (x != centerX || y != centerY) {
+                        //if (x != centerX || y != centerY) {
                             mutablePos.set(x, y, centerExhaust.blockPos.z)
                             val tile = WorldUtils.getTileEntity(TileEntityLiquidFuelThrusterExhaust::class.java, world, chunkMap!!, mutablePos)
                             validExhausts.add(mutablePos.immutable())
@@ -127,7 +129,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
                             if (tile == null){
                                 return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
                             }
-                        }
+                        //}
                     }
                 }
             }
