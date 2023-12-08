@@ -1,11 +1,11 @@
 [
  {
-  "block": "mekanism:steel_block",
+  "block": "mekanism:block_steel",
   "mass": 7800.0,
   "friction": 0.3
  },
  {
-  "block": "mekanism:bronze_block",
+  "block": "mekanism:block_bronze",
   "mass": 9500.0,
   "friction": 0.3
  },
@@ -15,8 +15,118 @@
   "friction": 0.3
  },
  {
-  "block": "mekanism:fluorite_block",
+  "block": "mekanism:block_fluorite",
   "mass": 3000.0,
   "friction": 0.4
+ },
+ {
+  "block": "mekanism:basic_pressurized_tube",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:advanced_pressurized_tube",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:elite_pressurized_tube",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:ultimate_pressurized_tube",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:basic_mechanical_pipe",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:advanced_mechanical_pipe",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:elite_mechanical_pipe",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:ultimate_mechanical_pipe",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:basic_universal_cable",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:advanced_universal_cable",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:elite_universal_cable",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:ultimate_universal_cable",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:basic_logistical_transporter",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:advanced_logistical_transporter",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:elite_logistical_transporter",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:ultimate_logistical_transporter",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:restrictive_transporter",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:diversion_transporter",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:basic_thermodynamic_conductor",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:advanced_thermodynamic_conductor",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:elite_thermodynamic_conductor",
+  "mass": 100.0,
+  "friction": 0.5
+ },
+ {
+  "block": "mekanism:ultimate_thermodynamic_conductor",
+  "mass": 100.0,
+  "friction": 0.5
  }
 ]
