@@ -3,6 +3,7 @@ package net.illuc.kontraption.blockEntities
 import mekanism.api.Action
 import mekanism.api.AutomationType
 import mekanism.api.IContentsListener
+import mekanism.api.RelativeSide
 import mekanism.api.energy.IStrictEnergyHandler
 import mekanism.api.math.FloatingLong
 import mekanism.common.capabilities.energy.MachineEnergyContainer
@@ -34,7 +35,7 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
     @Nonnull
     override fun getInitialEnergyContainers(listener: IContentsListener?): IEnergyContainerHolder? {
         val builder = EnergyContainerHelper.forSide { this.direction }
-        builder.addContainer(MachineEnergyContainer.input(this, listener).also { energyContainer = it })
+        builder.addContainer(MachineEnergyContainer.input(this, listener).also { energyContainer = it }, RelativeSide.BACK)
         return builder.build()
 
     }
@@ -46,8 +47,6 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
         if (MekanismUtils.canFunction(this)) {
             if(powered == true) {
                 toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
-                //println("energy usage" + toUse)
-                //println("energy amount" + energyContainer!!.energy)
                 if (!toUse.isZero) {
                     energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
                     if (enabled == false) {
@@ -105,15 +104,10 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
     fun enable() {
         if (level !is ServerLevel) return
         println("ENABLED")
-
         enabled = true
-
         val ship = KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
                 ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
                 ?: return
-
-
-
 
         KontraptionGyroControl.getOrCreate(ship).let {
             it.stopGyro(worldPosition)

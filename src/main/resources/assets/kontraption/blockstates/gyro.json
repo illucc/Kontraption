@@ -1,5 +1,19 @@
 {
   "variants": {
-    "": { "model": "kontraption:block/gyro" }
+    "facing=north": {
+      "model": "kontraption:block/gyro"
+    },
+    "facing=south": {
+      "model": "kontraption:block/gyro",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kontraption:block/gyro",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "kontraption:block/gyro",
+      "y": 90
+    }
   }
 }

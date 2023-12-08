@@ -40,7 +40,7 @@ public class KontraptionBlockTypes {
     public static final BlockTypeTile<TileEntityGyro> GYRO = BlockTypeTile.BlockTileBuilder
             .createBlock(() -> KontraptionTileEntityTypes.GYRO, MekanismLang.HOLD_FOR_DESCRIPTION)
             .withEnergyConfig(() -> ION_THRUSTER_USAGE, () -> ION_THRUSTER_STORAGE)
-            .with(new AttributeStateFacing(BlockStateProperties.FACING))
+            .with(new AttributeStateFacing(BlockStateProperties.HORIZONTAL_FACING))
             .with(AttributeCustomSelectionBox.JSON)
             .withCustomShape(KontraptionBlockShapes.GYRO)
             .build();
