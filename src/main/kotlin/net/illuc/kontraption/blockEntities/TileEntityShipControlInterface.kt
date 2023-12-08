@@ -204,10 +204,30 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
 
     @ComputerMethod
     private fun getPosition(): Map<String, Double> {
+        val a = ship!!.transform.positionInWorld
         return(mapOf(
-                Pair("x", ship!!.transform.positionInWorld.x()),
-                Pair("y", ship!!.transform.positionInWorld.y()),
-                Pair("z", ship!!.transform.positionInWorld.z())
+                Pair("x", a.x()),
+                Pair("y", a.y()),
+                Pair("z", a.z())
+        ))
+    }
+    @ComputerMethod
+    private fun getWeight(): Double {
+        //TODO: i think using the peripheral while not on ship might crash the game because ship is null
+        return(ship!!.inertiaData.mass)
+
+    }
+    @ComputerMethod
+    private fun getSlug(): String {
+        return(ship!!.slug.toString())
+    }
+    @ComputerMethod
+    private fun getVelocity(): Map<String, Double> {
+        val a = ship!!.velocity
+        return(mapOf(
+                Pair("x", a.x()),
+                Pair("y", a.y()),
+                Pair("z", a.z())
         ))
     }
     @ComputerMethod
