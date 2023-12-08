@@ -9,12 +9,13 @@ import mekanism.common.content.blocktype.BlockType;
 import mekanism.common.content.blocktype.BlockTypeTile;
 import mekanism.common.registries.MekanismSounds;
 import net.illuc.kontraption.blockEntities.*;
+import net.illuc.kontraption.config.KontraptionConfigs;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class KontraptionBlockTypes {
 
-    private static final FloatingLong ION_THRUSTER_USAGE = FloatingLong.createConst(100);
-    private static final FloatingLong ION_THRUSTER_STORAGE = FloatingLong.createConst(100);
+    private static final FloatingLong ION_THRUSTER_USAGE = FloatingLong.createConst(KontraptionConfigs.INSTANCE.getKontraption().getIonConsumption().get());
+    private static final FloatingLong ION_THRUSTER_STORAGE = FloatingLong.createConst(KontraptionConfigs.INSTANCE.getKontraption().getIonConsumption().get());
 
     private KontraptionBlockTypes() {
     }

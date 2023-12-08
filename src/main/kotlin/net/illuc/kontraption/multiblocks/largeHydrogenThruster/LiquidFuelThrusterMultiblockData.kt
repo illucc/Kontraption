@@ -114,9 +114,9 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
 
             if (Dist.DEDICATED_SERVER.isDedicatedServer and (thrusterLevel != null)) {
                 particleDir = if (ship == null){
-                    exhaustDirection.normal.multiply(innerVolume).toJOMLD()
+                    exhaustDirection.normal.multiply(innerVolume/3).toJOMLD()
                 }else {
-                    ship!!.transform.shipToWorld.transformDirection(exhaustDirection.normal.multiply(innerVolume).toJOMLD())
+                    ship!!.transform.shipToWorld.transformDirection(exhaustDirection.normal.multiply(innerVolume/3).toJOMLD())
                 }
 
                 thrusterLevel as ServerLevel
@@ -129,7 +129,7 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
     private fun burnFuel(world: Level) {
         val lastBurnRemaining: Double = burnRemaining
         var storedFuel: Double = fuelTank!!.stored + burnRemaining
-        val toBurn = thrusterPower * 100 //Math.min(Math.min(1.0, storedFuel), fuelAssemblies * MekanismGeneratorsConfig.generators.burnPerAssembly.get())
+        val toBurn = thrusterPower * KontraptionConfigs.kontraption.liquidFuelConsumption.get() //Math.min(Math.min(1.0, storedFuel), fuelAssemblies * MekanismGeneratorsConfig.generators.burnPerAssembly.get())
         storedFuel -= toBurn
         if (storedFuel <= 0.0){
             if (enabled == true){
@@ -151,7 +151,7 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
     private fun sendParticleData(level: Level, pos: Vec3, particleDir: Vector3d) {
         if (!isRemote && level is ServerLevel) {
             for (player in level.players()) {
-                level.sendParticles(player, ThrusterParticleData(particleDir.x.toDouble(), particleDir.y.toDouble(), particleDir.z.toDouble(), innerVolume.toDouble()), true, pos.x+0.5, pos.y+0.5, pos.z+0.5, 2*exhaustDiameter, offset.x, offset.y, offset.z, 0.0)
+                level.sendParticles(player, ThrusterParticleData(particleDir.x.toDouble(), particleDir.y.toDouble(), particleDir.z.toDouble(), innerVolume.toDouble()/3), true, pos.x+0.5, pos.y+0.5, pos.z+0.5, 2*exhaustDiameter, offset.x, offset.y, offset.z, 0.0)
             }
         }
     }
