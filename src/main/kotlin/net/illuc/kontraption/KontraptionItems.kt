@@ -12,5 +12,6 @@ object KontraptionItems { //idk check how tournament fixed it
     val ITEMS = ItemDeferredRegister(Kontraption.MODID)
 
     val LIGHTWEIGHT_ALLOY: ItemRegistryObject<Item> = ITEMS.register("alloy_lightweight", Rarity.RARE)
+    val ION_ENGINE: ItemRegistryObject<Item> = ITEMS.register("ion_engine", Rarity.RARE)
 
 }
