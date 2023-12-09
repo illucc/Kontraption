@@ -1,0 +1,10 @@
+{
+  "values": [
+    "kontraption:ion_thruster",
+    "kontraption:gyro",
+    "kontraption:ship_control_interface",
+    "kontraption:liquid_fuel_thruster_valve",
+    "kontraption:liquid_fuel_thruster_exhaust",
+    "kontraption:liquid_fuel_thruster_casing"
+  ]
+}
