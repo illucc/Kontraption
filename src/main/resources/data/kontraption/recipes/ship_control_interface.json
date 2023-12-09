@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S S",
+    "CHC",
+    "STS"
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:ingots/steel"
+    },
+    "T": {
+      "tag": "forge:ingots/tin"
+    },
+    "C": {
+      "item": "mekanism:advanced_control_circuit"
+    },
+    "H": {
+      "item": "mekanism:steel_casing"
+    }
+  },
+  "result": {
+    "item": "kontraption:ship_control_interface",
+    "count": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RBR",
+    "OCO",
+    "RGR"
+  ],
+  "key": {
+    "O": {
+      "tag": "forge:ingots/osmium"
+    },
+    "G": {
+      "tag": "forge:dusts/gold"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "C": {
+      "item": "mekanism:steel_casing"
+    },
+    "B": {
+      "item": "mekanism:basic_control_circuit"
+    }
+  },
+  "result": {
+    "item": "kontraption:ion_thruster",
+    "count": 1
+  }
+}

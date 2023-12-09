@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "STS",
+    " C "
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:ingots/iron"
+    },
+    "T": {
+      "item": "mekanism:steel_casing"
+    },
+    "C": {
+      "item": "mekanism:advanced_control_circuit"
+    }
+  },
+  "result": {
+    "item": "kontraption:gyro",
+    "count": 1
+  }
+}

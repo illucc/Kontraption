@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "STS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "kontraption:liquid_fuel_thruster_casing"
+    },
+    "T": {
+      "item": "mekanism:advanced_control_circuit"
+    }
+  },
+  "result": {
+    "item": "kontraption:liquid_fuel_thruster_valve",
+    "count": 2
+  }
+}
