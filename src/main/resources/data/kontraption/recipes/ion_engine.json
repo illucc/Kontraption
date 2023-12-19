@@ -2,21 +2,21 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "   ",
-    "OC ",
+    "OCO",
     "   "
   ],
   "key": {
     "O": {
-      "item": "kontraption:ion_engine"
+      "item": "mekanism:ingot_tin"
     },
 
     "C": {
-      "item": "mekanism:steel_casing"
+      "item": "mekanism:basic_control_circuit"
     }
 
   },
   "result": {
-    "item": "kontraption:ion_thruster",
-    "count": 1
+    "item": "kontraption:ion_engine",
+    "count": 2
   }
 }
