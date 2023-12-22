@@ -114,9 +114,9 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
 
             if (Dist.DEDICATED_SERVER.isDedicatedServer and (thrusterLevel != null)) {
                 particleDir = if (ship == null){
-                    exhaustDirection.normal.multiply(innerVolume/3).toJOMLD()
+                    exhaustDirection.normal.multiply(innerVolume).toJOMLD()
                 }else {
-                    ship!!.transform.shipToWorld.transformDirection(exhaustDirection.normal.multiply(innerVolume/3).toJOMLD())
+                    ship!!.transform.shipToWorld.transformDirection(exhaustDirection.normal.multiply(innerVolume).toJOMLD())
                 }
 
                 thrusterLevel as ServerLevel
@@ -151,7 +151,7 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
     private fun sendParticleData(level: Level, pos: Vec3, particleDir: Vector3d) {
         if (!isRemote && level is ServerLevel) {
             for (player in level.players()) {
-                level.sendParticles(player, ThrusterParticleData(particleDir.x.toDouble(), particleDir.y.toDouble(), particleDir.z.toDouble(), innerVolume.toDouble()/3), true, pos.x+0.5, pos.y+0.5, pos.z+0.5, 2*exhaustDiameter, offset.x, offset.y, offset.z, 0.0)
+                level.sendParticles(player, ThrusterParticleData(particleDir.x.toDouble(), particleDir.y.toDouble(), particleDir.z.toDouble(), innerVolume.toDouble()), true, pos.x+0.5, pos.y+0.5, pos.z+0.5, 2*exhaustDiameter, offset.x, offset.y, offset.z, 0.0)
             }
         }
     }

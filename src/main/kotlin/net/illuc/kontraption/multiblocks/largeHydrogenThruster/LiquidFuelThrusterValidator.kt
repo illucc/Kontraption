@@ -55,7 +55,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
         val innerY = (structure.height() - 3)/2
         val innerZ = (structure.length() - 3)/2
 
-        structure.innerVolume = (structure.width()-2)*(structure.length()-2)*(structure.height()-2)
+        structure.innerVolume = ((structure.width()-2)+(structure.length()-2)+(structure.height()-2))/3
 
 
         var exhausts: MutableSet<BlockPos> = ObjectOpenHashSet()
