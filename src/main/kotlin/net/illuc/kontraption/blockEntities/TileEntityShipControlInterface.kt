@@ -1,11 +1,7 @@
 package net.illuc.kontraption.blockEntities
 
-import mekanism.common.block.attribute.Attribute.isActive
 import mekanism.common.integration.computer.ComputerException
 import mekanism.common.integration.computer.annotation.ComputerMethod
-import mekanism.common.integration.computer.annotation.SyntheticComputerMethod
-import mekanism.common.integration.computer.annotation.WrappingComputerMethod
-import mekanism.common.inventory.container.sync.dynamic.ContainerSync
 import mekanism.common.tile.base.TileEntityMekanism
 import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.KontraptionBlocks
@@ -29,7 +25,7 @@ import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.saveAttachment
-import org.valkyrienskies.core.util.x
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 
@@ -237,7 +233,11 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
 
     @ComputerMethod
     private fun setRotation(x: Double, y: Double, z: Double, w: Double) {
-        rotTarget = Quaterniond(x, y, z, w)
+        if(abs(x * x + y * y + z * z + w * w - 1.0) < 0.01){
+            rotTarget = Quaterniond(x, y, z, w)
+        }else{
+            throw ComputerException(("Invalid quaternion " .. abs(x * x + y * y + z * z + w * w).toString()).toString()) //needs 2 tostrings for funny
+        }
     }
 
     @ComputerMethod
