@@ -138,6 +138,7 @@
 			"translation": [0.75, 4, -4.25]
 		},
 		"ground": {
+			"translation": [0, 2, 0],
 			"scale": [0.6, 0.6, 0.6]
 		},
 		"gui": {
