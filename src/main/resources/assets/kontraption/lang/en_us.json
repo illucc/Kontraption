@@ -9,6 +9,14 @@
   "block.kontraption.liquid_fuel_thruster_valve": "Liquid Fuel Thruster Valve",
   "block.kontraption.liquid_fuel_thruster_exhaust": "Liquid Fuel Thruster Exhaust",
 
+  "toolgun.kontraption.mode_change": "Toolgun mode changed to: %1$s",
+  "toolgun.kontraption.assemble": "Assemble",
+  "toolgun.kontraption.move": "Move",
+  "toolgun.kontraption.lock": "Lock",
+  "toolgun.kontraption.push": "Push",
+  "toolgun.kontraption.rotate": "Rotate",
+
+
   "category.kontraption.ship_controls": "Kontraption Ship Controls",
   "key.kontraption.down": "Down",
   "key.kontraption.pitch_down": "Pitch Down",

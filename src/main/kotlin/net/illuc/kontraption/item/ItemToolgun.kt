@@ -3,35 +3,44 @@ package net.illuc.kontraption.item
 
 import mekanism.api.Action
 import mekanism.api.AutomationType
-import mekanism.client.render.MekanismRenderer
-import mekanism.client.render.RenderResizableCuboid
+import mekanism.api.NBTConstants
+import mekanism.api.math.MathUtils
+import mekanism.api.text.EnumColor
+import mekanism.api.text.IHasTextComponent
+import mekanism.api.text.ILangEntry
 import mekanism.common.Mekanism
-import mekanism.common.config.MekanismConfig
+import mekanism.common.MekanismLang
 import mekanism.common.item.ItemEnergized
+import mekanism.common.item.gear.ItemFlamethrower.FlamethrowerMode
+import mekanism.common.item.interfaces.IItemHUDProvider
+import mekanism.common.item.interfaces.IModeItem
 import mekanism.common.registries.MekanismSounds
+import mekanism.common.util.ItemDataUtils
+import mekanism.common.util.MekanismUtils
 import mekanism.common.util.StorageUtils
-import net.illuc.kontraption.config.KontraptionConfig
+import net.illuc.kontraption.KontraptionLang
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.KontraptionVSUtils.createNewShipWithBlocks
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 import org.valkyrienskies.core.util.datastructures.DenseBlockPosSet
 import javax.annotation.Nonnull
-import kotlin.math.min
 import kotlin.math.max
+import kotlin.math.min
 
 
-
-class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kontraption.toolgunChargeRate, KontraptionConfigs.kontraption.toolgunStorage, properties.rarity(Rarity.UNCOMMON)) {
+class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kontraption.toolgunChargeRate, KontraptionConfigs.kontraption.toolgunStorage, properties.rarity(Rarity.UNCOMMON)), IItemHUDProvider, IModeItem {
 
     //TODO: Figure out how to do rendering stuff
 
@@ -53,7 +62,17 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
                 }
                 energyContainer.extract(energyPerUse, Action.EXECUTE, AutomationType.MANUAL)
             }
-            makeSelection(pos, context)
+            if (getMode(context.itemInHand) == ToolgunMode.ASSEMBLE){
+                makeSelection(pos, context)
+            } else if (getMode(context.itemInHand) == ToolgunMode.MOVE){
+                context.player?.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            } else if (getMode(context.itemInHand) == ToolgunMode.LOCK){
+                context.player?.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            } else if (getMode(context.itemInHand) == ToolgunMode.PUSH){
+                context.player?.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            } else if (getMode(context.itemInHand) == ToolgunMode.ROTATE){
+                context.player?.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            }
             return InteractionResult.CONSUME
         }
         return InteractionResult.PASS
@@ -108,9 +127,64 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
             }
             firstPosition = null
             secondPosition = null
+            }
+        }
+    }
+
+    override fun changeMode(player: Player, stack: ItemStack, shift: Int, displayChangeMessage: Boolean) {
+        val mode: ToolgunMode = getMode(stack)
+        val newMode = mode.byIndex(mode.ordinal + shift)
+        if (mode != newMode) {
+            setMode(stack, newMode)
+            if (displayChangeMessage) {
+                player.sendMessage(MekanismUtils.logFormat(KontraptionLang.MODE_CHANGE.translate(newMode)), Util.NIL_UUID)
+            }
+        }
+    }
+
+    fun setMode(stack: ItemStack?, mode: ToolgunMode) {
+        ItemDataUtils.setInt(stack, NBTConstants.MODE, mode.ordinal)
+    }
+
+    fun getMode(itemStack: ItemStack?): ToolgunMode {
+        return ToolgunMode.byIndexStatic(ItemDataUtils.getInt(itemStack, NBTConstants.MODE))
+    }
 
 
+    enum class ToolgunMode(private val langEntry: ILangEntry, private val color: EnumColor) : IHasTextComponent {
+        ASSEMBLE(KontraptionLang.ASSEMBLE, EnumColor.BRIGHT_GREEN) {
+        },
+        MOVE(KontraptionLang.MOVE, EnumColor.DARK_BLUE) {
+        },
+        LOCK(KontraptionLang.LOCK, EnumColor.RED) {
+        },
+        PUSH(KontraptionLang.PUSH, EnumColor.ORANGE) {
+        },
+        ROTATE(KontraptionLang.ROTATE, EnumColor.PURPLE) {
+        };
+
+        override fun getTextComponent(): Component {
+            return langEntry.translateColored(color)
         }
+
+        fun byIndex(index: Int): ToolgunMode {
+            return byIndexStatic(index)
         }
+
+        companion object {
+            private val MODES = values()
+            fun byIndexStatic(index: Int): ToolgunMode {
+                return MathUtils.getByIndexMod(MODES, index)
+            }
+        }
+    }
+
+
+    override fun addHUDStrings(list: MutableList<Component>?, player: Player?, stack: ItemStack?, slotType: EquipmentSlot?) {
+        if (list != null) {
+            val mode: ToolgunMode = getMode(stack)
+            //list.add(TextComponent("test"))
+            list.add(MekanismLang.MODE.translateColored(EnumColor.GRAY, mode));
+        };
     }
 }
