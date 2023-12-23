@@ -17,6 +17,10 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
     val ionConsumption: CachedDoubleValue
     val gyroTorqueStrength: CachedDoubleValue
     val thrusterSpeedLimit: CachedDoubleValue
+    val toolgunActionConsumption: CachedFloatingLongValue
+    val toolgunAssembleConsumption: CachedFloatingLongValue
+    val toolgunStorage: CachedFloatingLongValue
+    val toolgunChargeRate: CachedFloatingLongValue
 
     init {
         val builder = ForgeConfigSpec.Builder()
@@ -44,6 +48,22 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
 
         thrusterSpeedLimit = CachedDoubleValue.wrap(this, builder.comment("At what speed the thruster starts slowing down")
                 .define("thrusterSpeedLimit", 20.0),
+        )
+
+        toolgunActionConsumption = CachedFloatingLongValue.define(this, builder, ("How much power does the toolgun consume when used"),
+                "toolgunActionConsumption", FloatingLong.createConst(1000),
+        )
+
+        toolgunAssembleConsumption = CachedFloatingLongValue.define(this, builder, ("How much power does the toolgun consume per block when assembling a ship (including air blocks!)"),
+                "toolgunAssembleConsumption", FloatingLong.createConst(1000),
+        )
+
+        toolgunStorage = CachedFloatingLongValue.define(this, builder, ("How much power does the toolgun store"),
+                "toolgunStorage", FloatingLong.createConst(20000000),
+        )
+
+        toolgunChargeRate = CachedFloatingLongValue.define(this, builder, ("How fast does the toolgun charge"),
+                "toolgunChargeRate", FloatingLong.createConst(100000),
         )
 
 

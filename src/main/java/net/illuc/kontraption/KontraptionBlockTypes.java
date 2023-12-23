@@ -73,9 +73,11 @@ public class KontraptionBlockTypes {
             .build();
 
 
-
-    public static final BlockType PLUSHIE = BlockType.BlockTypeBuilder
-            .createBlock(MekanismLang.DESCRIPTION_STEEL_CASING)
+    public static final BlockTypeTile<TileEntityCannon> CANNON = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.CANNON, MekanismLang.HOLD_FOR_DESCRIPTION)
+            //.withCustomShape(KontraptionBlockShapes.INSTANCE.getWHEEL())
+            .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
+
 
 }

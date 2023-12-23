@@ -18,6 +18,6 @@ public class KontraptionTileEntityTypes {
     public static final TileEntityTypeRegistryObject<TileEntityLiquidFuelThrusterValve> LIQUID_FUEL_THRUSTER_VALVE = TILE_ENTITY_TYPES.register(KontraptionBlocks.LIQUID_FUEL_THRUSTER_VALVE, TileEntityLiquidFuelThrusterValve::new);
     public static final TileEntityTypeRegistryObject<TileEntityLiquidFuelThrusterExhaust> LIQUID_FUEL_THRUSTER_EXHAUST = TILE_ENTITY_TYPES.register(KontraptionBlocks.LIQUID_FUEL_THRUSTER_EXHAUST, TileEntityLiquidFuelThrusterExhaust::new);
 
-
+    public static final TileEntityTypeRegistryObject<TileEntityCannon> CANNON = TILE_ENTITY_TYPES.register(KontraptionBlocks.CANNON, TileEntityCannon::new);
 
 }

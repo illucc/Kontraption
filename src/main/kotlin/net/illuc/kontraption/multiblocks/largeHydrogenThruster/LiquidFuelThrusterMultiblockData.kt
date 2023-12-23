@@ -119,7 +119,7 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
                     ship!!.transform.shipToWorld.transformDirection(exhaustDirection.normal.multiply(innerVolume).toJOMLD())
                 }
 
-                thrusterLevel as ServerLevel
+                //thrusterLevel as ServerLevel
                 pos?.let { sendParticleData(thrusterLevel as ServerLevel, it.toDoubles(), particleDir) }
             }
         }

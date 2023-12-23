@@ -27,7 +27,7 @@ class ShotHandler {
 
 
     companion object {
-        public fun shoot(direction: Direction, level: Level, blockPos: BlockPos) {
+        public fun shoot(direction: Direction, level: Level, blockPos: BlockPos, func: (hitRes: BlockHitResult) -> Unit) {
             val lookingTowards = direction
 
             val startPos = blockPos.toJOMLD()
@@ -40,23 +40,23 @@ class ShotHandler {
 
             val clipResult = shootRaycast(level, startPos, ship, lookingTowards.normal.toJOMLD())
 
-            if (level is ServerLevel) {
+            /*if (level is ServerLevel) {
                 for (player in level.players()) {
                     level.sendParticles(player, BulletParticleData(lookingTowards.normal.toJOMLD().x,lookingTowards.normal.toJOMLD().y ,lookingTowards.normal.toJOMLD().z, 1.0), true, blockPos.x.toDouble()+0.5,blockPos.y.toDouble()+0.5,blockPos.z.toDouble()+0.5, 1, 0.5, 0.5, 0.5, 0.0)
                     //level.sendParticles(player, ParticleTypes.TOTEM_OF_UNDYING, true, blockPos.x.toDouble(), blockPos.x.toDouble(), blockPos.x.toDouble())
                 }
-            }
+            }*/
 
             if (clipResult.type == HitResult.Type.BLOCK) {
-
+                func(clipResult)
                 println("bals")
                 //level.addParticle(ParticleTypes.TOTEM_OF_UNDYING, clipResult.blockPos.x.toDouble(),clipResult.blockPos.y.toDouble(),clipResult.blockPos.z.toDouble(), 1.0, 1.0, 1.0)
-                if (level is ServerLevel) {
+                /*if (level is ServerLevel) {
                     for (player in level.players()) {
                         level.sendParticles(player, ParticleTypes.ASH, true, clipResult.blockPos.x.toDouble()+0.5,clipResult.blockPos.y.toDouble()+0.5,clipResult.blockPos.z.toDouble()+0.5, 1, 0.001, 0.001, 0.001, 0.0)
                     //level.sendParticles(player, ParticleTypes.TOTEM_OF_UNDYING, true, blockPos.x.toDouble(), blockPos.x.toDouble(), blockPos.x.toDouble())
                     }
-                }
+                }*/
 
             }
 
