@@ -13,7 +13,6 @@ import net.illuc.kontraption.KontraptionParticleTypes.BULLET
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
 import net.illuc.kontraption.client.BulletParticle
 import net.illuc.kontraption.client.ThrusterParticle
-import net.illuc.kontraption.client.render.ToolgunUI
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
@@ -213,10 +212,10 @@ class Kontraption : IModModule {
             Minecraft.getInstance().particleEngine.register(BULLET.get()) { spriteSet: SpriteSet? -> BulletParticle.Factory(spriteSet) }
         }
 
-        @SubscribeEvent
+        /*@SubscribeEvent
         fun init(event: FMLClientSetupEvent?) {
             OverlayRegistry.registerOverlayAbove(ForgeIngameGui.HOTBAR_ELEMENT, "Toolgun UI", ToolgunUI())
-        }
+        }*/
     }
 
 
