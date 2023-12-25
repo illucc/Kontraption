@@ -31,9 +31,10 @@ class KontraptionGyroControl : ShipForcesInducer {
 
         physShip as PhysShipImpl
 
-
+        if (KontraptionConfigs.kontraption.zeroGravity.get()){
+            physShip.applyInvariantForce(Vector3d(0.0, physShip.inertia.shipMass * 10, 0.0))
+        }
         if (gyros.size != 0){
-            //physShip.applyInvariantForce(Vector3d(0.0, physShip.inertia.shipMass * 10, 0.0))
 
 
             val totalPower = gyroStrength * gyros.size * targetStrength

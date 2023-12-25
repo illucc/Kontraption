@@ -21,6 +21,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
     val toolgunAssembleConsumption: CachedFloatingLongValue
     val toolgunStorage: CachedFloatingLongValue
     val toolgunChargeRate: CachedFloatingLongValue
+    val zeroGravity: CachedBooleanValue
 
     init {
         val builder = ForgeConfigSpec.Builder()
@@ -65,6 +66,11 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
         toolgunChargeRate = CachedFloatingLongValue.define(this, builder, ("How fast does the toolgun charge"),
                 "toolgunChargeRate", FloatingLong.createConst(100000),
         )
+
+        zeroGravity = CachedBooleanValue.wrap(this, builder.comment("Turns the gravity off (only gets swithced off after placing a gyro)")
+                .define("zeroGravity", false),
+        )
+
 
 
 

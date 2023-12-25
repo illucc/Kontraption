@@ -23,6 +23,7 @@ import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.util.*
 import net.illuc.kontraption.util.KontraptionVSUtils.createNewShipWithBlocks
 import net.minecraft.Util
+import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextComponent
@@ -96,60 +97,59 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
 
         if (!level.isClientSide) {
             println(level.getBlockState(pos))
-            if (player.isShiftKeyDown and (level.getBlockState(pos).isAir)){
+            if (player.isShiftKeyDown and (level.getBlockState(pos).isAir)) {
                 firstPosition = null
                 secondPosition = null
                 player.sendMessage(TextComponent("Selection reset"), Util.NIL_UUID)
-            }
-        else if (firstPosition == null){
-            if (KontraptionVSUtils.getShipObjectManagingPos(level, pos) == null) {
-                firstPosition = pos
-                Mekanism.logger.info("first pos: $firstPosition")
-                player.sendMessage(TextComponent("First pos selected"), Util.NIL_UUID)
-            } else{
-                player.sendMessage(TextComponent("Selected position is on a ship!"), Util.NIL_UUID)
-            }
-        }else if(secondPosition == null){
-            if (KontraptionVSUtils.getShipObjectManagingPos(level, pos) == null) {
-                secondPosition = pos
-                Mekanism.logger.info("second pos: $secondPosition")
-                player.sendMessage(TextComponent("Second pos selected"), Util.NIL_UUID)
-            } else{
-                player.sendMessage(TextComponent("Selected position is on a ship!"), Util.NIL_UUID)
-            }
-        }else{
-            Mekanism.logger.info("now we do the assembly stuff")
-            val set = DenseBlockPosSet()
-            print(firstPosition)
-            print(secondPosition)
+            } else if (firstPosition == null) {
+                if (KontraptionVSUtils.getShipObjectManagingPos(level, pos) == null) {
+                    firstPosition = pos
+                    Mekanism.logger.info("first pos: $firstPosition")
+                    player.sendMessage(TextComponent("First pos selected"), Util.NIL_UUID)
+                } else {
+                    player.sendMessage(TextComponent("Selected position is on a ship!"), Util.NIL_UUID)
+                }
+            } else if (secondPosition == null) {
+                if (KontraptionVSUtils.getShipObjectManagingPos(level, pos) == null) {
+                    secondPosition = pos
+                    Mekanism.logger.info("second pos: $secondPosition")
+                    player.sendMessage(TextComponent("Second pos selected"), Util.NIL_UUID)
+                } else {
+                    player.sendMessage(TextComponent("Selected position is on a ship!"), Util.NIL_UUID)
+                }
+            } else {
+                Mekanism.logger.info("now we do the assembly stuff")
+                val set = DenseBlockPosSet()
+                print(firstPosition)
+                print(secondPosition)
 
-            for (x in min(firstPosition!!.x, secondPosition!!.x)..max(firstPosition!!.x, secondPosition!!.x)) {
-                for (y in min(firstPosition!!.y, secondPosition!!.y)..max(firstPosition!!.y, secondPosition!!.y)) {
-                    for (z in min(firstPosition!!.z, secondPosition!!.z)..max(firstPosition!!.z, secondPosition!!.z)) {
-                        if(!level.getBlockState(BlockPos(x, y, z)).isAir){
-                            set.add(x, y, z)
+                for (x in min(firstPosition!!.x, secondPosition!!.x)..max(firstPosition!!.x, secondPosition!!.x)) {
+                    for (y in min(firstPosition!!.y, secondPosition!!.y)..max(firstPosition!!.y, secondPosition!!.y)) {
+                        for (z in min(firstPosition!!.z, secondPosition!!.z)..max(firstPosition!!.z, secondPosition!!.z)) {
+                            if (!level.getBlockState(BlockPos(x, y, z)).isAir) {
+                                set.add(x, y, z)
+                            }
                         }
                     }
                 }
-            }
 
-            val energyPerUse = KontraptionConfigs.kontraption.toolgunAssembleConsumption.get().multiply(set.size.toDouble())
-            val energyContainer = StorageUtils.getEnergyContainer(player.getItemInHand(interactionHand), 0)
-            if (energyContainer == null || energyContainer.extract(energyPerUse, Action.SIMULATE, AutomationType.MANUAL).smallerThan(energyPerUse)) {
-                if (energyContainer != null) {
-                    Mekanism.logger.info("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}")
-                    player.sendMessage(TextComponent("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}"), Util.NIL_UUID)
+                val energyPerUse = KontraptionConfigs.kontraption.toolgunAssembleConsumption.get().multiply(set.size.toDouble())
+                val energyContainer = StorageUtils.getEnergyContainer(player.getItemInHand(interactionHand), 0)
+                if (energyContainer == null || energyContainer.extract(energyPerUse, Action.SIMULATE, AutomationType.MANUAL).smallerThan(energyPerUse)) {
+                    if (energyContainer != null) {
+                        Mekanism.logger.info("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}")
+                        player.sendMessage(TextComponent("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}"), Util.NIL_UUID)
+                    }
+                } else {
+                    if (!set.isEmpty()) {
+                        energyContainer.extract(energyPerUse, Action.EXECUTE, AutomationType.MANUAL)
+                        createNewShipWithBlocks(pos, set, (level as ServerLevel))
+                        player.playSound(MekanismSounds.BEEP.get(), 1F, 2F)
+                        player.sendMessage(TextComponent("Assembled!"), Util.NIL_UUID)
+                    }
                 }
-            }else{
-                if (!set.isEmpty()){
-                    energyContainer.extract(energyPerUse, Action.EXECUTE, AutomationType.MANUAL)
-                    createNewShipWithBlocks(pos, set, (level as ServerLevel))
-                    player.playSound(MekanismSounds.BEEP.get(), 1F, 2F)
-                    player.sendMessage(TextComponent("Assembled!"), Util.NIL_UUID)
-                }
-            }
-            firstPosition = null
-            secondPosition = null
+                firstPosition = null
+                secondPosition = null
             }
         }
     }

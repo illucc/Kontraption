@@ -228,7 +228,7 @@ class TileEntityShipControlInterface(pos: BlockPos?, state: BlockState?) : TileE
     }
     @ComputerMethod
     private fun setMovement(x: Double, y: Double, z: Double) {
-        velTarget = Vector3d(x, y, z)
+        velTarget = Vector3d(Math.max(-1.0, Math.min(1.0, x)), Math.max(-1.0, Math.min(1.0, y)), Math.max(-1.0, Math.min(1.0, z)))
     }
 
     @ComputerMethod
