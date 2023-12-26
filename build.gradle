@@ -8,15 +8,18 @@ buildscript {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10'
+        // OPTIONAL Gradle plugin for Kotlin Serialization
+        //classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
 
     }
 }
 
 plugins {
     // Adds the Kotlin Gradle plugin
-    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+    //id "org.jetbrains.kotlin.jvm" version "1.9.10" apply false
     // OPTIONAL Kotlin Serialization plugin
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
+    //id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
 
     id 'eclipse'
     id 'idea'
@@ -27,6 +30,8 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: "org.jetbrains.kotlin.jvm"
+
 
 String gitRevision = "git rev-parse HEAD".execute().text.trim()
 version = mod_version + '+' + gitRevision.substring(0, 10)
@@ -167,7 +172,7 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // cri
     //annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1"))
 
@@ -177,7 +182,7 @@ dependencies {
     implementation         ("org.valkyrienskies.core:impl:${vs_core_version}")
     implementation         ("org.valkyrienskies.core:api-game:${vs_core_version}")
     implementation         ("org.valkyrienskies.core:util:${vs_core_version}")
-    implementation fg.deobf("org.valkyrienskies:valkyrienskies-118-forge:${vs2_version}")
+    implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}")
 
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")
     runtimeOnly    fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
@@ -187,18 +192,18 @@ dependencies {
 
     implementation "org.joml:joml:1.10.5"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
-    implementation 'thedarkcolour:kotlinforforge:3.12.0'
+    implementation 'thedarkcolour:kotlinforforge:4.10.0'
 
 
     //RUNTIME
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-    runtimeOnly fg.deobf("curse.maven:rubidium-574856:4494903")
-    runtimeOnly fg.deobf("curse.maven:cc-tweaked-282001:4630521")
-    runtimeOnly fg.deobf("curse.maven:ctm-267602:3933537")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4494903")
+    //runtimeOnly fg.deobf("curse.maven:cc-tweaked-282001:4630521")
+    //runtimeOnly fg.deobf("curse.maven:ctm-267602:3933537")
 
 
     //using lodestone for now until vsfx comes out
-    implementation fg.deobf("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}")
+    //implementation fg.deobf("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}")
 
     //for figuring out what is laggy
     //okay so this causes it to fnuuy itself

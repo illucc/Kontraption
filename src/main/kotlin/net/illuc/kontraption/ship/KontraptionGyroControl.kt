@@ -1,7 +1,5 @@
 package net.illuc.kontraption.ship
 
-import com.mojang.math.Quaternion
-import com.mojang.math.Vector3f
 import net.illuc.kontraption.blockEntities.TileEntityGyro
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.util.toJOML

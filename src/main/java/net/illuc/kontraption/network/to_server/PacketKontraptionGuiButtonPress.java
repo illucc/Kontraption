@@ -16,7 +16,8 @@ import net.minecraftforge.network.NetworkHooks;
 /**
  * Used for informing the server that a click happened in a GUI and the gui window needs to change
  */
-public class PacketKontraptionGuiButtonPress implements IMekanismPacket {
+/*public class PacketKontraptionGuiButtonPress implements IMekanismPacket {
+do we even need this rn?
 
     private final ClickedGeneratorsTileButton tileButton;
     private final int extra;
@@ -36,7 +37,7 @@ public class PacketKontraptionGuiButtonPress implements IMekanismPacket {
     public void handle(NetworkEvent.Context context) {
         ServerPlayer player = context.getSender();
         if (player != null) {//If we are on the server (the only time we should be receiving this packet), let forge handle switching the Gui
-            TileEntityMekanism tile = WorldUtils.getTileEntity(TileEntityMekanism.class, player.level, tilePosition);
+            TileEntityMekanism tile = WorldUtils.getTileEntity(TileEntityMekanism.class, player.level(), tilePosition);
             if (tile != null) {
                 MenuProvider provider = tileButton.getProvider(tile, extra);
                 if (provider != null) {
@@ -61,27 +62,7 @@ public class PacketKontraptionGuiButtonPress implements IMekanismPacket {
         return new PacketKontraptionGuiButtonPress(buffer.readEnum(ClickedGeneratorsTileButton.class), buffer.readBlockPos(), buffer.readVarInt());
     }
 
-    public enum ClickedGeneratorsTileButton {
-        /*TAB_MAIN((tile, extra) -> {
-            if (tile instanceof TileEntityTurbineCasing) {
-                return GeneratorsContainerTypes.INDUSTRIAL_TURBINE.getProvider(GeneratorsLang.TURBINE, tile);
-            } else if (tile instanceof TileEntityFissionReactorCasing) {
-                return GeneratorsContainerTypes.FISSION_REACTOR.getProvider(GeneratorsLang.FISSION_REACTOR, tile);
-            }
-            return null;
-        }),
-        TAB_HEAT((tile, extra) -> GeneratorsContainerTypes.FUSION_REACTOR_HEAT.getProvider(GeneratorsLang.FUSION_REACTOR, tile)),
-        TAB_FUEL((tile, extra) -> GeneratorsContainerTypes.FUSION_REACTOR_FUEL.getProvider(GeneratorsLang.FUSION_REACTOR, tile)),
-        TAB_STATS((tile, extra) -> {
-            if (tile instanceof TileEntityTurbineCasing) {
-                return GeneratorsContainerTypes.TURBINE_STATS.getProvider(GeneratorsLang.TURBINE_STATS, tile);
-            } else if (tile instanceof TileEntityFusionReactorController) {
-                return GeneratorsContainerTypes.FUSION_REACTOR_STATS.getProvider(GeneratorsLang.FUSION_REACTOR, tile);
-            } else if (tile instanceof TileEntityFissionReactorCasing) {
-                return GeneratorsContainerTypes.FISSION_REACTOR_STATS.getProvider(GeneratorsLang.FISSION_REACTOR_STATS, tile);
-            }
-            return null;
-        })*/;
+    public enum ClickedGeneratorsTileButton {;
 
         private final BiFunction<TileEntityMekanism, Integer, MenuProvider> providerFromTile;
 
@@ -93,4 +74,4 @@ public class PacketKontraptionGuiButtonPress implements IMekanismPacket {
             return providerFromTile.apply(tile, extra);
         }
     }
-}
+}*/

@@ -11,7 +11,6 @@ import mekanism.common.registries.MekanismFluids
 import mekanism.common.registries.MekanismGases
 import net.illuc.kontraption.KontraptionParticleTypes.BULLET
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
-import net.illuc.kontraption.client.BulletParticle
 import net.illuc.kontraption.client.ThrusterParticle
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.config.KontraptionKeyBindings
@@ -25,11 +24,9 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
 import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.client.ClientRegistry
 import net.minecraftforge.client.event.EntityRenderersEvent
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
-import net.minecraftforge.client.gui.ForgeIngameGui
-import net.minecraftforge.client.gui.OverlayRegistry
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
@@ -40,6 +37,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent
+import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
@@ -68,7 +66,7 @@ class Kontraption : IModModule {
     private val packetHandler: KontraptionPacketHandler
 
     private val KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY: RegistryObject<EntityType<KontraptionShipMountingEntity>>
-    private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Kontraption.MODID)
+    private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Kontraption.MODID)
 
 
 
@@ -77,12 +75,17 @@ class Kontraption : IModModule {
 
     init {
         instance = this
-        //MekanismGeneratorsConfig.registerConfigs(ModLoadingContext.get())
-        val modEventBus = MOD_BUS
-        modEventBus.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
-        modEventBus.addListener { configEvent: ModConfigEvent -> onConfigLoad(configEvent) }
-        modEventBus.addListener { event: InterModEnqueueEvent -> imcQueue(event) }
         KontraptionConfigs.registerConfigs(ModLoadingContext.get());
+        val modEventBus = MOD_BUS
+        /*modEventBus.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
+        modEventBus.addListener { configEvent: ModConfigEvent -> onConfigLoad(configEvent) }
+        modEventBus.addListener { event: InterModEnqueueEvent -> imcQueue(event) }*/
+        /*if(FMLEnvironment.dist.isClient){
+            modEventBus.addListener(::registerKeyBindings)
+        }*/
+        modEventBus.addListener(this::commonSetup)
+        modEventBus.addListener(this::onConfigLoad)
+        modEventBus.addListener(this::imcQueue)
         KontraptionItems.ITEMS.register(modEventBus)
         KontraptionBlocks.BLOCKS.register(modEventBus)
         ENTITIES.register(modEventBus)
@@ -107,6 +110,7 @@ class Kontraption : IModModule {
             ).sized(.3f, .3f)
                     .build(ResourceLocation(Kontraption.MODID, "kontraption_ship_mounting_entity").toString())
         }
+
 
         modEventBus.addListener(::clientSetup)
         modEventBus.addListener(::entityRenderers)
@@ -170,8 +174,11 @@ class Kontraption : IModModule {
 
     private fun clientSetup(event: FMLClientSetupEvent) {
         MinecraftForge.EVENT_BUS.register(this)
+    }
+
+    private fun registerKeyBindings(event: RegisterKeyMappingsEvent) {
         KontraptionKeyBindings.clientSetup {
-            ClientRegistry.registerKeyBinding(it)
+            event.register(it)
         }
     }
 
@@ -181,7 +188,7 @@ class Kontraption : IModModule {
         val config = configEvent.config
         //Make sure it is for the same modid as us
         if (config.modId == MODID && config is MekanismModConfig) {
-            config.clearCache()
+            config.clearCache(configEvent)
         }
     }
 
@@ -207,9 +214,9 @@ class Kontraption : IModModule {
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
     object ClientRegistryHandler {
         @SubscribeEvent
-        fun onParticlesRegistry(e: ParticleFactoryRegisterEvent?) {
+        fun onParticlesRegistry(e: RegisterParticleProvidersEvent?) {
             Minecraft.getInstance().particleEngine.register(THRUSTER.get()) { spriteSet: SpriteSet? -> ThrusterParticle.Factory(spriteSet) }
-            Minecraft.getInstance().particleEngine.register(BULLET.get()) { spriteSet: SpriteSet? -> BulletParticle.Factory(spriteSet) }
+            //Minecraft.getInstance().particleEngine.register(BULLET.get()) { spriteSet: SpriteSet? -> BulletParticle.Factory(spriteSet) }
         }
 
         /*@SubscribeEvent

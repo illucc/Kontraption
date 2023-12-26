@@ -6,11 +6,11 @@ import net.illuc.kontraption.blockEntities.TileEntityIonThruster
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
-import thedarkcolour.kotlinforforge.forge.vectorutil.toVec3
 
 
-class BlockIonThruster(type: BlockTypeTile<TileEntityIonThruster?>?) : BlockTile<TileEntityIonThruster?, BlockTypeTile<TileEntityIonThruster?>?>(type) {
+class BlockIonThruster(type: BlockTypeTile<TileEntityIonThruster?>?) : BlockTile<TileEntityIonThruster?, BlockTypeTile<TileEntityIonThruster?>?>(type, BlockBehaviour.Properties.of()) {
 
     override fun onPlace(state: BlockState, world: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
         val be = world.getBlockEntity(pos) as TileEntityIonThruster

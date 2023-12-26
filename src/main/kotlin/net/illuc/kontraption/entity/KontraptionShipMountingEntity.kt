@@ -7,9 +7,11 @@ import net.illuc.kontraption.util.KontraptionVSUtils.getShipObjectManagingPos
 import net.minecraft.client.Minecraft
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 import org.joml.Vector3d
 import org.lwjgl.glfw.GLFW
@@ -33,13 +35,13 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
 
     override fun tick() {
         super.tick()
-        if (!level.isClientSide && passengers.isEmpty()) {
+        if (!level().isClientSide && passengers.isEmpty()) {
             // Kill this entity if nothing is riding it
             kill()
             return
         }
 
-        if (getShipObjectManagingPos(level, blockPosition()) != null)
+        if (getShipObjectManagingPos(level(), blockPosition()) != null)
             sendDrivingPacket()
     }
 
@@ -53,14 +55,14 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
     }
 
     override fun remove(removalReason: RemovalReason) {
-        if (this.isController && !level.isClientSide)
-            (getShipObjectManagingPos(level, blockPosition()) as LoadedServerShip?)
+        if (this.isController && !level().isClientSide)
+            (getShipObjectManagingPos(level(), blockPosition()) as LoadedServerShip?)
                     ?.setAttachment<SeatedControllingPlayer>(null)
         super.remove(removalReason)
     }
 
     private fun sendDrivingPacket() {
-        if (!level.isClientSide) return
+        if (!level().isClientSide) return
         // qhar
         val opts = Minecraft.getInstance().options
         val forward   = opts.keyUp.isDown
@@ -104,11 +106,11 @@ open class KontraptionShipMountingEntity(type: EntityType<KontraptionShipMountin
         //KontraptionPacketPlayerDriving(impulse, rotation).sendToServer()
     }
 
-    override fun getControllingPassenger(): Entity? {
-        return if (isController) this.passengers.getOrNull(0) else null
+    override fun getControllingPassenger(): LivingEntity? {
+        return if (isController) this.passengers.getOrNull(0) as LivingEntity else null
     }
 
-    override fun getAddEntityPacket(): Packet<*> {
+    override fun getAddEntityPacket(): Packet<ClientGamePacketListener> {
         return ClientboundAddEntityPacket(this)
     }
 }

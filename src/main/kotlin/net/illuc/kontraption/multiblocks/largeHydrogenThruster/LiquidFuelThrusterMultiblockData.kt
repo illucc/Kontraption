@@ -9,8 +9,6 @@ import mekanism.common.capabilities.chemical.multiblock.MultiblockChemicalTankBu
 import mekanism.common.lib.multiblock.IValveHandler
 import mekanism.common.lib.multiblock.MultiblockData
 import mekanism.common.registries.MekanismGases
-import mekanism.common.tags.MekanismTags
-import net.illuc.kontraption.KontraptionTags
 import net.illuc.kontraption.ThrusterInterface
 import net.illuc.kontraption.blockEntities.TileEntityLiquidFuelThrusterCasing
 import net.illuc.kontraption.config.KontraptionConfigs
@@ -28,6 +26,8 @@ import net.minecraft.world.phys.Vec3
 import net.minecraftforge.api.distmarker.Dist
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.Ship
+import java.util.function.LongSupplier
+import java.util.function.Predicate
 
 
 class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing) : MultiblockData(tile), ThrusterInterface, IValveHandler {
@@ -64,14 +64,11 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
     var lastBurnRate = 0.0
 
     init {
+        LongSupplier { (thrusterPower * 100 * 4).toLong() }
         //fluidTanks.add(MultiblockFluidTank.create(10, tile))
         //fuelTank = MultiblockFluidTank.input(this, tile, { 10 }, { fluid: FluidStack -> MekanismTags.Fluids.LAVA_LOOKUP.contains(fluid.fluid) })
-        fuelTank = MultiblockChemicalTankBuilder.GAS.create(this, tile, { (thrusterPower * 100 * 4).toLong() },
-                { stack: Gas?, automationType: AutomationType -> automationType != AutomationType.EXTERNAL }, { stack: Gas?, automationType: AutomationType? -> isFormed },
-                { gas: Gas -> gas === MekanismGases.HYDROGEN.get() }, ChemicalAttributeValidator.ALWAYS_ALLOW, null)
-
-
-        gasTanks.add(fuelTank);
+        gasTanks.add(MultiblockChemicalTankBuilder.GAS.input(this, { (thrusterPower * 100 * 4).toLong() }, { gas: Gas -> gas === MekanismGases.HYDROGEN.get() },
+                ChemicalAttributeValidator.ALWAYS_ALLOW, null))
     }
 
     override fun onCreated(world: Level?) {

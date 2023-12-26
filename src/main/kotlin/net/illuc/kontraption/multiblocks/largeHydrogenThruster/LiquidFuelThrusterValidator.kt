@@ -45,7 +45,7 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
         val centerY = structure!!.minPos.y + (structure!!.height() - 1) / 2
         val centerZ = structure!!.minPos.z + (structure!!.width() - 1) / 2
 
-        structure.center = BlockPos(centerX.toDouble(), centerY.toDouble(), centerZ.toDouble())
+        structure.center = BlockPos(centerX, centerY, centerZ)
 
         val innerRadius = (Math.min(structure.length(), structure.width()) - 3) / 2
 

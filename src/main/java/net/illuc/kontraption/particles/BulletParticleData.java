@@ -68,6 +68,6 @@ public record BulletParticleData (Double posX, Double posY, Double posZ, Double 
     @Nonnull
     @Override
     public String writeToString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", getType().getRegistryName(), posX, posY, posZ, scale);
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", getType(), posX, posY, posZ, scale);
     }
 }

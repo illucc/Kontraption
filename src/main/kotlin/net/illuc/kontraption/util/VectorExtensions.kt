@@ -1,7 +1,6 @@
 package net.illuc.kontraption.util
 
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Quaternion
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Position
@@ -24,7 +23,6 @@ import org.joml.Vector3ic
 import org.joml.primitives.AABBd
 import org.joml.primitives.AABBdc
 import org.valkyrienskies.mod.mixin.accessors.util.math.Matrix4fAccessor
-import com.mojang.math.Matrix4f as Matrix4fMC
 
 //credit to the vs2 source code, would just import it if gradle worked and didnt forgor it existed
 
@@ -74,16 +72,16 @@ fun AABBd.set(v: AABB) = also {
 fun Vector3ic.toBlockPos() = BlockPos(x(), y(), z())
 fun Vector3dc.toMinecraft() = Vec3(x(), y(), z())
 
-fun Quaternionfc.toMinecraft() = Quaternion(x(), y(), z(), w())
-fun Quaterniondc.toMinecraft() = Quaternion(x().toFloat(), y().toFloat(), z().toFloat(), w().toFloat())
+//fun Quaternionfc.toMinecraft() = Quaternion(x(), y(), z(), w())
+//fun Quaterniondc.toMinecraft() = Quaternion(x().toFloat(), y().toFloat(), z().toFloat(), w().toFloat())
 
-fun Matrix4fc.toMinecraft() = Matrix4fMC().set(this)
-fun Matrix4dc.toMinecraft() = Matrix4fMC().set(this)
+//fun Matrix4fc.toMinecraft() = Matrix4fMC().set(this)
+//fun Matrix4dc.toMinecraft() = Matrix4fMC().set(this)
 
-fun Matrix4d.mul(m: Matrix4fMC): Matrix4d = mul(m.toJOML(), this)
-fun Matrix4dc.mul(m: Matrix4fMC, dest: Matrix4d): Matrix4d = mul(m.toJOML(), dest)
+//fun Matrix4d.mul(m: Matrix4fMC): Matrix4d = mul(m.toJOML(), this)
+//fun Matrix4dc.mul(m: Matrix4fMC, dest: Matrix4d): Matrix4d = mul(m.toJOML(), dest)
 
-fun Matrix4fMC.toJOML() = Matrix4d().set(this)
+//fun Matrix4fMC.toJOML() = Matrix4d().set(this)
 
 fun AABBdc.toMinecraft() = AABB(minX(), minY(), minZ(), maxX(), maxY(), maxZ())
 fun AABB.toJOML() = AABBd().set(this)
@@ -107,15 +105,15 @@ fun Matrix4dc.transformDirection(dir: Direction, dest: Vector3d = Vector3d()) = 
 
 // region Minecraft
 
-fun PoseStack.multiply(modelTransform: Matrix4dc, normalTransform: Quaterniondc) = also {
+/*fun PoseStack.multiply(modelTransform: Matrix4dc, normalTransform: Quaterniondc) = also {
     val last = last()
     last.pose().multiply(modelTransform.toMinecraft())
     last.normal().mul(normalTransform.toMinecraft())
-}
+}*/
 
-fun Matrix4fMC.multiply(m: Matrix4dc): Matrix4fMC = also {
-    multiply(m.toMinecraft())
-}
+//fun Matrix4fMC.multiply(m: Matrix4dc): Matrix4fMC = also {
+ //   multiply(m.toMinecraft())
+//}
 
 fun Vec3i.toJOML() = Vector3i().set(this)
 fun Vec3i.toJOMLD() = Vector3d().set(this)
@@ -123,7 +121,7 @@ fun Vec3i.toJOMLF() = Vector3f().set(this)
 
 fun Position.toJOML() = Vector3d().set(this)
 
-fun Quaternion.set(source: Quaterniondc) =
+/*fun Quaternion.set(source: Quaterniondc) =
         set(source.x().toFloat(), source.y().toFloat(), source.z().toFloat(), source.w().toFloat())
 
 fun Matrix4fMC.set(m: Matrix4fc) = also {
@@ -188,5 +186,5 @@ fun Matrix4d.set(m: Matrix4fMC) = also {
     m32(m.m23.toDouble())
     m33(m.m33.toDouble())
 }
-
+*/
 // endregion

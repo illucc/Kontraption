@@ -13,6 +13,8 @@ import org.valkyrienskies.mod.common.entity.handling.VSEntityManager
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.controls.KontraptionSeatedControllingPlayer
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
+import net.minecraft.world.entity.EntityType
+import net.minecraftforge.registries.RegistryObject
 import org.valkyrienskies.core.impl.networking.simple.SimplePacketNetworking
 import org.valkyrienskies.mod.common.networking.PacketRestartChunkUpdates
 import org.valkyrienskies.mod.common.networking.PacketStopChunkUpdates
@@ -54,14 +56,15 @@ object KontraptionVSGamePackets { //yoinkered from the vs2 github
         }*/
 
         // Syncs the entity handlers to the client
+        /* do we actually need it? TODO: uncomment and fix if stuff breakers
         PacketSyncVSEntityTypes::class.registerClientHandler { syncEntities ->
             syncEntities.entity2Handler.forEach { (id, handler) ->
                 VSEntityManager.pair(
-                        Registry.ENTITY_TYPE.byId(id),
+                        RegistryObject<EntityType>.byId(id),
                         ResourceLocation.tryParse(handler)?.let { VSEntityManager.getHandler(it) }
                                 ?: throw IllegalStateException("No handler: $handler")
                 )
             }
-        }
+        }*/
     }
 }

@@ -12,10 +12,11 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 
-class ShipControlInterfaceBlock(type: BlockTypeTile<TileEntityShipControlInterface?>?) : BlockTile<TileEntityShipControlInterface?, BlockTypeTile<TileEntityShipControlInterface?>?>(type) {
+class ShipControlInterfaceBlock(type: BlockTypeTile<TileEntityShipControlInterface?>?) : BlockTile<TileEntityShipControlInterface?, BlockTypeTile<TileEntityShipControlInterface?>?>(type, BlockBehaviour.Properties.of()) {
 
 
     override fun use(

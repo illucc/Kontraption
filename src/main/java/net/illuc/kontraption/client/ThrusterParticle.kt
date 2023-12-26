@@ -22,7 +22,7 @@ class ThrusterParticle protected constructor(world: ClientLevel?, posX: Double, 
     }
 
     public override fun getLightColor(partialTick: Float): Int {
-        return 190 + (20f * (1.0f - Minecraft.getInstance().options.gamma)).toInt()
+        return 190 + (20f * (1.0f - Minecraft.getInstance().options.gamma().get())).toInt()
     }
 
     override fun tick() {

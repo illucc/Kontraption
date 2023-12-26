@@ -4,7 +4,7 @@ import mekanism.common.lib.Version
 import mekanism.common.network.BasePacketHandler
 import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.network.to_server.PacketKontraptionDriving
-import net.illuc.kontraption.network.to_server.PacketKontraptionGuiButtonPress
+//import net.illuc.kontraption.network.to_server.PacketKontraptionGuiButtonPress
 import net.illuc.kontraption.network.to_server.PacketKontraptionGuiInteract
 import net.minecraftforge.network.simple.SimpleChannel
 
@@ -17,7 +17,7 @@ class KontraptionPacketHandler : BasePacketHandler() {
 
     override fun initialize() {
         //Client to server messages
-        registerClientToServer(PacketKontraptionGuiButtonPress::class.java, PacketKontraptionGuiButtonPress::decode)
+        //registerClientToServer(PacketKontraptionGuiButtonPress::class.java, PacketKontraptionGuiButtonPress::decode)
         registerClientToServer(PacketKontraptionGuiInteract::class.java, PacketKontraptionGuiInteract::decode)
         registerClientToServer(PacketKontraptionDriving::class.java, PacketKontraptionDriving::decode)
         //Server to client messages
