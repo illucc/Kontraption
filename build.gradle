@@ -29,7 +29,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 String gitRevision = "git rev-parse HEAD".execute().text.trim()
-version = mod_version + '+' + gitRevision.substring(0, 10)
+version = mod_version + '-' + gitRevision.substring(0, 10)
 
 publishing {
     publications {
@@ -60,7 +60,7 @@ publishing {
 //group = mod_version
 
 base {
-    archivesName = mod_id //+ version
+    archivesName = archives_base_name //+ version
 }
 
 java {
@@ -195,16 +195,6 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:rubidium-574856:4494903")
     runtimeOnly fg.deobf("curse.maven:cc-tweaked-282001:4630521")
     runtimeOnly fg.deobf("curse.maven:ctm-267602:3933537")
-
-
-    //using lodestone for now until vsfx comes out
-    implementation fg.deobf("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}")
-
-    //for figuring out what is laggy
-    //okay so this causes it to fnuuy itself
-    //runtimeOnly("curse.maven:spark-361579:3824951")
-
-
 }
 
 configurations {

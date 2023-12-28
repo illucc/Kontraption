@@ -10,12 +10,12 @@ import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.*
 import net.minecraft.util.Mth
 import org.joml.Vector3d
-import team.lodestar.lodestone.systems.client.ClientTickCounter
 
 
 class BulletParticle protected constructor(world: ClientLevel?, posX: Double, posY: Double, posZ: Double, velX: Double, velY: Double, velZ: Double, scale: Double, spriteSet: SpriteSet?) : TextureSheetParticle(world, posX, posY, posZ, velX, velY, velZ) {
     private var spriteset: SpriteSet? = null
     private var vel: Vector3d = Vector3d(velX, velY, velZ)
+    //TODO: remove
     init {
         spriteset = spriteSet
         lifetime = 200
@@ -53,15 +53,15 @@ class BulletParticle protected constructor(world: ClientLevel?, posX: Double, po
         val scale = getQuadSize(partialTicks)
         val rotation: Quaternion = Quaternion(camera.rotation())
         if (roll != 0.0f) {
-            val angle = Mth.lerp(ClientTickCounter.partialTicks, oRoll, roll)
-            rotation.mul(Vector3f.ZP.rotation(angle))
+            //val angle = Mth.lerp(ClientTickCounter.partialTicks, oRoll, roll)
+            rotation.mul(Vector3f.ZP.rotation(2f))
         }
 
         //val rotation = Vector3f.XP.rotationDegrees(90f);//Quaternion((Math.ceil(vel.x.absoluteValue)*camera.xRot).toFloat(), (Math.ceil(vel.y.absoluteValue)*-camera.yRot).toFloat(), 0f, true)
 
         if (roll != 0.0f) {
-            val angle = Mth.lerp(ClientTickCounter.partialTicks, oRoll, roll)
-            rotation.mul(Vector3f.ZP.rotation(angle))
+            //val angle = Mth.lerp(ClientTickCounter.partialTicks, oRoll, roll)
+            rotation.mul(Vector3f.ZP.rotation(2f))
         }
 
         for (i in 0..3) {
