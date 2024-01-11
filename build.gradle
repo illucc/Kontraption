@@ -144,10 +144,6 @@ repositories {
     maven { url 'https://modmaven.dev/' }
 
 
-    maven {
-        name = "Valkyrien Skies Internal"
-        url = 'https://maven.valkyrienskies.org'
-    }
 
     maven {
         url "https://cursemaven.com"
@@ -167,6 +163,12 @@ repositories {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
+
+    maven {
+        name = "Valkyrien Skies Internal"
+        url = 'https://maven.valkyrienskies.org'
+    }
+
 
 }
 
