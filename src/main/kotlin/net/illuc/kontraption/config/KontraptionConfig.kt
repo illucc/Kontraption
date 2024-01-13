@@ -21,6 +21,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
     val toolgunAssembleConsumption: CachedFloatingLongValue
     val toolgunStorage: CachedFloatingLongValue
     val toolgunChargeRate: CachedFloatingLongValue
+    val dampeningStrength: CachedDoubleValue
     val zeroGravity: CachedBooleanValue
 
     init {
@@ -65,6 +66,10 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
 
         toolgunChargeRate = CachedFloatingLongValue.define(this, builder, ("How fast does the toolgun charge"),
                 "toolgunChargeRate", FloatingLong.createConst(100000),
+        )
+
+        dampeningStrength = CachedDoubleValue.wrap(this, builder.comment("How strong the dampening is")
+                .define("dampeningAmount", 2.0),
         )
 
         zeroGravity = CachedBooleanValue.wrap(this, builder.comment("Turns the gravity off (only gets swithced off after placing a gyro)")
