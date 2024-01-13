@@ -61,4 +61,17 @@ description='''${mod_description}'''
    versionRange="${minecraft_version_range}"
    ordering="NONE"
    side="BOTH"
+[[dependencies.kontraption]]
+   modId="mekanism"
+   mandatory=true
+   versionRange="[10,)"
+   ordering="BEFORE"
+   side="BOTH"
+[[dependencies.kontraption]]
+   modId="kotlinforforge"
+   mandatory=true
+   versionRange="[3,)"
+   ordering="BEFORE"
+   side="BOTH"
+
 
