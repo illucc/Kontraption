@@ -7,6 +7,7 @@ import net.minecraft.Util;
 
 enum class KontraptionLang(private val key: String) : ILangEntry {
 
+    KONTRAPTION("constants", "mod_name"),
     PLACEHOLDER("description", "placeholder"),
     MODE_CHANGE("toolgun", "mode_change"),
     ASSEMBLE("toolgun", "assemble"),

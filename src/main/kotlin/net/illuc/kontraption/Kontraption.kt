@@ -1,14 +1,11 @@
 package net.illuc.kontraption
 
-import mekanism.api.chemical.gas.attribute.GasAttributes.Fuel
 import mekanism.common.Mekanism
 import mekanism.common.base.IModModule
 import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
 import mekanism.common.lib.multiblock.MultiblockCache
 import mekanism.common.lib.multiblock.MultiblockManager
-import mekanism.common.registries.MekanismFluids
-import mekanism.common.registries.MekanismGases
 import net.illuc.kontraption.KontraptionParticleTypes.BULLET
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
 import net.illuc.kontraption.client.BulletParticle
@@ -28,8 +25,6 @@ import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.ClientRegistry
 import net.minecraftforge.client.event.EntityRenderersEvent
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
-import net.minecraftforge.client.gui.ForgeIngameGui
-import net.minecraftforge.client.gui.OverlayRegistry
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
@@ -70,6 +65,7 @@ class Kontraption : IModModule {
     private val KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY: RegistryObject<EntityType<KontraptionShipMountingEntity>>
     private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Kontraption.MODID)
 
+    //val tabKontraption: KontraptionCreativeTab = KontraptionCreativeTab() i hav e no clue how the fuck it woekrs
 
 
     // = TODO()
