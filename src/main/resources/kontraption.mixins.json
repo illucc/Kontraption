@@ -6,6 +6,8 @@
   "refmap": "Kontraption.refmap.json",
   "mixins": [
     "MixinLaser",
+    "MixinRenderMechanicalPipe",
+    "MixinRenderPressureTube",
     "MixinRenderUniversalCable"
   ],
   "client": [
