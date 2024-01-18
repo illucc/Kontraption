@@ -1,5 +1,4 @@
 # Kontraption Contributing Guidelines
-wip 
 Thank you for taking your time to contribute 💖
 
 Check [Table of Contents](#table-of-contents) to see how you can contribute!
@@ -17,10 +16,21 @@ Check [Table of Contents](#table-of-contents) to see how you can contribute!
 > When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
 
 ### Your First Code Contribution
-<!-- TODO
-include Setup of env, IDE and typical getting started instructions?
+**1. Pick an issue**
+>Pick an issue you are interested in dealing with.
 
--->
+**2. Notify that you are working on that issue**
+>If you don't let others know you are working on it then someone else could also pick that one.
+
+**3. Make your changes**
+>Make sure you're following the style guide.
+
+**4. Open a pull request**
+>Don't forget to mention the issue!
+
+**5. Wait for the pull request to be reviewed**
+>Should take from anywhere between 10 minutes to 2 weeks
+
 
 ### Improving The Wiki
 <!-- TODO
@@ -36,7 +46,7 @@ One way to contribute to Kontraption is by improving the project's wiki. The wik
 ### Commit Messages
 Kontraption uses [gitmoji](https://gitmoji.dev/) for commits, please make sure you follow the gitmoji guide when writing the commit message.
 
-*Examples:*
+**Examples:**
 > 📝 added modrinth link to the README
 
 > ⚖️ tweaked fuel consumption math
