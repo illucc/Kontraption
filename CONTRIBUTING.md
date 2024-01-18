@@ -25,8 +25,12 @@ include Setup of env, IDE and typical getting started instructions?
 ### Improving The Wiki
 <!-- TODO
 Updating, improving and correcting the documentation
-
 -->
+One way to contribute to Kontraption is by improving the project's wiki. The wiki serves as a central hub for documentation, tutorials, and other helpful resources for players. Here are some ways you can improve the wiki:
+
+- **Fix typos and errors:** If you come across a typo or error in the wiki, feel free to fix it! Simply click the "Edit" button on the relevant page and make your changes. Be sure to note all the additions and removals in the edit message when making changes.
+
+- **Add missing information:** If you notice that a page is missing important information, consider adding it yourself. This could include additional examples, explanations, or links to related resources.
 
 ## Styleguides
 ### Commit Messages
