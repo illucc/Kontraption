@@ -1,7 +1,11 @@
 package net.illuc.kontraption
 
 import mekanism.common.Mekanism
+import mekanism.common.MekanismLang
 import mekanism.common.base.IModModule
+import mekanism.common.command.CommandMek
+import mekanism.common.command.builders.BuildCommand
+import mekanism.common.command.builders.Builders.*
 import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
 import mekanism.common.lib.multiblock.MultiblockCache
@@ -10,6 +14,7 @@ import net.illuc.kontraption.KontraptionParticleTypes.BULLET
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
 import net.illuc.kontraption.client.BulletParticle
 import net.illuc.kontraption.client.ThrusterParticle
+import net.illuc.kontraption.command.CommandKontraption
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
@@ -26,6 +31,7 @@ import net.minecraftforge.client.ClientRegistry
 import net.minecraftforge.client.event.EntityRenderersEvent
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -78,6 +84,7 @@ class Kontraption : IModModule {
         modEventBus.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
         modEventBus.addListener { configEvent: ModConfigEvent -> onConfigLoad(configEvent) }
         modEventBus.addListener { event: InterModEnqueueEvent -> imcQueue(event) }
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommands)
         KontraptionConfigs.registerConfigs(ModLoadingContext.get());
         KontraptionItems.ITEMS.register(modEventBus)
         KontraptionBlocks.BLOCKS.register(modEventBus)
@@ -169,6 +176,10 @@ class Kontraption : IModModule {
         KontraptionKeyBindings.clientSetup {
             ClientRegistry.registerKeyBinding(it)
         }
+    }
+
+    private fun registerCommands(event: RegisterCommandsEvent) {
+        event.dispatcher.register(CommandKontraption.register())
     }
 
     private fun onConfigLoad(configEvent: ModConfigEvent) {

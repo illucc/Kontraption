@@ -184,6 +184,8 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
         PUSH(KontraptionLang.PUSH, EnumColor.ORANGE) {
         },
         ROTATE(KontraptionLang.ROTATE, EnumColor.PURPLE) {
+        },
+        WELD(KontraptionLang.WELD, EnumColor.YELLOW) {
         };
 
         override fun getTextComponent(): Component {

@@ -6,7 +6,8 @@
   "refmap": "Kontraption.refmap.json",
   "mixins": [
     "MixinLaser",
-    "MixinRadiationManager"
+    "MixinRadiationManager",
+    "MixinSoundHandler"
   ],
   "client": [
   ],

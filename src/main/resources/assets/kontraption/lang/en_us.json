@@ -1,6 +1,9 @@
 {
+  "_": "----- ITEMS -----",
   "item.kontraption.alloy_lightweight": "Lightweight Alloy",
   "item.kontraption.toolgun": "Toolgun",
+
+  "_": "----- BLOCKS -----",
   "block.kontraption.ion_thruster": "Ion Thruster",
   "block.kontraption.ship_control_interface": "Ship Control Interface",
   "block.kontraption.gyro": "Gyroscope",
@@ -8,6 +11,8 @@
   "block.kontraption.liquid_fuel_thruster_casing": "Liquid Fuel Thruster Casing",
   "block.kontraption.liquid_fuel_thruster_valve": "Liquid Fuel Thruster Valve",
   "block.kontraption.liquid_fuel_thruster_exhaust": "Liquid Fuel Thruster Exhaust",
+  "block.kontraption.oil_drill_casing": "Oil Drill Casing",
+  "block.kontraption.oil_drill_port": "Oil Drill Port",
 
   "toolgun.kontraption.mode_change": "Toolgun mode changed to: %1$s",
   "toolgun.kontraption.assemble": "Assemble",
@@ -15,15 +20,15 @@
   "toolgun.kontraption.lock": "Lock",
   "toolgun.kontraption.push": "Push",
   "toolgun.kontraption.rotate": "Rotate",
-
+  "toolgun.kontraption.weld": "Weld",
 
   "category.kontraption.ship_controls": "Kontraption Ship Controls",
   "key.kontraption.down": "Down",
+  "key.kontraption.up": "Up",
   "key.kontraption.pitch_down": "Pitch Down",
   "key.kontraption.pitch_up": "Pitch Up",
   "key.kontraption.roll_down": "Roll Down",
   "key.kontraption.roll_up": "Roll Up",
-  "key.kontraption.up": "Up",
   "key.kontraption.yaw_down": "Yaw Down",
   "key.kontraption.yaw_up": "Yaw Up"
 }

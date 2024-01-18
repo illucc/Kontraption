@@ -15,6 +15,7 @@ enum class KontraptionLang(private val key: String) : ILangEntry {
     PUSH("toolgun", "push"),
     LOCK("toolgun", "lock"),
     ROTATE("toolgun", "rotate"),
+    WELD("toolgun", "weld"),
     DESCRIPTION_ION_THRUSTER("description", "ion_thruster");
 
     constructor(type: String, path: String) : this(Util.makeDescriptionId(type, Kontraption.rl(path)))

@@ -166,7 +166,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft ("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // cri
     //annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1"))
