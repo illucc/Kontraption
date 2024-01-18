@@ -38,5 +38,7 @@ Kontraption uses [gitmoji](https://gitmoji.dev/) for commits, please make sure y
 
 *Examples:*
 > 📝 added modrinth link to the README
+
 > ⚖️ tweaked fuel consumption math
+
 > ✨🐛 added oil drill, fixed #12
