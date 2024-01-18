@@ -9,7 +9,7 @@ Check [Table of Contents](#table-of-contents) to see how you can contribute!
 - [Styleguides](#styleguides)
 - [Commit Messages](#commit-messages)
 - [Your First Code Contribution](#your-first-code-contribution)
-- [Improving The Documentation](#improving-the-documentation)
+- [Improving The Wiki](#improving-the-wiki)
 
 ## I Want To Contribute 
 
@@ -35,3 +35,8 @@ One way to contribute to Kontraption is by improving the project's wiki. The wik
 ## Styleguides
 ### Commit Messages
 Kontraption uses [gitmoji](https://gitmoji.dev/) for commits, please make sure you follow the gitmoji guide when writing the commit message.
+
+*Examples:*
+> 📝 added modrinth link to the README
+> ⚖️ tweaked fuel consumption math
+> ✨🐛 added oil drill, fixed #12
