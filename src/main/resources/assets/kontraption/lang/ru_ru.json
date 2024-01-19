@@ -1,0 +1,29 @@
+{
+  "item.kontraption.alloy_lightweight": "Легкий Сплав",
+  "item.kontraption.toolgun": "Тул Ган",
+  "block.kontraption.ion_thruster": "Ионный Двигатель",
+  "block.kontraption.ship_control_interface": "Интерфейс Управления Кораблем",
+  "block.kontraption.gyro": "Гироскоп",
+  "block.kontraption.wheel": "Колесо",
+  "block.kontraption.liquid_fuel_thruster_casing": "Корпус Жидкостного Двигателя",
+  "block.kontraption.liquid_fuel_thruster_valve": "Клапан Жидкостного Двигателя",
+  "block.kontraption.liquid_fuel_thruster_exhaust": "Выхлоп Жидкостного Двигателя",
+
+  "toolgun.kontraption.mode_change": "Режим Тул Гана изменен на: %1$s",
+  "toolgun.kontraption.assemble": "Собрать",
+  "toolgun.kontraption.move": "Сдвигать",
+  "toolgun.kontraption.lock": "Зафиксировать",
+  "toolgun.kontraption.push": "Толкнуть",
+  "toolgun.kontraption.rotate": "Вращать",
+
+
+  "category.kontraption.ship_controls": "Контрапционное управление кораблём",
+  "key.kontraption.down": "Вниз",
+  "key.kontraption.pitch_down": "Тангаж Вниз",
+  "key.kontraption.pitch_up": "Тангаж Вверх",
+  "key.kontraption.roll_down": "Крен Вниз",
+  "key.kontraption.roll_up": "Крен Вверх",
+  "key.kontraption.up": "Вверх",
+  "key.kontraption.yaw_down": "Рысканье Вниз",
+  "key.kontraption.yaw_up": "Рысканье Вверх"
+}
