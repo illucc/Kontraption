@@ -14,8 +14,8 @@ object KontraptionKeyBindings {
 
     val pitchUp   = register("key.kontraption.pitch_up"  , GLFW.GLFW_KEY_UP       , "category.kontraption.ship_controls")
     val pitchDown = register("key.kontraption.pitch_down", GLFW.GLFW_KEY_DOWN     , "category.kontraption.ship_controls")
-    val yawUp     = register("key.kontraption.yaw_up"    , GLFW.GLFW_KEY_LEFT     , "category.kontraption.ship_controls")
-    val yawDown   = register("key.kontraption.yaw_down"  , GLFW.GLFW_KEY_RIGHT    , "category.kontraption.ship_controls")
+    val yawUp     = register("key.kontraption.yaw_up"    , GLFW.GLFW_KEY_RIGHT     , "category.kontraption.ship_controls")
+    val yawDown   = register("key.kontraption.yaw_down"  , GLFW.GLFW_KEY_LEFT    , "category.kontraption.ship_controls")
     val rollUp    = register("key.kontraption.roll_up"   , GLFW.GLFW_KEY_PAGE_UP  , "category.kontraption.ship_controls")
     val rollDown  = register("key.kontraption.roll_down" , GLFW.GLFW_KEY_PAGE_DOWN, "category.kontraption.ship_controls")
 
