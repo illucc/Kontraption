@@ -1,0 +1,39 @@
+{
+  "_": "----- ITEMS -----",
+  "item.kontraption.alloy_lightweight": "Kergsulam",
+  "item.kontraption.toolgun": "Toolgun",
+
+  "_": "----- BLOCKS -----",
+  "block.kontraption.ion_thruster": "Ioon Põtkur",
+  "block.kontraption.ship_control_interface": "Laeva Juhtliides",
+  "block.kontraption.gyro": "Güroskoop",
+  "block.kontraption.wheel": "Ratas",
+  "block.kontraption.liquid_fuel_thruster_casing": "Vedelkütuse Põtkuri Raam",
+  "block.kontraption.liquid_fuel_thruster_valve": "Vedelkütuse Põtkuri Ventiil",
+  "block.kontraption.liquid_fuel_thruster_exhaust": "Vedelkütuse Põtkuri Väljund",
+  "block.kontraption.oil_drill_casing": "Oil Drill Casing",
+  "block.kontraption.oil_drill_port": "Oil Drill Port",
+
+  "toolgun.kontraption.mode_change": "Toolgun režiim muudetud: %1$s",
+  "toolgun.kontraption.assemble": "Koonda",
+  "_": "see kõlab valesti lmao",
+  "toolgun.kontraption.move": "Liiguta",
+  "toolgun.kontraption.lock": "Lukusta",
+  "toolgun.kontraption.push": "Lükka",
+  "toolgun.kontraption.rotate": "Keera",
+  "toolgun.kontraption.weld": "Kinnita",
+
+  "category.kontraption.ship_controls": "Kontraption Ship Controls",
+  "key.kontraption.down": "Alla",
+  "key.kontraption.up": "Üles",
+  "key.kontraption.pitch_down": "Pööra alla",
+  "key.kontraption.pitch_up": "Pööra üles",
+  "key.kontraption.roll_down": "Pöörle vastupäeva",
+  "key.kontraption.roll_up": "Pöörle päripäeva",
+  "key.kontraption.yaw_down": "Pööra vasakule",
+  "key.kontraption.yaw_up": "Pööra paremale",
+
+  "chat.kontraption.testing_build": "This is a testing build of Kontraption\nnot intended for normal gameplay. \nThere will be game breaking bugs,\nmissing functionality, and placeholder assets!\nPlease report any bugs you find on\nthe issue tracker!\nhttps://github.com/illucc/Kontraption/issues",
+  "chat.kontraption.titleborder": "===========[Kontraption]===========",
+  "chat.kontraption.border":      "================================="
+}
