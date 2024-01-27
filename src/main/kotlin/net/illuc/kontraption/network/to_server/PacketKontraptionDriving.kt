@@ -32,8 +32,7 @@ class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) 
         val player: Player? = context.sender
         if (player != null) {
             val seat = player.vehicle as? KontraptionShipMountingEntity
-            val ship = KontraptionVSUtils.getShipObjectManagingPos(seat!!.level, seat.position().toJOML()) as? LoadedServerShip
-                    ?: return
+            val ship = (KontraptionVSUtils.getShipObjectManagingPos(seat!!.level, seat.position().toJOML()) as? LoadedServerShip) ?: return
 
             val attachment: KontraptionSeatedControllingPlayer = ship.getAttachment()
                     ?: KontraptionSeatedControllingPlayer(seat.direction.opposite).apply { ship.setAttachment(this) }
