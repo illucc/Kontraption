@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "STS",
+    "CEC",
+    "STS"
+  ],
+  "key": {
+    "E": {
+      "item": "mekanism:configurator"
+    },
+    "S": {
+      "tag": "forge:ingots/steel"
+    },
+    "C": {
+      "item": "mekanism:advanced_control_circuit"
+    },
+    "T": {
+      "item": "mekanism:energy_tablet"
+    }
+  },
+  "result": {
+    "item": "kontraption:toolgun",
+    "count": 1
+  }
+}
