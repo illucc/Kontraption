@@ -20,4 +20,6 @@ public class KontraptionTileEntityTypes {
 
     public static final TileEntityTypeRegistryObject<TileEntityCannon> CANNON = TILE_ENTITY_TYPES.register(KontraptionBlocks.CANNON, TileEntityCannon::new);
 
+    public static final TileEntityTypeRegistryObject<TileEntityServo> SERVO = TILE_ENTITY_TYPES.register(KontraptionBlocks.SERVO, TileEntityServo::new);
+
 }

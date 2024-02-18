@@ -14,5 +14,7 @@ object KontraptionItems { //idk check how tournament fixed it
 
     val LIGHTWEIGHT_ALLOY: ItemRegistryObject<Item> = ITEMS.register("alloy_lightweight", Rarity.RARE)
     val TOOLGUN: ItemRegistryObject<ItemToolgun> = ITEMS.register("toolgun")  { properties: Item.Properties -> ItemToolgun(properties) }
+    val ESTROGEN: ItemRegistryObject<Item> = ITEMS.register("estrogen", Rarity.RARE)
+
 
 }

@@ -42,4 +42,5 @@ public class KontraptionBlocks {
     public static final BlockRegistryObject<Block, BlockItem> RUBBER_BLOCK = BLOCKS.register("rubber_block", BlockBehaviour.Properties.of(Material.METAL));
 
     public static final BlockRegistryObject<BlockCannon, BlockItem> CANNON = BLOCKS.register("cannon", () -> new BlockCannon(KontraptionBlockTypes.CANNON));
+    public static final BlockRegistryObject<BlockServo, BlockItem> SERVO = BLOCKS.register("servo", () -> new BlockServo(KontraptionBlockTypes.SERVO));
 }
