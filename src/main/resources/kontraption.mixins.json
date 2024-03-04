@@ -10,6 +10,7 @@
     "MixinSoundHandler"
   ],
   "client": [
+    "MixinGameRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
