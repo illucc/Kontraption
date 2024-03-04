@@ -33,9 +33,9 @@ class KontraptionClientTickHandler {
             if (!notificationSent && MekanismClient.ticksPassed % 5_12 == 0L) {
                 if (notificationType != null) {
                     val message = if (notificationType == "testing") KontraptionLang.TESTINGNOTICE.translateColored(EnumColor.RED) else KontraptionLang.TESTINGNOTICE.translateColored(EnumColor.ORANGE)
-                    minecraft.player!!.sendMessage(KontraptionLang.NAMEBORDER.translateColored(EnumColor.ORANGE), Util.NIL_UUID)
-                    minecraft.player!!.sendMessage(message, Util.NIL_UUID)
-                    minecraft.player!!.sendMessage(KontraptionLang.BORDER.translateColored(EnumColor.ORANGE), Util.NIL_UUID)
+                    minecraft.player!!.sendSystemMessage(KontraptionLang.NAMEBORDER.translateColored(EnumColor.ORANGE))
+                    minecraft.player!!.sendSystemMessage(message)
+                    minecraft.player!!.sendSystemMessage(KontraptionLang.BORDER.translateColored(EnumColor.ORANGE))
                 }
                 notificationSent = true
             }

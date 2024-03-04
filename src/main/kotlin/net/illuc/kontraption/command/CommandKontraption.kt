@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.item.PrimedTnt
 import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import org.joml.*
 import java.util.*
@@ -43,12 +44,12 @@ object CommandKontraption {
 
         fun hit(clipResult: BlockHitResult, ctx: CommandContext<CommandSourceStack>){
             //todo yucky make it better
-            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 40F, Explosion.BlockInteraction.DESTROY)
+            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 40F, Level.ExplosionInteraction.TNT)
 
-            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble()+10, clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 10F, Explosion.BlockInteraction.DESTROY)
-            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble()-10, clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 10F, Explosion.BlockInteraction.DESTROY)
-            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble()+10, 10F, Explosion.BlockInteraction.DESTROY)
-            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble()-10, 10F, Explosion.BlockInteraction.DESTROY)
+            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble()+10, clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 10F, Level.ExplosionInteraction.TNT)
+            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble()-10, clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 10F, Level.ExplosionInteraction.TNT)
+            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble()+10, 10F, Level.ExplosionInteraction.TNT)
+            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble()-10, 10F, Level.ExplosionInteraction.TNT)
 
             //ShotHandler.shoot(Vec3(ctx.source.entity!!.lookAngle.x+1,ctx.source.entity!!.lookAngle.y,ctx.source.entity!!.lookAngle.z), ctx.source.level, clipResult.blockPos.toDoubles(), 5.0) { m -> secondhit(m, ctx) }
             //ShotHandler.shoot(Vec3(ctx.source.entity!!.lookAngle.x-1,ctx.source.entity!!.lookAngle.y,ctx.source.entity!!.lookAngle.z), ctx.source.level, clipResult.blockPos.toDoubles(), 5.0) { m -> secondhit(m, ctx) }
@@ -64,7 +65,7 @@ object CommandKontraption {
         }
 
         fun secondhit(clipResult: BlockHitResult, ctx: CommandContext<CommandSourceStack>){
-            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 20F, Explosion.BlockInteraction.DESTROY)
+            ctx.source.level.explode(PrimedTnt(EntityType.TNT, ctx.source.level), clipResult.blockPos.x.toDouble(), clipResult.blockPos.y.toDouble(), clipResult.blockPos.z.toDouble(), 20F, Level.ExplosionInteraction.TNT)
         }
 
 

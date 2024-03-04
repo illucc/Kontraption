@@ -11,12 +11,10 @@ import mekanism.api.text.ILangEntry
 import mekanism.common.Mekanism
 import mekanism.common.MekanismLang
 import mekanism.common.item.ItemEnergized
-import mekanism.common.item.gear.ItemFlamethrower.FlamethrowerMode
 import mekanism.common.item.interfaces.IItemHUDProvider
 import mekanism.common.item.interfaces.IModeItem
 import mekanism.common.registries.MekanismSounds
 import mekanism.common.util.ItemDataUtils
-import mekanism.common.util.MekanismUtils
 import mekanism.common.util.StorageUtils
 import net.illuc.kontraption.KontraptionLang
 import net.illuc.kontraption.client.render.Renderer
@@ -26,28 +24,23 @@ import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.util.*
 import net.illuc.kontraption.util.KontraptionVSUtils.createNewShipWithBlocks
 import net.minecraft.Util
-import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.TextComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
-import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import org.joml.Vector3d
 import org.valkyrienskies.core.util.datastructures.DenseBlockPosSet
 import java.awt.Color
-import javax.annotation.Nonnull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -88,13 +81,13 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
         if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.ASSEMBLE){
             makeSelection(level, player, interactionHand, pos)
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.MOVE){
-            player.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            player.sendSystemMessage(Component.literal("Work in progress :P"))
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.LOCK){
-            player.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            player.sendSystemMessage(Component.literal("Work in progress :P"))
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.PUSH){
-            player.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            player.sendSystemMessage(Component.literal("Work in progress :P"))
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.ROTATE){
-            player.sendMessage(TextComponent("Work in progress :P"), Util.NIL_UUID)
+            player.sendSystemMessage(Component.literal("Work in progress :P"))
         }
 
 
@@ -112,7 +105,7 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
                 secondPosition = null
                 if (SelectionZone!=null) Renderer.removeRender(SelectionZone!!)
                 SelectionZone = null;
-                player.sendMessage(TextComponent("Selection reset"), Util.NIL_UUID)
+                player.sendSystemMessage(Component.literal("Selection reset"))
 
             // First pos selection
             } else if (firstPosition == null) {
@@ -120,9 +113,9 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
                 if (res!=null && KontraptionVSUtils.getShipObjectManagingPos(level, res.blockPos) == null ) {
                     firstPosition = res.blockPos
                     Mekanism.logger.info("first pos: $firstPosition")
-                    player.sendMessage(TextComponent("First pos selected"), Util.NIL_UUID)
+                    player.sendSystemMessage(Component.literal("First pos selected"))
                 } else {
-                    player.sendMessage(TextComponent("Selected position is on a ship!"), Util.NIL_UUID)
+                    player.sendSystemMessage(Component.literal("Selected position is on a ship!"))
                 }
 
 
@@ -136,14 +129,14 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
 
                     secondPosition = res.blockPos
                     Mekanism.logger.info("second pos: $secondPosition")
-                    player.sendMessage(TextComponent("Second pos selected"), Util.NIL_UUID)
+                    player.sendSystemMessage(Component.literal("Second pos selected"))
 
                     val SZ = SelectionZoneRenderer(Vector3d(firstPosition!!.x.toDouble(),
                             firstPosition!!.y.toDouble(), firstPosition!!.z.toDouble()),Vector3d(res.blockPos.x.toDouble(),res.blockPos.y.toDouble(),res.blockPos.z.toDouble()), Color.GREEN);
                     SelectionZone = Renderer.addRender(SZ)
 
                 } else {
-                    player.sendMessage(TextComponent("Selected position is on a ship!"), Util.NIL_UUID)
+                    player.sendSystemMessage(Component.literal("Selected position is on a ship!"))
                 }
 
             // Assembly
@@ -169,14 +162,14 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
                 if (energyContainer == null || energyContainer.extract(energyPerUse, Action.SIMULATE, AutomationType.MANUAL).smallerThan(energyPerUse)) {
                     if (energyContainer != null) {
                         Mekanism.logger.info("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}")
-                        player.sendMessage(TextComponent("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}"), Util.NIL_UUID)
+                        player.sendSystemMessage(Component.literal("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}"))
                     }
                 } else {
                     if (!set.isEmpty()) {
                         energyContainer.extract(energyPerUse, Action.EXECUTE, AutomationType.MANUAL)
                         createNewShipWithBlocks(pos, set, (level as ServerLevel))
                         player.playSound(MekanismSounds.BEEP.get(), 1F, 2F)
-                        player.sendMessage(TextComponent("Assembled!"), Util.NIL_UUID)
+                        player.sendSystemMessage(Component.literal("Assembled!"))
                     }
                 }
                 if (SelectionZone!=null) Renderer.removeRender(SelectionZone!!)
@@ -233,14 +226,12 @@ class ItemToolgun(properties: Properties) : ItemEnergized(KontraptionConfigs.kon
         return level.clip(ClipContext(vec3, vec32, ClipContext.Block.OUTLINE, fluidMode, player))
     }
 
-    override fun changeMode(player: Player, stack: ItemStack, shift: Int, displayChangeMessage: Boolean) {
+    override fun changeMode(player: Player, stack: ItemStack, shift: Int, displayChange: IModeItem.DisplayChange?) {
         val mode: ToolgunMode = getMode(stack)
         val newMode = mode.byIndex(mode.ordinal + shift)
         if (mode != newMode) {
             setMode(stack, newMode)
-            if (displayChangeMessage) {
-                player.sendMessage(MekanismUtils.logFormat(KontraptionLang.MODE_CHANGE.translate(newMode)), Util.NIL_UUID)
-            }
+            displayChange?.sendMessage(player) {KontraptionLang.MODE_CHANGE.translate(newMode)}
         }
     }
 

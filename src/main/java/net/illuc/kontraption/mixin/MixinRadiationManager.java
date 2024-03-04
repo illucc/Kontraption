@@ -32,22 +32,5 @@ import static org.valkyrienskies.mod.common.util.VectorConversionsMCKt.toMinecra
 
 @Mixin(RadiationManager.class)
 public class MixinRadiationManager  {
-
-
-    @ModifyVariable(remap = false, ordinal = 0, method = "radiate(Lmekanism/api/Coord4D;D)V", at = @At("HEAD"), argsOnly = true)
-    private Coord4D MixinDumpRadiation(Coord4D a0) {
-        ResourceKey<Level> resourceKey = a0.dimension;
-        Mekanism.logger.info("testing the server doodad");
-        Level level = ValkyrienSkiesMod.getCurrentServer().getLevel(resourceKey);
-        Mekanism.logger.info("we mixining!");
-        Ship ship = KontraptionVSUtils.getShipObjectManagingPos(level, a0.getPos());
-        if (ship == null) {
-            ship = KontraptionVSUtils.getShipManagingPos(level, a0.getPos());
-        }
-        if (ship == null){
-            return a0;
-        }else{
-            return new Coord4D(new BlockPos(toMinecraft(VSGameUtilsKt.toWorldCoordinates(ship, a0.getPos()))), a0.dimension);
-        }
-    }
+    //the mixin is now in vs :p
 }

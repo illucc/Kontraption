@@ -6,9 +6,7 @@ import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
 import mekanism.common.lib.multiblock.MultiblockCache
 import mekanism.common.lib.multiblock.MultiblockManager
-import net.illuc.kontraption.KontraptionParticleTypes.BULLET
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
-import net.illuc.kontraption.client.BulletParticle
 import net.illuc.kontraption.client.KontraptionClientTickHandler
 import net.illuc.kontraption.client.ThrusterParticle
 import net.illuc.kontraption.command.CommandKontraption
@@ -25,7 +23,6 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.EntityRenderersEvent
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent
 import net.minecraftforge.common.MinecraftForge

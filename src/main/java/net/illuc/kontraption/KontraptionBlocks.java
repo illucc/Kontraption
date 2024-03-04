@@ -39,7 +39,7 @@ public class KontraptionBlocks {
     public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> LIQUID_FUEL_THRUSTER_VALVE = BLOCKS.register("liquid_fuel_thruster_valve", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.LIQUID_FUEL_THRUSTER_VALVE, properties -> properties.mapColor(MapColor.COLOR_GRAY)));
     public static final BlockRegistryObject<BlockBasicMultiblock, BlockItem> LIQUID_FUEL_THRUSTER_EXHAUST = BLOCKS.register("liquid_fuel_thruster_exhaust", () -> new BlockBasicMultiblock<>(KontraptionBlockTypes.LIQUID_FUEL_THRUSTER_EXHAUST, properties -> properties.mapColor(MapColor.COLOR_GRAY)));
 
-    public static final BlockRegistryObject<Block, BlockItem> RUBBER_BLOCK = BLOCKS.register("rubber_block", BlockBehaviour.Properties.of(Material.METAL));
+    public static final BlockRegistryObject<Block, BlockItem> RUBBER_BLOCK = BLOCKS.register("rubber_block", () -> new Block(BlockBehaviour.Properties.of()));
 
     public static final BlockRegistryObject<BlockCannon, BlockItem> CANNON = BLOCKS.register("cannon", () -> new BlockCannon(KontraptionBlockTypes.CANNON));
     public static final BlockRegistryObject<BlockServo, BlockItem> SERVO = BLOCKS.register("servo", () -> new BlockServo(KontraptionBlockTypes.SERVO));
