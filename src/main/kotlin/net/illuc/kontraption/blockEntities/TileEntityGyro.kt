@@ -103,7 +103,7 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
 
     fun enable() {
         if (level !is ServerLevel) return
-        println("ENABLED")
+        //println("ENABLED")
         enabled = true
         val ship = KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
                 ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
@@ -123,7 +123,7 @@ class TileEntityGyro(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(Ko
 
 
     fun disable() {
-        println("DISABLED")
+        //println("DISABLED")
         if (level !is ServerLevel) return
 
         enabled = false

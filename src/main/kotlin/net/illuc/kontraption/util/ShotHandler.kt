@@ -1,18 +1,6 @@
 package net.illuc.kontraption.util
 
-import net.illuc.kontraption.KontraptionParticleTypes
-import net.illuc.kontraption.particle.BulletParticleType
-import net.illuc.kontraption.particles.BulletParticleData
-import net.illuc.kontraption.particles.ThrusterParticleData
 import net.illuc.kontraption.util.KontraptionVSUtils.getShipObjectManagingPos
-import net.minecraft.client.particle.Particle
-import net.minecraft.client.particle.SmokeParticle
-import net.minecraft.client.particle.TotemParticle
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
-import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.core.particles.SimpleParticleType
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
@@ -27,18 +15,18 @@ class ShotHandler {
 
 
     companion object {
-        public fun shoot(direction: Direction, level: Level, blockPos: BlockPos, func: (hitRes: BlockHitResult) -> Unit) {
+        public fun shoot(direction: Vector3d, level: Level, position: Vector3d, distance: Double, func: (hitRes: BlockHitResult) -> Unit) {
             val lookingTowards = direction
 
-            val startPos = blockPos.toJOMLD()
+            val startPos = position
                     .add(0.5, 0.5, 0.5)
-                    .add(direction.normal.toJOMLD().mul(0.5))
+                    .add(direction.mul(0.5))
 
 
-            val ship = getShipObjectManagingPos(level, blockPos)
+            val ship = getShipObjectManagingPos(level, position)
 
 
-            val clipResult = shootRaycast(level, startPos, ship, lookingTowards.normal.toJOMLD())
+            val clipResult = shootRaycast(level, startPos, ship, lookingTowards, distance)
 
             /*if (level is ServerLevel) {
                 for (player in level.players()) {
@@ -63,13 +51,13 @@ class ShotHandler {
 
         }
 
-        private fun shootRaycast(level: Level, startPos: Vector3d, ship: Ship?, direction: Vector3d): BlockHitResult {
+        private fun shootRaycast(level: Level, startPos: Vector3d, ship: Ship?, direction: Vector3d, distance: Double): BlockHitResult {
             return level.clip(
                     ClipContext(
                             (Vector3d(startPos).let { ship?.shipToWorld?.transformPosition(it) ?: it }).toMinecraft(),
                             (startPos
                                     .add(0.5, 0.5, 0.5)
-                                    .add(Vector3d(direction).mul(200.0)) //distance
+                                    .add(Vector3d(direction).mul(distance)) //distance
                                     .let {
                                         ship?.shipToWorld?.transformPosition(it) ?: it
                                     }).toMinecraft(),

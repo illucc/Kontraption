@@ -16,7 +16,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 
 class TileEntityCannon(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.CANNON, pos, state) {
-    override fun onUpdateServer() {
+    /*override fun onUpdateServer() {
         super.onUpdateServer()
         level?.let { ShotHandler.shoot(blockState.getValue(BlockStateProperties.FACING), it, blockPos,  {m -> hit(m) }) }
     }
@@ -29,5 +29,5 @@ class TileEntityCannon(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(
                     //level.sendParticles(player, ParticleTypes.TOTEM_OF_UNDYING, true, blockPos.x.toDouble(), blockPos.x.toDouble(), blockPos.x.toDouble())
             }
         }
-    }
+    }*/
 }

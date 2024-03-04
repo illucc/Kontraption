@@ -5,6 +5,7 @@
     "kontraption:ship_control_interface",
     "kontraption:liquid_fuel_thruster_valve",
     "kontraption:liquid_fuel_thruster_exhaust",
-    "kontraption:liquid_fuel_thruster_casing"
+    "kontraption:liquid_fuel_thruster_casing",
+    "kontraption:rubber_block"
   ]
 }

@@ -1,17 +1,17 @@
 package net.illuc.kontraption
 
-import mekanism.api.chemical.gas.attribute.GasAttributes.Fuel
 import mekanism.common.Mekanism
 import mekanism.common.base.IModModule
 import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
 import mekanism.common.lib.multiblock.MultiblockCache
 import mekanism.common.lib.multiblock.MultiblockManager
-import mekanism.common.registries.MekanismFluids
-import mekanism.common.registries.MekanismGases
 import net.illuc.kontraption.KontraptionParticleTypes.BULLET
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
+import net.illuc.kontraption.client.BulletParticle
+import net.illuc.kontraption.client.KontraptionClientTickHandler
 import net.illuc.kontraption.client.ThrusterParticle
+import net.illuc.kontraption.command.CommandKontraption
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.config.KontraptionKeyBindings
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
@@ -25,9 +25,11 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.EntityRenderersEvent
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -75,11 +77,10 @@ class Kontraption : IModModule {
 
     init {
         instance = this
-        KontraptionConfigs.registerConfigs(ModLoadingContext.get());
+        //MekanismGeneratorsConfig.registerConfigs(ModLoadingContext.get())
         val modEventBus = MOD_BUS
-        /*modEventBus.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
-        modEventBus.addListener { configEvent: ModConfigEvent -> onConfigLoad(configEvent) }
-        modEventBus.addListener { event: InterModEnqueueEvent -> imcQueue(event) }*/
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommands)
+        KontraptionConfigs.registerConfigs(ModLoadingContext.get());
         /*if(FMLEnvironment.dist.isClient){
             modEventBus.addListener(::registerKeyBindings)
         }*/
@@ -182,6 +183,10 @@ class Kontraption : IModModule {
         }
     }
 
+    private fun registerCommands(event: RegisterCommandsEvent) {
+        event.dispatcher.register(CommandKontraption.register())
+    }
+
     private fun onConfigLoad(configEvent: ModConfigEvent) {
         //Note: We listen to both the initial load and the reload, to make sure that we fix any accidentally
         // cached values from calls before the initial loading
@@ -217,6 +222,11 @@ class Kontraption : IModModule {
         fun onParticlesRegistry(e: RegisterParticleProvidersEvent?) {
             Minecraft.getInstance().particleEngine.register(THRUSTER.get()) { spriteSet: SpriteSet? -> ThrusterParticle.Factory(spriteSet) }
             //Minecraft.getInstance().particleEngine.register(BULLET.get()) { spriteSet: SpriteSet? -> BulletParticle.Factory(spriteSet) }
+        }
+
+        @SubscribeEvent
+        fun init(event: FMLClientSetupEvent?) {
+            MinecraftForge.EVENT_BUS.register(KontraptionClientTickHandler())
         }
 
         /*@SubscribeEvent

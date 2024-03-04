@@ -79,5 +79,11 @@ public class KontraptionBlockTypes {
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
 
+    public static final BlockTypeTile<TileEntityServo> SERVO = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.SERVO, MekanismLang.HOLD_FOR_DESCRIPTION)
+            //.withCustomShape(KontraptionBlockShapes.INSTANCE.getWHEEL())
+            .with(new AttributeStateFacing(BlockStateProperties.FACING))
+            .build();
+
 
 }

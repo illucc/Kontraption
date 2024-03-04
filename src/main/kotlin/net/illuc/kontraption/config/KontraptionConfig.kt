@@ -21,13 +21,14 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
     val toolgunAssembleConsumption: CachedFloatingLongValue
     val toolgunStorage: CachedFloatingLongValue
     val toolgunChargeRate: CachedFloatingLongValue
+    val dampeningStrength: CachedDoubleValue
     val zeroGravity: CachedBooleanValue
 
     init {
         val builder = ForgeConfigSpec.Builder()
         builder.comment("Kontraption Config. This config is synced between server and client.").push("kontraption")
         liquidFuelThrust = CachedDoubleValue.wrap(this, builder.comment("How powerful the liquid fuel thruster is. (3x3)")
-                .define("liquidFuelThrust", 60.0),
+                .define("liquidFuelThrust", 90.0),
         )
 
         liquidFuelConsumption = CachedDoubleValue.wrap(this, builder.comment("How much fuel does the liquid fuel thruster use")
@@ -36,7 +37,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
 
 
         ionThrust = CachedDoubleValue.wrap(this, builder.comment("How powerful the ion thruster is.")
-                .define("ionThrust", 1.0),
+                .define("ionThrust", 4.0),
         )
 
         ionConsumption = CachedDoubleValue.wrap(this, builder.comment("How much energy does the ion thruster use.")
@@ -65,6 +66,10 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
 
         toolgunChargeRate = CachedFloatingLongValue.define(this, builder, ("How fast does the toolgun charge"),
                 "toolgunChargeRate", FloatingLong.createConst(100000),
+        )
+
+        dampeningStrength = CachedDoubleValue.wrap(this, builder.comment("How strong the dampening is")
+                .define("dampeningAmount", 1.0),
         )
 
         zeroGravity = CachedBooleanValue.wrap(this, builder.comment("Turns the gravity off (only gets swithced off after placing a gyro)")

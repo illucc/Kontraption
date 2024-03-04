@@ -1,0 +1,6 @@
+{
+  "parent": "mekanism:block/basic_cube",
+  "textures": {
+    "all": "kontraption:block/rubber_block"
+  }
+}

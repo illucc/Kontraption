@@ -19,6 +19,7 @@ import org.valkyrienskies.core.api.ships.setAttachment
 import org.valkyrienskies.core.util.readVec3d
 import org.valkyrienskies.core.util.writeVec3AsFloat
 import org.valkyrienskies.core.util.writeVec3d
+import thedarkcolour.kotlinforforge.forge.vectorutil.toVec3i
 
 
 class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) : IMekanismPacket {
@@ -30,12 +31,15 @@ class PacketKontraptionDriving(val impulse: Vector3dc, val rotation: Vector3dc) 
     override fun handle(context: NetworkEvent.Context) {
         val player: Player? = context.sender
         if (player != null) {
-            val seat = player.vehicle as? KontraptionShipMountingEntity
-            val ship = KontraptionVSUtils.getShipObjectManagingPos(seat!!.level(), seat.position().toJOML()) as? LoadedServerShip
-                    ?: return
+            val seat = player.vehicle as? KontraptionShipMountingEntity ?: return
+            //fucking please dont do stuff if something is wrong
+            if (seat.level() == null){
+                return
+            }
+            val ship = (KontraptionVSUtils.getShipObjectManagingPos(seat.level, seat.position().toJOML())) ?: return
 
-            val attachment: KontraptionSeatedControllingPlayer = ship.getAttachment()
-                    ?: KontraptionSeatedControllingPlayer(seat.direction.opposite).apply { ship.setAttachment(this) }
+            val attachment: KontraptionSeatedControllingPlayer = (ship as? LoadedServerShip)?.getAttachment()
+                    ?: KontraptionSeatedControllingPlayer(seat.direction.opposite).apply { (ship as? LoadedServerShip)?.setAttachment(this) }
 
             attachment.forwardImpulse   = impulse.z()
             attachment.leftImpulse      = impulse.x()

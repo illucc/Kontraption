@@ -146,9 +146,8 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
         }
 
         if (exhausts != validExhausts){
-            println("EXHAUSTS != VALID EXHAUSTS")
-            println(exhausts)
-            println(validExhausts)
+            //println(exhausts)
+            //println(validExhausts)
             return FormationResult.fail(KontraptionLang.PLACEHOLDER, mutablePos);
         }
 
@@ -164,7 +163,6 @@ class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterM
             //return FormationResult.fail(KontraptionLang.DESCRIPTION_ION_THRUSTER, mutablePos);
 
         }
-        println("yahhooo")
 
 
 

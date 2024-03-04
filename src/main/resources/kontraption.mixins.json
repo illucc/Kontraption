@@ -8,9 +8,13 @@
     "MixinLaser",
     "MixinRenderMechanicalPipe",
     "MixinRenderPressureTube",
-    "MixinRenderUniversalCable"
+    "MixinRenderUniversalCable",
+    "MixinLaser",
+    "MixinRadiationManager",
+    "MixinSoundHandler"
   ],
   "client": [
+    "MixinGameRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

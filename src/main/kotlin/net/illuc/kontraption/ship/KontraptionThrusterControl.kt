@@ -26,6 +26,7 @@ class KontraptionThrusterControl : ShipForcesInducer {
 
     override fun applyForces(physShip: PhysShip) {
         physShip as PhysShipImpl
+        physShip.applyInvariantForce(physShip.poseVel.vel.negate(Vector3d()).mul(physShip.inertia.shipMass).mul(KontraptionConfigs.kontraption.dampeningStrength.get()))
         thrusters.forEach {
             val (position, forceDirection, forceStrength, be) = it
             //be.enable()

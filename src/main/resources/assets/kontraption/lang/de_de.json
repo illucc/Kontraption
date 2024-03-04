@@ -1,0 +1,39 @@
+{
+  "_": "Translation by Sascha_T",
+  "_": "----- ITEMS -----",
+  "item.kontraption.alloy_lightweight": "Leichtlegierung",
+  "item.kontraption.toolgun": "Toolgun",
+
+  "_": "----- BLOCKS -----",
+  "block.kontraption.ion_thruster": "Ionentriebwerk",
+  "block.kontraption.ship_control_interface": "Schiffskontrolleinheit",
+  "block.kontraption.gyro": "Gyroskop",
+  "block.kontraption.wheel": "Rad",
+  "block.kontraption.liquid_fuel_thruster_casing": "Flüssigtreibstofftriebwerksgehäuse",
+  "block.kontraption.liquid_fuel_thruster_valve": "Flüssigtreibstofftriebwerksventil",
+  "block.kontraption.liquid_fuel_thruster_exhaust": "Flüssigtreibstofftriebwerksauspuff",
+  "block.kontraption.oil_drill_casing": "Ölbohrergehäuse",
+  "block.kontraption.oil_drill_port": "Ölbohreranschluss",
+
+  "toolgun.kontraption.mode_change": "Ausgewählter Toolgun Modus: %1$s",
+  "toolgun.kontraption.assemble": "Zusammenbauen",
+  "toolgun.kontraption.move": "Bewegen",
+  "toolgun.kontraption.lock": "Sperren",
+  "toolgun.kontraption.push": "Schieben",
+  "toolgun.kontraption.rotate": "Drehen",
+  "toolgun.kontraption.weld": "Schweißen",
+
+  "category.kontraption.ship_controls": "Kontraption-Schiffssteuerung",
+  "key.kontraption.down": "Runter",
+  "key.kontraption.up": "Hoch",
+  "key.kontraption.pitch_down": "Pitch runter",
+  "key.kontraption.pitch_up": "Pitch hoch",
+  "key.kontraption.roll_down": "Roll gegen Uhrzeigersinn",
+  "key.kontraption.roll_up": "Roll mit Uhrzeigersinn",
+  "key.kontraption.yaw_down": "Yaw rechts",
+  "key.kontraption.yaw_up": "Yaw links",
+
+  "chat.kontraption.testing_build": "Dies ist ein Kontraption-Testbuild\nder nicht für normalen Gameplay geeignet ist. \nEs gibt Bugs, fehlende Features, und Platzhalterassets!\nBitte melden Sie jegliche Fehler\nauf dem GitHub!\nhttps://github.com/illucc/Kontraption/issues",
+  "chat.kontraption.titleborder": "===========[Kontraption]===========",
+  "chat.kontraption.border":      "================================="
+}
