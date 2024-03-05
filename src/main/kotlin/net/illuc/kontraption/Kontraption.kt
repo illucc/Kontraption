@@ -19,13 +19,16 @@ import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThruste
 import net.illuc.kontraption.network.KontraptionPacketHandler
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.SpriteSet
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
+import net.minecraft.world.item.CreativeModeTab
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.EntityRenderersEvent
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
@@ -37,10 +40,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent
-import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
+import net.minecraftforge.versions.forge.ForgeVersion.MOD_ID
 import org.valkyrienskies.mod.client.EmptyRenderer
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
@@ -67,7 +70,7 @@ class Kontraption : IModModule {
 
     private val KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY: RegistryObject<EntityType<KontraptionShipMountingEntity>>
     private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Kontraption.MODID)
-
+    val TAB_REGISTER: DeferredRegister<CreativeModeTab> = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID)
 
 
     // = TODO()
@@ -116,6 +119,8 @@ class Kontraption : IModModule {
         modEventBus.addListener(::loadComplete)
         MinecraftForge.EVENT_BUS.addListener(ClientRuntimeEvents::onRenderWorld)
 
+        TAB_REGISTER.register("general", ::createCreativeTab);
+        TAB_REGISTER.register(modEventBus);
     }
 
 
@@ -234,4 +239,26 @@ class Kontraption : IModModule {
     }
 
 
+    fun createCreativeTab(): CreativeModeTab {
+        return CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+            .title(Component.translatable("itemGroup.kontraption"))
+            .icon { KontraptionBlocks.ION_THRUSTER.asItem().defaultInstance }
+            .displayItems { _, output ->
+                output.accept(KontraptionItems.LIGHTWEIGHT_ALLOY)
+                output.accept(KontraptionItems.TOOLGUN)
+                //output.accept(KontraptionItems.ESTROGEN)
+                //output.accept(KontraptionBlocks.RUBBER_BLOCK)
+                output.accept(KontraptionBlocks.LIQUID_FUEL_THRUSTER_CASING)
+                output.accept(KontraptionBlocks.LIQUID_FUEL_THRUSTER_VALVE)
+                output.accept(KontraptionBlocks.LIQUID_FUEL_THRUSTER_EXHAUST)
+                output.accept(KontraptionBlocks.ION_THRUSTER)
+                output.accept(KontraptionBlocks.SHIP_CONTROL_INTERFACE)
+                //output.accept(KontraptionBlocks.CANNON)
+                output.accept(KontraptionBlocks.GYRO)
+                //output.accept(KontraptionBlocks.SERVO)
+                //output.accept(KontraptionBlocks.WHEEL)
+
+            }
+            .build()
+    }
 }

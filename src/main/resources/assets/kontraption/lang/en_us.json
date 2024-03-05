@@ -36,5 +36,7 @@
 
   "chat.kontraption.testing_build": "This is a testing build of Kontraption\nnot intended for normal gameplay. \nThere will be game breaking bugs,\nmissing functionality, and placeholder assets!\nPlease report any bugs you find on\nthe issue tracker!\nhttps://github.com/illucc/Kontraption/issues",
   "chat.kontraption.titleborder": "===========[Kontraption]===========",
-  "chat.kontraption.border":      "================================="
+  "chat.kontraption.border":      "=================================",
+
+  "itemGroup.kontraption": "Kontraption"
 }
