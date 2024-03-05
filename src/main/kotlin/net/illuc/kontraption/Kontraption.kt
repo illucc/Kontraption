@@ -6,6 +6,7 @@ import mekanism.common.config.MekanismModConfig
 import mekanism.common.lib.Version
 import mekanism.common.lib.multiblock.MultiblockCache
 import mekanism.common.lib.multiblock.MultiblockManager
+import net.illuc.kontraption.ClientEvents.ClientRuntimeEvents
 import net.illuc.kontraption.KontraptionParticleTypes.THRUSTER
 import net.illuc.kontraption.client.KontraptionClientTickHandler
 import net.illuc.kontraption.client.ThrusterParticle
@@ -113,7 +114,7 @@ class Kontraption : IModModule {
         modEventBus.addListener(::clientSetup)
         modEventBus.addListener(::entityRenderers)
         modEventBus.addListener(::loadComplete)
-
+        MinecraftForge.EVENT_BUS.addListener(ClientRuntimeEvents::onRenderWorld)
 
     }
 

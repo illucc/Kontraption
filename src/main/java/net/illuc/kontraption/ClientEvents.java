@@ -1,16 +1,14 @@
 package net.illuc.kontraption;
 
-import net.illuc.kontraption.client.KontraptionClientTickHandler;
 import net.illuc.kontraption.client.ThrusterParticle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.UnbakedModel;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import static net.illuc.kontraption.client.render.RendererKt.renderData;
 
 public class ClientEvents {
 
@@ -23,8 +21,22 @@ public class ClientEvents {
             System.out.println("bal");
             Minecraft.getInstance().particleEngine.register(KontraptionParticleTypes.INSTANCE.getTHRUSTER().get(), ThrusterParticle.Factory::new);
         }
+    }
 
+    @Mod.EventBusSubscriber(Dist.CLIENT)
+    public static class ClientRuntimeEvents {
 
+        @SubscribeEvent
+        public static void onRenderWorld(RenderLevelStageEvent event) {
+            if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
+                var matrixStack = event.getPoseStack();
+                var mainCamera = event.getCamera();
+
+                Minecraft.getInstance().getProfiler().push("vsshipassembler_rendering_phase");
+                renderData(matrixStack, mainCamera);
+                Minecraft.getInstance().getProfiler().pop();
+            }
+        }
 
     }
 }
