@@ -27,7 +27,7 @@ object KontraptionKeyBindings {
 
     private fun register(name: String, keyCode: Int, category: String): Supplier<KeyMapping> =
             object : Supplier<KeyMapping>, Consumer<Consumer<KeyMapping>> {
-                lateinit var registered: KeyMapping
+                var registered: KeyMapping = KeyMapping(name, keyCode, category)
 
                 // If this throws error ur on server
                 override fun get(): KeyMapping = registered
