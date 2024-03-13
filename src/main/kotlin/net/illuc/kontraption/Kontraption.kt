@@ -40,6 +40,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent
+import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
@@ -82,9 +83,9 @@ class Kontraption : IModModule {
         val modEventBus = MOD_BUS
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands)
         KontraptionConfigs.registerConfigs(ModLoadingContext.get());
-        /*if(FMLEnvironment.dist.isClient){
+        if(FMLEnvironment.dist.isClient){
             modEventBus.addListener(::registerKeyBindings)
-        }*/
+        }
         modEventBus.addListener(this::commonSetup)
         modEventBus.addListener(this::onConfigLoad)
         modEventBus.addListener(this::imcQueue)
@@ -122,7 +123,6 @@ class Kontraption : IModModule {
         TAB_REGISTER.register("general", ::createCreativeTab);
         TAB_REGISTER.register(modEventBus);
     }
-
 
 
     private fun commonSetup(event: FMLCommonSetupEvent) {
@@ -178,6 +178,9 @@ class Kontraption : IModModule {
 
     private fun clientSetup(event: FMLClientSetupEvent) {
         MinecraftForge.EVENT_BUS.register(this)
+
+
+
     }
 
     private fun registerKeyBindings(event: RegisterKeyMappingsEvent) {
