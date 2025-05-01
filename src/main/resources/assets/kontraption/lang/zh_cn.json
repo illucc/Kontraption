@@ -1,0 +1,47 @@
+{
+  "_": "----- 物品 -----",
+  "item.kontraption.alloy_lightweight": "轻质合金",
+  "item.kontraption.toolgun": "工具枪",
+  "item.kontraption.estrogen": "雌激素",
+
+  "_": "----- 方块 -----",
+  "block.kontraption.ion_thruster": "离子推进器",
+  "block.kontraption.ship_control_interface": "物理结构控制面板",
+  "block.kontraption.gyro": "陀螺仪",
+  "block.kontraption.wheel": "轮子",
+  "block.kontraption.rubber_block": "橡胶块",
+  "block.kontraption.liquid_fuel_thruster_casing": "液体燃料推进器外壳",
+  "block.kontraption.liquid_fuel_thruster_valve": "液体燃料推进器阀门",
+  "block.kontraption.liquid_fuel_thruster_exhaust": "液体燃料推进器喷口",
+  "block.kontraption.oil_drill_casing": "石油钻机外壳",
+  "block.kontraption.oil_drill_port": "石油钻机端口",
+  "block.kontraption.connector": "连接器",
+  "block.kontraption.key": "红石接口",
+
+  "toolgun.kontraption.mode_change": "工具枪模式已切换为：%1$s",
+  "toolgun.kontraption.assemble": "组装",
+  "toolgun.kontraption.move": "移动",
+  "toolgun.kontraption.lock": "锁定",
+  "toolgun.kontraption.push": "推动",
+  "toolgun.kontraption.rotate": "旋转",
+  "toolgun.kontraption.weld": "焊接",
+
+  "category.kontraption.ship_controls": "精妙机械 物理结构控制",
+  "key.kontraption.down": "下降",
+  "key.kontraption.up": "上升",
+  "key.kontraption.pitch_down": "俯冲",
+  "key.kontraption.pitch_up": "爬升",
+  "key.kontraption.roll_down": "逆时针翻滚",
+  "key.kontraption.roll_up": "顺时针翻滚",
+  "key.kontraption.yaw_down": "左偏航",
+  "key.kontraption.yaw_up": "右偏航",
+
+  "chat.kontraption.testing_build": "这是精妙机械的测试版本\n不适用于正常游戏！\n可能会遇到恶性漏洞、\n功能缺失和计算机资源的错误占用！\n请在问题追踪器提交漏洞报告：\nhttps://github.com/illucc/Kontraption/issues",
+  "chat.kontraption.titleborder": "===========[精妙机械]===========",
+  "chat.kontraption.border":      "=================================",
+
+  "itemGroup.kontraption": "精妙机械",
+
+  "_": "----------GUI-------------",
+  "container.kontraption.TerminalGUI": "物理结构终端配置"
+}
