@@ -17,6 +17,14 @@
   "block.kontraption.oil_drill_port": "石油钻机端口",
   "block.kontraption.connector": "连接器",
   "block.kontraption.key": "红石接口",
+  "block.kontraption.cannon": "加农炮",
+  "block.kontraption.otter_plushie":"ZeOttery 毛绒玩具",
+  "block.kontraption.cosmic_plushie":"Cosmos 毛绒玩具",
+  "block.kontraption.illuc_plushie":"Illuc 毛绒玩具",
+  "block.kontraption.large_ion_thruster_casing": "大型离子推进器外壳",
+  "block.kontraption.large_ion_thruster_coil": "大型离子推进器线圈",
+  "block.kontraption.large_ion_thruster_valve": "大型离子推进器阀门",
+  "block.kontraption.large_ion_thruster_controller": "大型离子推进器控制器",
 
   "toolgun.kontraption.mode_change": "工具枪模式已切换为：%1$s",
   "toolgun.kontraption.assemble": "组装",
@@ -25,8 +33,16 @@
   "toolgun.kontraption.push": "推动",
   "toolgun.kontraption.rotate": "旋转",
   "toolgun.kontraption.weld": "焊接",
+  "toolgun.kontraption.selection_reset": "选区已重置",
+  "toolgun.kontraption.first_pos_selected": "已选择第一个位置",
+  "toolgun.kontraption.second_pos_selected": "已选择第二个位置",
+  "toolgun.kontraption.pos_on_ship": "所选位置处于物理结构上！",
+  "toolgun.kontraption.assembly_successful": "组装成功！",
+  "toolgun.kontraption.selected_ship": "已选择物理结构！",
+  "toolgun.kontraption.ship_not_found": "请指向一个物理结构并重试",
+  "toolgun.kontraption.moving_successful": "物理结构移动成功！",
 
-  "category.kontraption.ship_controls": "精妙机械 物理结构控制",
+  "category.kontraption.ship_controls": "精致机械 物理结构控制",
   "key.kontraption.down": "下降",
   "key.kontraption.up": "上升",
   "key.kontraption.pitch_down": "俯冲",
@@ -36,12 +52,15 @@
   "key.kontraption.yaw_down": "左偏航",
   "key.kontraption.yaw_up": "右偏航",
 
-  "chat.kontraption.testing_build": "这是精妙机械的测试版本\n不适用于正常游戏！\n可能会遇到恶性漏洞、\n功能缺失和计算机资源的错误占用！\n请在问题追踪器提交漏洞报告：\nhttps://github.com/illucc/Kontraption/issues",
-  "chat.kontraption.titleborder": "===========[精妙机械]===========",
+  "chat.kontraption.testing_build": "这是精致机械的测试版本\n不适用于正常游戏！\n可能会遇到恶性漏洞、\n功能缺失和占位用的资源！\n请将发现的任何漏洞报告至问题追踪器！\nhttps://github.com/illucc/Kontraption/issues",
+  "chat.kontraption.titleborder": "===========[精致机械]===========",
   "chat.kontraption.border":      "=================================",
 
-  "itemGroup.kontraption": "精妙机械",
+  "itemGroup.kontraption": "精致机械",
 
   "_": "----------GUI-------------",
-  "container.kontraption.TerminalGUI": "物理结构终端配置"
+  "container.kontraption.TerminalGUI": "物理结构终端配置",
+  "block.kontraption.tooltip.ottplush1": "喵~",
+  "block.kontraption.tooltip.cosplush1": "Cosmo嘶嘶嘶……",
+  "block.kontraption.tooltip.illplush1": "CORRU"
 }
