@@ -5,12 +5,14 @@ import mekanism.common.tile.base.TileEntityMekanism
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.blocks.BlockKey
 import net.illuc.kontraption.events.KeyBindEvent
+import net.illuc.kontraption.ship.KontraptionBConfigControl
 import net.illuc.kontraption.ship.KontraptionKeyBlockControl
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
+import java.lang.Math.random
 
 class TileEntityKey(
     pos: BlockPos?,
@@ -40,6 +42,14 @@ class TileEntityKey(
 
     fun enable() { // Totally not stolen from gyro xd
         if (level !is ServerLevel) return
+        val slevel = level as ServerLevel
+        val settings =
+            listOf(
+                KontraptionBConfigControl.BlockSetting.BooleanSetting("enabled", true),
+                KontraptionBConfigControl.BlockSetting.IntSetting("range", (0 until 10).random()),
+                KontraptionBConfigControl.BlockSetting.StringSetting("name", "CoolBlock"),
+            )
+
         val ship =
             KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
                 ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
@@ -53,6 +63,11 @@ class TileEntityKey(
                 this,
                 // keybind is unsused lol
             )
+        }
+        KontraptionBConfigControl.getOrCreate(ship).let {
+            it.removeConfigBlock(worldPosition)
+
+            it.addConfigBlock(worldPosition, slevel.getBlockEntity(worldPosition), settings)
         }
     }
 

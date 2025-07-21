@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=up": { "model": "kontraption:block/large_ion_thruster_coil", "x": 0, "y": 0 },
+    "facing=down": { "model": "kontraption:block/large_ion_thruster_coil", "x": 180, "y": 0 },
+    "facing=north": { "model": "kontraption:block/large_ion_thruster_coil","x": 90, "y": 0 },
+    "facing=south": { "model": "kontraption:block/large_ion_thruster_coil", "x": 90, "y": 180 },
+    "facing=east": { "model": "kontraption:block/large_ion_thruster_coil", "x": 90, "y": 90 },
+    "facing=west": { "model": "kontraption:block/large_ion_thruster_coil", "x": 90, "y": 270 }
+  }
+}

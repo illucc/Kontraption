@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "kontraption:block/large_ion_thruster_valve" },
+    "facing=south": { "model": "kontraption:block/large_ion_thruster_valve", "y": 180 },
+    "facing=west": { "model": "kontraption:block/large_ion_thruster_valve", "y": 270 },
+    "facing=east": { "model": "kontraption:block/large_ion_thruster_valve", "y": 90 }
+  }
+}

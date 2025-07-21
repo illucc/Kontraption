@@ -9,7 +9,7 @@ import mekanism.common.lib.multiblock.IValveHandler
 import mekanism.common.lib.multiblock.MultiblockData
 import mekanism.common.registries.MekanismGases
 import net.illuc.kontraption.ThrusterInterface
-import net.illuc.kontraption.blockEntities.TileEntityLiquidFuelThrusterCasing
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterCasing
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.particles.ThrusterParticleData
 import net.illuc.kontraption.util.KontraptionVSUtils
@@ -27,7 +27,11 @@ import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.Ship
 import java.util.function.LongSupplier
 
-class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing) : MultiblockData(tile), ThrusterInterface, IValveHandler {
+class LiquidFuelThrusterMultiblockData(
+    tile: TileEntityLiquidFuelThrusterCasing,
+) : MultiblockData(tile),
+    ThrusterInterface,
+    IValveHandler {
     // :cri:
     val te = tile
     var exhaustDirection: Direction = Direction.NORTH
@@ -50,7 +54,7 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
     override var powered: Boolean = true
     override var thrusterPower: Double = KontraptionConfigs.kontraption.liquidFuelThrust.get()
     override val basePower: Double = KontraptionConfigs.kontraption.liquidFuelThrust.get()
-
+    override var currentThrust: Double = 0.0
     // ----------------stuff-----------------------
 
     var gasTank: IGasTank? = null
@@ -63,8 +67,11 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
         // fuelTank = MultiblockFluidTank.input(this, tile, { 10 }, { fluid: FluidStack -> MekanismTags.Fluids.LAVA_LOOKUP.contains(fluid.fluid) })
         gasTank =
             MultiblockChemicalTankBuilder.GAS.input(
-                this, { (thrusterPower * 100 * 4).toLong() }, { gas: Gas -> gas === MekanismGases.HYDROGEN.get() },
-                ChemicalAttributeValidator.ALWAYS_ALLOW, null,
+                this,
+                { (thrusterPower * 100 * 4).toLong() },
+                { gas: Gas -> gas === MekanismGases.HYDROGEN.get() },
+                ChemicalAttributeValidator.ALWAYS_ALLOW,
+                null,
             )
 
         gasTanks.add(gasTank)
@@ -77,15 +84,20 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
             ?: KontraptionVSUtils.getShipManagingPos((thrusterLevel as ServerLevel), center)
         offset =
             Vector3d(1.0, 1.0, 1.0)
-                .add(exhaustDirection.normal.toJOMLD().normalize().negate())
-                .mul(0.25 * exhaustDiameter)
                 .add(
-                    exhaustDirection.normal.toJOMLD()
+                    exhaustDirection.normal
+                        .toJOMLD()
+                        .normalize()
+                        .negate(),
+                ).mul(0.25 * exhaustDiameter)
+                .add(
+                    exhaustDirection.normal
+                        .toJOMLD()
                         .mul(1.5),
                 ).toMinecraft()
         pos = centerExhaust?.blockPos?.offset(exhaustDirection.normal.multiply(1))
 
-        thrusterPower = (KontraptionConfigs.kontraption.liquidFuelThrust.get() * innerVolume)
+        thrusterPower = (KontraptionConfigs.kontraption.liquidFuelThrust.get() * innerVolume * 3)
         if (ship != null) {
             thrusterLevel = centerExhaust?.level
             worldPosition = center
@@ -125,14 +137,15 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
     private fun burnFuel(world: Level) {
         val lastBurnRemaining: Double = burnRemaining
         var storedFuel: Double = gasTank!!.stored + burnRemaining
-        val toBurn = thrusterPower * KontraptionConfigs.kontraption.liquidFuelConsumption.get() // Math.min(Math.min(1.0, storedFuel), fuelAssemblies * MekanismGeneratorsConfig.generators.burnPerAssembly.get())
+        val powerPerc = currentThrust / thrusterPower
+        val toBurn = thrusterPower * KontraptionConfigs.kontraption.liquidFuelConsumption.get() * powerPerc // Math.min(Math.min(1.0, storedFuel), fuelAssemblies * MekanismGeneratorsConfig.generators.burnPerAssembly.get())
         storedFuel -= toBurn
         if (storedFuel <= 0.0) {
-            if (enabled == true) {
+            if (enabled) {
                 disable()
             }
         } else {
-            if (enabled == false) {
+            if (!enabled) {
                 enable()
             }
         }
@@ -158,13 +171,19 @@ class LiquidFuelThrusterMultiblockData(tile: TileEntityLiquidFuelThrusterCasing)
                         particleDir.z.toDouble(),
                         innerVolume.toDouble(),
                     ),
-                    true, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 2 * exhaustDiameter, offset.x, offset.y, offset.z, 0.0,
+                    true,
+                    pos.x + 0.5,
+                    pos.y + 0.5,
+                    pos.z + 0.5,
+                    2 * exhaustDiameter,
+                    offset.x,
+                    offset.y,
+                    offset.z,
+                    0.0,
                 )
             }
         }
     }
 
-    fun getMaxFluid(): Int {
-        return height() * 4 * 1
-    }
+    fun getMaxFluid(): Int = height() * 4 * 1
 }

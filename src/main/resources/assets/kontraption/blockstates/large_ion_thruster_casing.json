@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "": {
+      "model": "kontraption:block/large_ion_thruster_casing"
+    }
+  },
+
+  "athena:loader": "athena:ctm",
+  "ctm_textures": {
+    "center": "kontraption:block/large_ion_thruster_casing_corners",
+    "empty": "kontraption:block/large_ion_thruster_casing_empty",
+    "horizontal": "kontraption:block/large_ion_thruster_casing_horizontal",
+    "particle": "kontraption:block/large_ion_thruster_casing_particle",
+    "vertical": "kontraption:block/large_ion_thruster_casing_vertical"
+  }
+}

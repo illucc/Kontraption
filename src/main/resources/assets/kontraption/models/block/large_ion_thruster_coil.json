@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "side": "kontraption:block/large_ion_thruster_coilsides",
+    "particle": "kontraption:block/large_ion_thruster_coiltb",
+    "end": "kontraption:block/large_ion_thruster_coiltb"
+
+  }
+}

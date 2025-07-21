@@ -17,6 +17,14 @@
   "block.kontraption.oil_drill_port": "Oil Drill Port",
   "block.kontraption.connector": "Connector",
   "block.kontraption.key": "Redstone Interface",
+  "block.kontraption.cannon": "Cannon",
+  "block.kontraption.otter_plushie":"ZeOttery Plushie",
+  "block.kontraption.cosmic_plushie":"Cosmos Plushie",
+  "block.kontraption.illuc_plushie":"Illuc Plushie",
+  "block.kontraption.large_ion_thruster_casing": "Large Ion Thruster Casing",
+  "block.kontraption.large_ion_thruster_coil": "Large Ion Thruster Coil",
+  "block.kontraption.large_ion_thruster_valve": "Large Ion Thruster Valve",
+  "block.kontraption.large_ion_thruster_controller": "Large Ion Thruster Controller",
 
   "toolgun.kontraption.mode_change": "Toolgun mode changed to: %1$s",
   "toolgun.kontraption.assemble": "Assemble",
@@ -25,6 +33,14 @@
   "toolgun.kontraption.push": "Push",
   "toolgun.kontraption.rotate": "Rotate",
   "toolgun.kontraption.weld": "Weld",
+  "toolgun.kontraption.selection_reset": "Selection reset",
+  "toolgun.kontraption.first_pos_selected": "First pos selected",
+  "toolgun.kontraption.second_pos_selected": "Second pos selected",
+  "toolgun.kontraption.pos_on_ship": "Selected position is on a ship!",
+  "toolgun.kontraption.assembly_successful": "Assembled!",
+  "toolgun.kontraption.selected_ship": "Ship selected!",
+  "toolgun.kontraption.ship_not_found": "Please point at a ship and try again",
+  "toolgun.kontraption.moving_successful": "Successfully moved ship!",
 
   "category.kontraption.ship_controls": "Kontraption Ship Controls",
   "key.kontraption.down": "Down",
@@ -43,5 +59,8 @@
   "itemGroup.kontraption": "Kontraption",
 
   "_": "----------GUI-------------",
-  "container.kontraption.TerminalGUI": "Ship Terminal Configuration"
+  "container.kontraption.TerminalGUI": "Ship Terminal Configuration",
+  "block.kontraption.tooltip.ottplush1": "Nya",
+  "block.kontraption.tooltip.cosplush1": "Cosmosss",
+  "block.kontraption.tooltip.illplush1": "CORRU"
 }

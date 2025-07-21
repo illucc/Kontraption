@@ -19,6 +19,7 @@ import net.illuc.kontraption.client.gui.GuiGun
 import net.illuc.kontraption.command.CommandKontraption
 import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.config.KontraptionKeyBindings
+import net.illuc.kontraption.debugger.DebugCommands
 import net.illuc.kontraption.entity.KontraptionShipMountingEntity
 import net.illuc.kontraption.events.EventListener
 import net.illuc.kontraption.gui.ShipTerminalMenu
@@ -28,10 +29,16 @@ import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThruste
 import net.illuc.kontraption.multiblocks.railgun.RailgunMultiblockData
 import net.illuc.kontraption.multiblocks.railgun.RailgunValidator
 import net.illuc.kontraption.network.KontraptionPacketHandler
+import net.illuc.kontraption.renderers.LargeIonExhaustRenderer
+import net.illuc.kontraption.renderers.LargeIonRenderer
+import net.illuc.kontraption.renderers.PlushieRenderer
 import net.illuc.kontraption.util.BlockDamageManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.MenuScreens
 import net.minecraft.client.particle.SpriteSet
+import net.minecraft.client.renderer.ItemBlockRenderTypes
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
@@ -43,6 +50,7 @@ import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.EntityRenderersEvent
+import net.minecraftforge.client.event.ModelEvent
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent
 import net.minecraftforge.common.MinecraftForge
@@ -64,44 +72,34 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegisterEvent
 import net.minecraftforge.registries.RegistryObject
 import net.minecraftforge.versions.forge.ForgeVersion.MOD_ID
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.valkyrienskies.mod.client.EmptyRenderer
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
-/**
- * Main mod class. Should be an `object` declaration annotated with `@Mod`.
- * The modid should be declared in this object and should match the modId entry
- * in mods.toml.
- *
- * An example for blocks is in the `blocks` package of this mod.
- */
-
 @Mod(Kontraption.MODID)
 class Kontraption : IModModule {
-    /**
-     * Kontraption version number
-     */
-    val versionNumber: Version
+    val logger: Logger = LogManager.getLogger(Kontraption::class.java) // LOGGER FFS COUGHT too lazy to find where used
 
-    /**
-     * Kontraption Packet Pipeline
-     */
+    // Versioning
+    val versionNumber: Version
     private val packetHandler: KontraptionPacketHandler
 
     private val KONTRAPTION_SHIP_MOUNTING_ENTITY_REGISTRY: RegistryObject<EntityType<KontraptionShipMountingEntity>>
-    private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Kontraption.MODID)
+    private val ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID)
     val TAB_REGISTER: DeferredRegister<CreativeModeTab> = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID)
 
     // = TODO()
 
     init {
         instance = this
-        // MekanismGeneratorsConfig.registerConfigs(ModLoadingContext.get())
         val modEventBus = MOD_BUS
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands)
         KontraptionConfigs.registerConfigs(ModLoadingContext.get())
         if (FMLEnvironment.dist.isClient) {
             modEventBus.addListener(::registerKeyBindings)
         }
+        GlobalRegistry.EventInit(modEventBus)
         modEventBus.addListener(this::commonSetup)
         modEventBus.addListener(this::onConfigLoad)
         modEventBus.addListener(this::imcQueue)
@@ -117,9 +115,7 @@ class Kontraption : IModModule {
         KontraptionSounds.SOUND_EVENTS.register(modEventBus)
         // note for ottery: in future move to seperate file
         MENU_TYPES.register(modEventBus)
-        // GeneratorsGases.GASES.register(modEventBus)
-        // GeneratorsModules.MODULES.register(modEventBus)
-        // Set our version number to match the mods.toml file, which matches the one in our build.gradle
+        // we should version eariel ya know?
         versionNumber = Version(ModLoadingContext.get().activeContainer)
         packetHandler = KontraptionPacketHandler()
 
@@ -130,10 +126,12 @@ class Kontraption : IModModule {
                         ::KontraptionShipMountingEntity,
                         MobCategory.MISC,
                     ).sized(.3f, .3f)
-                    .build(ResourceLocation(Kontraption.MODID, "kontraption_ship_mounting_entity").toString())
+                    .build(ResourceLocation(MODID, "kontraption_ship_mounting_entity").toString())
             }
 
         modEventBus.addListener(::clientSetup)
+        modEventBus.addListener(::registerModels)
+        modEventBus.addListener(::registerBER)
         modEventBus.addListener(::entityRenderers)
         MinecraftForge.EVENT_BUS.addListener(::levelLoad)
         modEventBus.addListener(::loadComplete)
@@ -197,6 +195,10 @@ class Kontraption : IModModule {
     private fun clientSetup(event: FMLClientSetupEvent) {
         MinecraftForge.EVENT_BUS.register(this)
         MinecraftForge.EVENT_BUS.addListener(ClientRuntimeEvents::onRenderWorld)
+        ItemBlockRenderTypes.setRenderLayer(GlobalRegistry.Blocks.OTTER_PLUSHIE.get(), RenderType.cutout())
+        ItemBlockRenderTypes.setRenderLayer(GlobalRegistry.Blocks.COSMIC_PLUSHIE.get(), RenderType.cutout())
+        ItemBlockRenderTypes.setRenderLayer(GlobalRegistry.Blocks.ILLUC_PLUSHIE.get(), RenderType.cutout())
+        ItemBlockRenderTypes.setRenderLayer(GlobalRegistry.Blocks.LARGE_ION_THRUSTER_CASING.get(), RenderType.cutout())
     }
 
     private fun registerKeyBindings(event: RegisterKeyMappingsEvent) {
@@ -207,6 +209,20 @@ class Kontraption : IModModule {
 
     private fun registerCommands(event: RegisterCommandsEvent) {
         event.dispatcher.register(CommandKontraption.register())
+        DebugCommands.register(event.dispatcher)
+    }
+
+    private fun registerModels(event: ModelEvent.RegisterAdditional) {
+        event.register(ResourceLocation(MODID, "block/large_ion_ring_segment"))
+        event.register(ResourceLocation(MODID, "block/large_ion_ring_input"))
+        event.register(ResourceLocation(MODID, "block/large_ion_ring_controller"))
+        event.register(ResourceLocation(MODID, "block/large_ion_ring_corner"))
+        event.register(ResourceLocation(MODID, "block/ion_exhaust"))
+    }
+
+    private fun registerBER(event: EntityRenderersEvent.RegisterRenderers) {
+        logger.info("[TEST] RENDERER REGISTERED UWU") // We use this one ONLY for BlockEntity Renderers
+        logger.info("[TEST] CURRENTLY UNUSED AS BER REGISTRATION IS MOVED TO CLIENT INIT")
     }
 
     private fun onConfigLoad(configEvent: ModConfigEvent) {
@@ -223,6 +239,9 @@ class Kontraption : IModModule {
         lateinit var KONTRAPTION_SHIP_MOUNTING_ENTITY_TYPE: EntityType<KontraptionShipMountingEntity>
         const val MODID = "kontraption"
         var instance: Kontraption? = null
+
+        @JvmField
+        val LOGGER: Logger = LogManager.getLogger(Kontraption::class.java)
 
         // Im BLIND
         val MENU_TYPES: DeferredRegister<MenuType<*>> = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID)
@@ -261,11 +280,20 @@ class Kontraption : IModModule {
             // Minecraft.getInstance().particleEngine.register(BULLET.get()) { spriteSet: SpriteSet? -> BulletParticle.Factory(spriteSet) }
         }
 
+        private fun registerTRenderers() {
+            BlockEntityRenderers.register(GlobalRegistry.TileEntities.LARGE_ION_THRUSTER_CASING.get(), ::LargeIonRenderer)
+            BlockEntityRenderers.register(GlobalRegistry.TileEntities.LARGE_ION_THRUSTER_CONTROLLER.get(), ::LargeIonExhaustRenderer)
+            BlockEntityRenderers.register(GlobalRegistry.TileEntities.PLUSHIE_ENTITY.get(), ::PlushieRenderer)
+        }
+
         @SubscribeEvent
-        fun init(event: FMLClientSetupEvent?) {
+        fun init(event: FMLClientSetupEvent) {
             MinecraftForge.EVENT_BUS.register(KontraptionClientTickHandler())
-            event!!.enqueueWork {
+            event.enqueueWork {
                 MenuScreens.register(TERMINALMENU.get(), ::ShipTerminalScreen)
+                var logger: Logger = LogManager.getLogger(Kontraption::class)
+                logger.info("TRYING TO LOAD TRENDERER")
+                registerTRenderers()
             }
         }
 
@@ -309,6 +337,15 @@ class Kontraption : IModModule {
                 output.accept(KontraptionBlocks.GYRO)
                 output.accept(KontraptionBlocks.CONNECTOR)
                 output.accept(KontraptionBlocks.KEY)
+                output.accept(KontraptionBlocks.DRILL)
+                output.accept(GlobalRegistry.Items.LARGE_ION_THRUSTER_CONTROLLER.get())
+                output.accept(GlobalRegistry.Items.LARGE_ION_THRUSTER_VALVE.get())
+                output.accept(GlobalRegistry.Items.LARGE_ION_THRUSTER_COIL.get())
+                output.accept(GlobalRegistry.Items.LARGE_ION_THRUSTER_CASING.get())
+                // divider
+                output.accept(GlobalRegistry.Items.OTTER_PLUSHIE.get())
+                output.accept(GlobalRegistry.Items.COSMIC_PLUSHIE.get())
+                output.accept(GlobalRegistry.Items.ILLUC_PLUSHIE.get())
                 // output.accept(KontraptionBlocks.SERVO)
                 // output.accept(KontraptionBlocks.WHEEL)
             }.build()

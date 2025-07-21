@@ -1,4 +1,4 @@
-package net.illuc.kontraption.blockEntities
+package net.illuc.kontraption.blockEntities.railgun
 
 import mekanism.api.providers.IBlockProvider
 import mekanism.common.lib.multiblock.MultiblockManager
@@ -10,8 +10,11 @@ import net.illuc.kontraption.multiblocks.railgun.RailgunMultiblockData
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState
 
-open class TileEntityRailgunCasing(blockProvider: IBlockProvider?, pos: BlockPos?, state: BlockState?) :
-    TileEntityMultiblock<RailgunMultiblockData?>(
+open class TileEntityRailgunCasing(
+    blockProvider: IBlockProvider?,
+    pos: BlockPos?,
+    state: BlockState?,
+) : TileEntityMultiblock<RailgunMultiblockData?>(
         blockProvider,
         pos,
         state,
@@ -21,21 +24,15 @@ open class TileEntityRailgunCasing(blockProvider: IBlockProvider?, pos: BlockPos
 
     lateinit var prevMultiblock: RailgunMultiblockData
 
-    override fun createMultiblock(): RailgunMultiblockData {
-        return RailgunMultiblockData(this)
-    }
+    override fun createMultiblock(): RailgunMultiblockData = RailgunMultiblockData(this)
 
-    override fun getManager(): MultiblockManager<RailgunMultiblockData?> {
-        return Kontraption.railgunManager
-    }
+    override fun getManager(): MultiblockManager<RailgunMultiblockData?> = Kontraption.railgunManager
 
     override fun blockRemoved() {
         super.blockRemoved()
     }
 
-    override fun getMultiblock(): RailgunMultiblockData? {
-        return super.getMultiblock()
-    }
+    override fun getMultiblock(): RailgunMultiblockData? = super.getMultiblock()
 
     override fun onUpdateServer() {
         super.onUpdateServer()

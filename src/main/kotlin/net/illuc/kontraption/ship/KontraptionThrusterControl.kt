@@ -2,7 +2,6 @@ package net.illuc.kontraption.ship
 
 import net.illuc.kontraption.ThrusterInterface
 import net.illuc.kontraption.config.KontraptionConfigs
-import net.illuc.kontraption.util.toBlockPos
 import net.illuc.kontraption.util.toJOML
 import net.minecraft.core.BlockPos
 import org.joml.Vector3d
@@ -14,7 +13,12 @@ import kotlin.math.max
 import kotlin.math.min
 
 class KontraptionThrusterControl : ShipForcesInducer {
-    data class Thruster(val position: Vector3i, val forceDirection: Vector3d, val forceStrength: Double, val thruster: ThrusterInterface)
+    data class Thruster(
+        val position: Vector3i,
+        val forceDirection: Vector3d,
+        val forceStrength: Double,
+        val thruster: ThrusterInterface,
+    )
 
     private val thrusters = CopyOnWriteArrayList<Thruster>()
 
@@ -23,18 +27,17 @@ class KontraptionThrusterControl : ShipForcesInducer {
     override fun applyForces(physShip: PhysShip) {
         physShip as PhysShipImpl
         physShip.applyInvariantForce(
-            physShip.poseVel.vel.negate(
-                Vector3d(),
-            ).mul(physShip.inertia.shipMass).mul(KontraptionConfigs.kontraption.dampeningStrength.get()),
-        )
-        thrusters.forEach {
-            val (position, forceDirection, forceStrength, be) = it
-            // be.enable()
+            physShip.poseVel.vel
+                .negate(Vector3d())
+                .mul(physShip.inertia.shipMass)
+                .mul(KontraptionConfigs.kontraption.dampeningStrength.get()),
+        ) // YEET in future
+        // also BRR lambda
+        thrusters.forEach { (position, forceDirection, forceStrengthORG, be) ->
+            val forceStrength = be.currentThrust
             if (forceStrength != 0.0) {
                 val tForce = physShip.transform.shipToWorld.transformDirection(forceDirection, Vector3d())
-                // val tPos2 = position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
                 val tPos = Vector3d(0.0, 0.0, 0.0) // position.toDouble().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
-
                 if (forceDirection.isFinite) {
                     var forceFinal = forceStrength * thrusterStrength
                     if (forceFinal > 0) {
@@ -88,25 +91,34 @@ class KontraptionThrusterControl : ShipForcesInducer {
         thrusters.removeAll { it.position == pos.toJOML() }
     }
 
-    fun thrusterControlAll(
-        forceDirection: Vector3d,
-        power: Double,
+    fun assignThrustPerDirection(
+        requestedThrust: Map<Vector3d, Double>,
+        setMax: Boolean,
     ) {
-        // TODO you want prob a hashmap with directions as keys
-        thrusters.forEach {
-            if (it.forceDirection == forceDirection) {
-                val (pos, forceDir, tier, be) = it
-                stopThruster(pos.toBlockPos())
-                addThruster(pos.toBlockPos(), forceDir, power * it.thruster.thrusterPower, be)
-                // println("INSANITY " + tier + " " + power*it.thruster.thrusterPower)
+        val groups = thrusters.groupBy { it.forceDirection }
+        for ((direction, totalThrust) in requestedThrust) {
+            val thrustersInDirection = groups[direction] ?: continue
+            if (!setMax) {
+                val splitThrust = totalThrust / thrustersInDirection.size
+                for (thruster in thrustersInDirection) {
+                    thruster.thruster.currentThrust = splitThrust.coerceIn(0.0, thruster.thruster.thrusterPower)
+                }
+            } else {
+                if (totalThrust > 0) {
+                    for (thruster in thrustersInDirection) {
+                        thruster.thruster.currentThrust = thruster.thruster.thrusterPower
+                    }
+                }
             }
         }
+        thrusters
+            .filter { it.forceDirection !in requestedThrust.keys }
+            .forEach { it.thruster.currentThrust = 0.0 }
     }
 
     companion object {
-        fun getOrCreate(ship: ServerShip): KontraptionThrusterControl {
-            return ship.getAttachment<KontraptionThrusterControl>()
+        fun getOrCreate(ship: ServerShip): KontraptionThrusterControl =
+            ship.getAttachment<KontraptionThrusterControl>()
                 ?: KontraptionThrusterControl().also { ship.saveAttachment(it) }
-        }
     }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "kontraption:block/large_ion_thruster_casing_particle"
+  }
+}

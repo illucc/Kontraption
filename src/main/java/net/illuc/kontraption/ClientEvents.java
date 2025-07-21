@@ -1,29 +1,23 @@
 package net.illuc.kontraption;
 
+import mekanism.common.Mekanism;
 import net.illuc.kontraption.client.MuzzleFlashParticle;
 import net.illuc.kontraption.client.ThrusterParticle;
+import net.illuc.kontraption.renderers.LargeIonRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 
+import java.util.logging.Logger;
+
 import static net.illuc.kontraption.client.render.RendererKt.renderData;
 
 public class ClientEvents {
-
-
-    @Mod.EventBusSubscriber(modid = Kontraption.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class ClientModBusEvents {
-
-        @SubscribeEvent
-        public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
-            System.out.println("bal");
-            Minecraft.getInstance().particleEngine.register(KontraptionParticleTypes.INSTANCE.getTHRUSTER().get(), ThrusterParticle.Factory::new);
-            Minecraft.getInstance().particleEngine.register(KontraptionParticleTypes.INSTANCE.getMUZZLE_FLASH().get(), MuzzleFlashParticle.Factory::new);
-        }
-    }
 
     @Mod.EventBusSubscriber(Dist.CLIENT)
     public static class ClientRuntimeEvents {

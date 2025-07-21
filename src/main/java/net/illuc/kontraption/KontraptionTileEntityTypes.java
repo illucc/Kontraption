@@ -3,12 +3,21 @@ package net.illuc.kontraption;
 import mekanism.common.registration.impl.TileEntityTypeDeferredRegister;
 import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
 import net.illuc.kontraption.blockEntities.*;
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterCasing;
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterExhaust;
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterValve;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunCasing;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunCoil;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunController;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunPort;
 
+//EVERYTHING IS TO BE MOVED TO GLOBALREGISTRY
 public class KontraptionTileEntityTypes {
     private KontraptionTileEntityTypes() {
     }
-
     public static final TileEntityTypeDeferredRegister TILE_ENTITY_TYPES = new TileEntityTypeDeferredRegister(Kontraption.MODID);
+
+
 
     public static final TileEntityTypeRegistryObject<TileEntityIonThruster> ION_THRUSTER = TILE_ENTITY_TYPES.register(KontraptionBlocks.ION_THRUSTER, TileEntityIonThruster::new);
     public static final TileEntityTypeRegistryObject<TileEntityShipControlInterface> SHIP_CONTROL_INTERFACE = TILE_ENTITY_TYPES.register(KontraptionBlocks.SHIP_CONTROL_INTERFACE, TileEntityShipControlInterface::new);
@@ -28,5 +37,8 @@ public class KontraptionTileEntityTypes {
     public static final TileEntityTypeRegistryObject<TileEntityRailgunPort> RAILGUN_PORT = TILE_ENTITY_TYPES.register(KontraptionBlocks.RAILGUN_PORT, TileEntityRailgunPort::new);
     public static final TileEntityTypeRegistryObject<TileEntityConnector> CONNECTOR = TILE_ENTITY_TYPES.register(KontraptionBlocks.CONNECTOR, TileEntityConnector::new);
     public static final TileEntityTypeRegistryObject<TileEntityKey> KEY = TILE_ENTITY_TYPES.register(KontraptionBlocks.KEY, TileEntityKey::new);
+    public static final TileEntityTypeRegistryObject<TileEntityDrill> DRILL = TILE_ENTITY_TYPES.register(KontraptionBlocks.DRILL, TileEntityDrill::new);
+
+
 
 }

@@ -11,7 +11,7 @@ import mekanism.common.lib.multiblock.FormationProtocol.FormationResult
 import mekanism.common.util.WorldUtils
 import net.illuc.kontraption.KontraptionBlockTypes
 import net.illuc.kontraption.KontraptionLang
-import net.illuc.kontraption.blockEntities.TileEntityLiquidFuelThrusterExhaust
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterExhaust
 import net.illuc.kontraption.util.toJOMLD
 import net.minecraft.core.BlockPos
 import net.minecraft.core.BlockPos.MutableBlockPos
@@ -20,10 +20,11 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
 
-class LiquidFuelThrusterValidator : CuboidStructureValidator<LiquidFuelThrusterMultiblockData>(
-    VoxelCuboid(3, 3, 3),
-    VoxelCuboid(17, 18, 17),
-) {
+class LiquidFuelThrusterValidator :
+    CuboidStructureValidator<LiquidFuelThrusterMultiblockData>(
+        VoxelCuboid(3, 3, 3),
+        VoxelCuboid(17, 18, 17),
+    ) {
     override fun getCasingType(state: BlockState?): FormationProtocol.CasingType {
         val block: Block = state!!.block
         if (BlockType.`is`(block, KontraptionBlockTypes.LIQUID_FUEL_THRUSTER_CASING)) {

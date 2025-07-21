@@ -1,4 +1,4 @@
-package net.illuc.kontraption.blockEntities
+package net.illuc.kontraption.blockEntities.largehydrogen
 
 import mekanism.api.providers.IBlockProvider
 import mekanism.common.lib.multiblock.MultiblockManager
@@ -10,8 +10,11 @@ import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThruste
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState
 
-open class TileEntityLiquidFuelThrusterCasing(blockProvider: IBlockProvider?, pos: BlockPos?, state: BlockState?) :
-    TileEntityMultiblock<LiquidFuelThrusterMultiblockData?>(
+open class TileEntityLiquidFuelThrusterCasing(
+    blockProvider: IBlockProvider?,
+    pos: BlockPos?,
+    state: BlockState?,
+) : TileEntityMultiblock<LiquidFuelThrusterMultiblockData?>(
         blockProvider,
         pos,
         state,
@@ -21,21 +24,15 @@ open class TileEntityLiquidFuelThrusterCasing(blockProvider: IBlockProvider?, po
 
     lateinit var prevMultiblock: LiquidFuelThrusterMultiblockData
 
-    override fun createMultiblock(): LiquidFuelThrusterMultiblockData {
-        return LiquidFuelThrusterMultiblockData(this)
-    }
+    override fun createMultiblock(): LiquidFuelThrusterMultiblockData = LiquidFuelThrusterMultiblockData(this)
 
-    override fun getManager(): MultiblockManager<LiquidFuelThrusterMultiblockData?> {
-        return Kontraption.hydrogenThrusterManager
-    }
+    override fun getManager(): MultiblockManager<LiquidFuelThrusterMultiblockData?> = Kontraption.hydrogenThrusterManager
 
     override fun blockRemoved() {
         super.blockRemoved()
     }
 
-    override fun getMultiblock(): LiquidFuelThrusterMultiblockData? {
-        return super.getMultiblock()
-    }
+    override fun getMultiblock(): LiquidFuelThrusterMultiblockData? = super.getMultiblock()
 
     override fun onUpdateServer() {
         super.onUpdateServer()

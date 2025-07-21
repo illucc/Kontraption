@@ -1,4 +1,4 @@
-package net.illuc.kontraption.blockEntities
+package net.illuc.kontraption.blockEntities.largehydrogen
 
 import mekanism.common.tile.base.SubstanceType
 import net.illuc.kontraption.KontraptionBlocks
@@ -6,11 +6,14 @@ import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThruste
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState
 
-class TileEntityLiquidFuelThrusterExhaust(pos: BlockPos?, state: BlockState?) : TileEntityLiquidFuelThrusterCasing(
-    KontraptionBlocks.LIQUID_FUEL_THRUSTER_EXHAUST,
-    pos,
-    state,
-) {
+class TileEntityLiquidFuelThrusterExhaust(
+    pos: BlockPos?,
+    state: BlockState?,
+) : TileEntityLiquidFuelThrusterCasing(
+        KontraptionBlocks.LIQUID_FUEL_THRUSTER_EXHAUST,
+        pos,
+        state,
+    ) {
    /* @Nonnull
     protected override fun getInitialFluidTanks(listener: IContentsListener?): IFluidTankHolder {
         return IFluidTankHolder { side: Direction? ->

@@ -6,15 +6,18 @@ import mekanism.common.block.attribute.Attribute;
 import mekanism.common.block.attribute.AttributeCustomSelectionBox;
 import mekanism.common.block.attribute.AttributeStateFacing;
 import mekanism.common.block.attribute.Attributes;
-import mekanism.common.content.blocktype.BlockType;
 import mekanism.common.content.blocktype.BlockTypeTile;
+import mekanism.common.registration.impl.BlockRegistryObject;
 import mekanism.common.registries.MekanismSounds;
-import mekanism.common.util.MekanismUtils;
 import net.illuc.kontraption.blockEntities.*;
-import net.illuc.kontraption.config.KontraptionConfigs;
-import net.minecraft.core.Direction;
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterCasing;
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterExhaust;
+import net.illuc.kontraption.blockEntities.largehydrogen.TileEntityLiquidFuelThrusterValve;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunCasing;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunCoil;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunController;
+import net.illuc.kontraption.blockEntities.railgun.TileEntityRailgunPort;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
 
 public class KontraptionBlockTypes {
 
@@ -125,6 +128,11 @@ public class KontraptionBlockTypes {
             .createBlock(() -> KontraptionTileEntityTypes.KEY, MekanismLang.HOLD_FOR_DESCRIPTION)
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
+    public static final BlockTypeTile<TileEntityDrill> DRILL = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.DRILL, MekanismLang.HOLD_FOR_DESCRIPTION)
+            .with(new AttributeStateFacing(BlockStateProperties.FACING))
+            .build();
+
 
 
 }

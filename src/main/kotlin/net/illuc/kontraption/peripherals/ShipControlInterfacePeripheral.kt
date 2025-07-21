@@ -8,16 +8,16 @@ import dan200.computercraft.api.peripheral.IDynamicPeripheral
 import dan200.computercraft.api.peripheral.IPeripheral
 import net.illuc.kontraption.blockEntities.TileEntityShipControlInterface
 
-class ShipControlInterfacePeripheral(private val blockEntity: TileEntityShipControlInterface) : IDynamicPeripheral {
-    override fun getType(): String {
-        return "ShipControlInterface"
-    }
+class ShipControlInterfacePeripheral(
+    private val blockEntity: TileEntityShipControlInterface,
+) : IDynamicPeripheral {
+    override fun getType(): String = "ShipControlInterface"
 
     public fun testingcc() { // Left bc i forgot to remove it and now im too lazy to change numbers :3
     }
 
     override fun getMethodNames(): Array<String> {
-        return arrayOf("testingcc", "getRotation", "getMovement", "getPosition", "getWeight", "getSlug", "getVelocity", "setMovement", "setRotation", "rotateAlongAxis") // remember to remove testing method before adding other func
+        return arrayOf("testingcc", "getRotation", "getMovement", "getPosition", "getWeight", "getSlug", "getVelocity", "setMovement", "setRotation", "rotateAlongAxis", "preciseThrustImpulse") // remember to remove testing method before adding other fun
     }
 
     override fun callMethod(
@@ -83,6 +83,17 @@ class ShipControlInterfacePeripheral(private val blockEntity: TileEntityShipCont
                 )
                 return MethodResult.of(true)
             }
+            10 -> {
+                if (arguments?.count() != 3) {
+                    throw LuaException("You must have 3 arguments.\n")
+                }
+                blockEntity.preciseThrustImpulse(
+                    arguments?.getFiniteDouble(0) ?: 0.0,
+                    arguments?.getFiniteDouble(1) ?: 0.0,
+                    arguments?.getFiniteDouble(2) ?: 0.0,
+                )
+                return MethodResult.of(true)
+            }
             else -> MethodResult.of(null)
         }
     }
@@ -91,11 +102,7 @@ class ShipControlInterfacePeripheral(private val blockEntity: TileEntityShipCont
 
     override fun detach(computer: IComputerAccess) {}
 
-    override fun equals(other: IPeripheral?): Boolean {
-        return other is ShipControlInterfacePeripheral && other.blockEntity == this.blockEntity
-    }
+    override fun equals(other: IPeripheral?): Boolean = other is ShipControlInterfacePeripheral && other.blockEntity == this.blockEntity
 
-    override fun hashCode(): Int {
-        return blockEntity.hashCode()
-    }
+    override fun hashCode(): Int = blockEntity.hashCode()
 }

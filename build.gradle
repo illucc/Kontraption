@@ -38,7 +38,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: "org.jetbrains.kotlin.jvm"
-
+ktlint {
+    ignoreFailures = true
+}
 
 String gitRevision = "git rev-parse HEAD".execute().text.trim()
 version = mod_version + '+' + gitRevision.substring(0, 10)
@@ -159,6 +161,14 @@ repositories {
         }
     }
 
+    maven {
+        name = "Modrinth Maven"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+
 
 
     maven {
@@ -175,23 +185,31 @@ repositories {
         name = "Valkyrien Skies Internal"
         url = 'https://maven.valkyrienskies.org'
     }
+    maven {
+        name "zerocore"
+        url "https://maven.zerono.it/"
+    }
 
 
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    ///annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // cri
     //annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1"))
 
 
+    //ZEROCORE
+    compileOnly group: "it.zerono.mods.zerocore", name: "ZeroCore2", version: "1.20.1-2.1.47"
+    implementation 'it.zerono.mods.zerocore:ZeroCore2:1.20.1-2.1.47'
 
     implementation         ("org.valkyrienskies.core:api:${vs_core_version}")
     implementation         ("org.valkyrienskies.core:impl:${vs_core_version}")
     implementation         ("org.valkyrienskies.core:api-game:${vs_core_version}")
     implementation         ("org.valkyrienskies.core:util:${vs_core_version}")
     implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}")
+
 
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")
     runtimeOnly    fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
@@ -201,7 +219,13 @@ dependencies {
 
     implementation "org.joml:joml:1.10.5"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
-    implementation 'thedarkcolour:kotlinforforge:4.10.0'
+    implementation 'thedarkcolour:kotlinforforge:4.11.0'
+    //DEBUG
+    implementation fg.deobf("curse.maven:stitch-841890:5176879")
+    implementation fg.deobf("maven.modrinth:cosmic-horizons-cosmos:0.0.7.3")//Required for compilation but not used as depp
+    implementation fg.deobf("curse.maven:starlance-1130106:6419355")
+    //DEBUG
+    compileOnly fg.deobf("curse.maven:cc-tweaked-282001:5379173")
     implementation fg.deobf("curse.maven:cc-tweaked-282001:5379173")
 
 
