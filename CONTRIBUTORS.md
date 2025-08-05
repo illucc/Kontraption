@@ -7,7 +7,7 @@
 - MrSterner - 1.20.1 fixes
 - ewoudje - controls fix
 - cj05 - speed limiter
-- HackerSploit
+- Exec64 (formerly HackerSploit) - Work around the toolgun
 
 <!--add categories like
 
