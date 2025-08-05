@@ -10,7 +10,7 @@ import org.joml.Vector3d
 import org.joml.Vector3i
 import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
-import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.CopyOnWriteArrayList
 
 class KontraptionGyroControl : ShipForcesInducer {
     data class Gyro(
@@ -19,7 +19,7 @@ class KontraptionGyroControl : ShipForcesInducer {
         val be: BlockEntity,
     )
 
-    private val gyros = ConcurrentLinkedQueue<Gyro>()
+    private val gyros = CopyOnWriteArrayList<Gyro>()
     private var targetRotation = Quaterniond()
     private var targetStrength = 1.0
 

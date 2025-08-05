@@ -6,6 +6,7 @@ import it.zerono.mods.zerocore.lib.multiblock.cuboid.PartPosition
 import it.zerono.mods.zerocore.lib.multiblock.validation.IMultiblockValidator
 import net.illuc.kontraption.GlobalRegistry
 import net.minecraft.core.BlockPos
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.client.model.data.ModelData
@@ -36,4 +37,9 @@ class LargeIonRingController(
         position: BlockPos,
         state: BlockState,
     ): Boolean = super.isMachineAssembled()
+
+    override fun load(tag: CompoundTag) {
+        super.load(tag)
+        multiblockController.get().addToShip()
+    }
 }

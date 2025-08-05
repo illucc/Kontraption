@@ -192,8 +192,9 @@ public final class GlobalRegistry {
                         ),
                         shader -> ion_exaust = shader
                 );
+                Kontraption.LOGGER.info("Loaded shader succefully: shader/post/ion_exaust");
             } catch (IOException e) {
-                Kontraption.LOGGER.error("Failed to load shader: shaders/post/my_shader", e);
+                Kontraption.LOGGER.error("Failed to load shader: shaders/post/my_shader", e); //uh shaders stuff may be from chat bc i couldnt find any good thing online :(
             }
         }
     }

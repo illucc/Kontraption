@@ -45,10 +45,11 @@ import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.saveAttachment
-import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
+@Suppress("UnstableApiUsage")
 class TileEntityShipControlInterface(
     pos: BlockPos?,
     state: BlockState?,
@@ -121,17 +122,17 @@ class TileEntityShipControlInterface(
         return entity
     }
 
-    fun getKeystones(): ConcurrentLinkedQueue<KontraptionKeyBlockControl.KeyStone> = KontraptionKeyBlockControl.getOrCreate(this.ship!!).getKeystones()
+    fun getKeystones(): CopyOnWriteArrayList<KontraptionKeyBlockControl.KeyStone> = KontraptionKeyBlockControl.getOrCreate(this.ship!!).getKeystones()
 
     fun tick() {
         val ship = this.ship ?: return
 
         seatedControllingPlayer = ship.getAttachment(KontraptionSeatedControllingPlayer::class.java) ?: return
-        if (seats.size != 0) {
-            if (seats[0].passengers.size != 0) {
+        if (seats.isNotEmpty()) {
+            if (seats[0].passengers.isNotEmpty()) {
                 velTarget = Vector3d(seatedControllingPlayer!!.forwardImpulse, seatedControllingPlayer!!.upImpulse, seatedControllingPlayer!!.leftImpulse)
-                if (seatedControllingPlayer!!.openConfig == true) {
-                    var player = entity.controllingPassenger as ServerPlayer
+                if (seatedControllingPlayer!!.openConfig) {
+                    val player = entity.controllingPassenger as ServerPlayer
                     val posKeystones = getKeystones().map { it.position.toBlockPos() }
                     val bindKeyStones =
                         posKeystones.map { blockPos ->
@@ -182,7 +183,7 @@ class TileEntityShipControlInterface(
         val thrusters = KontraptionThrusterControl.getOrCreate(ship)
         val gyros = KontraptionGyroControl.getOrCreate(ship)
 
-        thrusters.thrusterControlAll(
+        /* thrusters.thrusterControlAll(
             this.direction.normal.toJOMLD(),
             // -seatedControllingPlayer?.forwardImpulse!!.toDouble()
             -velTarget.x,
@@ -219,7 +220,36 @@ class TileEntityShipControlInterface(
                 .toJOMLD(),
             // -seatedControllingPlayer?.leftImpulse!!.toDouble()
             -velTarget.z,
-        )
+        )// OLD IMPE
+*/
+        val requestedThrust = mutableMapOf<Vector3d, Double>()
+
+        if (velTarget.x > 0) {
+            requestedThrust[
+                this.direction.opposite.normal
+                    .toJOMLD(),
+            ] = velTarget.x
+        } else if (velTarget.x < 0) {
+            requestedThrust[this.direction.normal.toJOMLD()] = -velTarget.x
+        }
+        if (velTarget.y > 0) {
+            requestedThrust[Direction.UP.normal.toJOMLD()] = velTarget.y
+        } else if (velTarget.y < 0) {
+            requestedThrust[Direction.DOWN.normal.toJOMLD()] = -velTarget.y
+        }
+        if (velTarget.z > 0) {
+            requestedThrust[
+                this.direction.counterClockWise.normal
+                    .toJOMLD(),
+            ] = velTarget.z
+        } else if (velTarget.z < 0) {
+            requestedThrust[
+                this.direction.clockWise.normal
+                    .toJOMLD(),
+            ] = -velTarget.z
+        }
+        // HATE THIS but still better than old imple
+        thrusters.assignThrustPerDirection(requestedThrust, true) // SHOULD WORK??
 
         if (seatedControllingPlayer!!.pitch.absoluteValue + seatedControllingPlayer!!.yaw.absoluteValue + seatedControllingPlayer!!.roll.absoluteValue != 0.0) {
             val sensitivity = 0.1
@@ -227,12 +257,12 @@ class TileEntityShipControlInterface(
             tmp.fromAxisAngleRad(
                 this.direction.clockWise.normal
                     .toJOMLD(),
-                seatedControllingPlayer?.pitch!!.toDouble() * sensitivity,
+                seatedControllingPlayer?.pitch!! * sensitivity,
             )
             rotTarget.mul(tmp)
-            tmp.fromAxisAngleRad(this.direction.normal.toJOMLD(), seatedControllingPlayer?.roll!!.toDouble() * sensitivity)
+            tmp.fromAxisAngleRad(this.direction.normal.toJOMLD(), seatedControllingPlayer?.roll!! * sensitivity)
             rotTarget.mul(tmp)
-            tmp.fromAxisAngleRad(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.yaw!!.toDouble() * sensitivity)
+            tmp.fromAxisAngleRad(Vector3d(0.0, 1.0, 0.0), seatedControllingPlayer?.yaw!! * sensitivity)
             rotTarget.mul(tmp)
         }
 
@@ -259,8 +289,8 @@ class TileEntityShipControlInterface(
         }
 
         val seat = spawnSeat(blockPos, blockState, level)
-        // player.xRot = 0F
-        // player.yRot = 0F
+        // player.xRot = 0 F
+        // player.yRot = 0 F FFFUCK "STYLE" ERRORS
         // Minecraft.getInstance().options.sensitivity = -1/3.0
         // GLFW.glfwSetInputMode(Minecraft.getInstance().getWindow().window, CURSOR, CURSOR_NORMAL)
         val ride = player.startRiding(seat, force)
@@ -272,14 +302,15 @@ class TileEntityShipControlInterface(
     }
 
     fun enable() {
-        // idc if its against your will or not you WILL exist and you WILL like it
+        // idc if its against your will or not, you WILL exist, and you WILL like it "Long sentences (45 words here) are harder to read, according to the research; consider splitting" added it just for spite
+        // iiluc for love of god stop using "enable" as fricking "CHANGE STATE" working with it is an absolute nightmaree ALSO FUCK INTELIJ TRYIN TO CORRECT MY GRAMAR N SHIT
     }
 
     fun sit(
         player: Player,
         force: Boolean = false,
     ): Boolean {
-        // If player is already controlling the ship, open the helm menu
+        // If the player is already controlling the ship, open the helm menu
         if (!force && player.vehicle?.type == Kontraption.KONTRAPTION_SHIP_MOUNTING_ENTITY_TYPE && seats.contains(player.vehicle as KontraptionShipMountingEntity)) {
             return true
         }
@@ -291,22 +322,24 @@ class TileEntityShipControlInterface(
         return startRiding(player, force, blockPos, blockState, level as ServerLevel)
     }
 
-    public fun getRotation(): Map<String, Double> = (
-        mapOf(
-            Pair("x", rotTarget.x()),
-            Pair("y", rotTarget.y()),
-            Pair("z", rotTarget.z()),
-            Pair("w", rotTarget.w()),
+    public fun getRotation(): Map<String, Double> =
+        (
+            mapOf(
+                Pair("x", rotTarget.x()),
+                Pair("y", rotTarget.y()),
+                Pair("z", rotTarget.z()),
+                Pair("w", rotTarget.w()),
+            )
         )
-    )
 
-    public fun getMovement(): Map<String, Double> = (
-        mapOf(
-            Pair("x", velTarget.x()),
-            Pair("y", velTarget.y()),
-            Pair("z", velTarget.z()),
+    public fun getMovement(): Map<String, Double> =
+        (
+            mapOf(
+                Pair("x", velTarget.x()),
+                Pair("y", velTarget.y()),
+                Pair("z", velTarget.z()),
+            )
         )
-    )
 
     public fun getPosition(): Map<String, Double> {
         val a = ship!!.transform.positionInWorld
@@ -342,7 +375,7 @@ class TileEntityShipControlInterface(
         y: Double,
         z: Double,
     ) {
-        velTarget = Vector3d(Math.max(-1.0, Math.min(1.0, x)), Math.max(-1.0, Math.min(1.0, y)), Math.max(-1.0, Math.min(1.0, z)))
+        velTarget = Vector3d(Math.max(-1.0, Math.min(1.0, x)), Math.max(-1.0, Math.min(1.0, y)), Math.max(-1.0, Math.min(1.0, z))) // "should be replaced with kotlin function" BLA BLA BLAH GO FU . . .
     }
 
     public fun setRotation(

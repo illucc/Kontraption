@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 
@@ -22,8 +21,6 @@ open class LargeIonMultiblockPartBlockTemplate<Controller : IMultiblockControlle
         registerDefaultState(
             stateDefinition
                 .any()
-                .setValue(ASS, false)
-                .setValue(SR, false)
                 .setValue(ROT, Direction.UP)
                 .setValue(STATETYPE, 0)
                 .setValue(FACING, Direction.NORTH),
@@ -31,7 +28,7 @@ open class LargeIonMultiblockPartBlockTemplate<Controller : IMultiblockControlle
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(ASS, SR, ROT, STATETYPE, FACING)
+        builder.add(ROT, STATETYPE, FACING)
     }
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState =
@@ -43,7 +40,7 @@ open class LargeIonMultiblockPartBlockTemplate<Controller : IMultiblockControlle
 
     @Deprecated("Annoying ass IDE", ReplaceWith("Nothing, bc overriding is fine"))
     override fun getRenderShape(pState: BlockState): RenderShape =
-        if (pState.getValue(ASS) == true) {
+        if (pState.getValue(STATETYPE) != 0) {
             RenderShape.ENTITYBLOCK_ANIMATED
         } else {
             RenderShape.MODEL
@@ -51,8 +48,6 @@ open class LargeIonMultiblockPartBlockTemplate<Controller : IMultiblockControlle
 
     companion object {
         val FACING: DirectionProperty = DirectionProperty.create("facing", *Direction.entries.toTypedArray())
-        val ASS: BooleanProperty = BooleanProperty.create("ass")
-        val SR: BooleanProperty = BooleanProperty.create("srender")
         val ROT: DirectionProperty = DirectionProperty.create("rotation")
         val STATETYPE: IntegerProperty = IntegerProperty.create("statetype", 0, 10)
     }

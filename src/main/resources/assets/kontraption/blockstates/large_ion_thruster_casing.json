@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "kontraption:block/large_ion_thruster_casing_particle"
+      "model": "kontraption:block/large_ion_thruster_casing"
     }
   },
 

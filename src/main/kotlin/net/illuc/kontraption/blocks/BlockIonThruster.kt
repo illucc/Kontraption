@@ -9,10 +9,12 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 
-class BlockIonThruster(type: BlockTypeTile<TileEntityIonThruster?>?) : BlockTile<TileEntityIonThruster?, BlockTypeTile<TileEntityIonThruster?>?>(
-    type,
-    BlockBehaviour.Properties.of(),
-) {
+class BlockIonThruster(
+    type: BlockTypeTile<TileEntityIonThruster?>?,
+) : BlockTile<TileEntityIonThruster?, BlockTypeTile<TileEntityIonThruster?>?>(
+        type,
+        BlockBehaviour.Properties.of(),
+    ) {
     override fun onPlace(
         state: BlockState,
         world: Level,
@@ -21,7 +23,7 @@ class BlockIonThruster(type: BlockTypeTile<TileEntityIonThruster?>?) : BlockTile
         isMoving: Boolean,
     ) {
         val be = world.getBlockEntity(pos) as TileEntityIonThruster
-        be.enable()
+        be.enable(world as ServerLevel, pos) // . . . DIS IS FUCKIN USELESS WITHOUT PASSING WORLD WTF
         super.onPlace(state, world, pos, oldState, isMoving)
     }
 

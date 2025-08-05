@@ -24,7 +24,8 @@ import javax.annotation.Nonnull
 class TileEntityIonThruster(
     pos: BlockPos?,
     state: BlockState?,
-) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state), ThrusterInterface {
+) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state),
+    ThrusterInterface {
     override var enabled = false
     override var thrusterLevel: Level? = null
     override val worldPosition: BlockPos? = pos
@@ -32,6 +33,7 @@ class TileEntityIonThruster(
     override var powered: Boolean = true
     override val thrusterPower: Double = KontraptionConfigs.kontraption.ionThrust.get()
     override val basePower: Double = KontraptionConfigs.kontraption.ionThrust.get()
+    override var currentThrust: Double = 0.0
 
     private var clientEnergyUsed = FloatingLong.ZERO
 
@@ -49,21 +51,32 @@ class TileEntityIonThruster(
         thrusterLevel = level as ServerLevel
         var toUse = FloatingLong.ZERO
         if (MekanismUtils.canFunction(this)) {
-            if (powered == true) {
-                toUse = energyContainer!!.extract(energyContainer!!.energyPerTick, Action.SIMULATE, AutomationType.INTERNAL)
-                if (!toUse.isZero) {
-                    energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
-                    if (enabled == false) {
-                        enable()
+            if (powered) { // WHY ILLUC YA USE IF BOOLEAN IS TRUE WTFF
+                if (currentThrust != 0.0) {
+                    val thrustPercent = currentThrust / thrusterPower
+                    val pwrUsage = energyContainer!!.energyPerTick.multiply(thrustPercent)
+                    toUse = energyContainer!!.extract(pwrUsage, Action.SIMULATE, AutomationType.INTERNAL) // Uh so we always are sure that we have poweer
+                    if (!toUse.isZero) {
+                        energyContainer!!.extract(toUse, Action.EXECUTE, AutomationType.INTERNAL)
+                        enabled = true
+                    } else {
+                        enabled = false
                     }
                 } else {
-                    if (enabled == true) {
-                        disable()
-                    }
+                    val maybeUsage = energyContainer!!.energyPerTick
+                    toUse = energyContainer!!.extract(maybeUsage, Action.SIMULATE, AutomationType.INTERNAL)
+                    enabled = !toUse.isZero
                 }
             }
         }
-        setActive(!toUse.isZero())
+        active = !toUse.isZero
         clientEnergyUsed = toUse
+    }
+
+    override fun onLoad() {
+        if (level is ServerLevel) {
+            enable(level as ServerLevel, blockPos)
+        }
+        super.onLoad()
     }
 }

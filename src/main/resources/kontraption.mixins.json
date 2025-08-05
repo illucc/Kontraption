@@ -11,6 +11,7 @@
     "MixinRenderPressureTube",
     "MixinRenderUniversalCable",
     "MixinSoundHandler",
+    "MixinTeleporter",
     "MixinThermalEvapRender",
     "MixinThreadMinerSearch",
     "MixinTileEntityDigitalMiner"

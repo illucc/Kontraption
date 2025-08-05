@@ -16,21 +16,24 @@ interface ThrusterInterface {
     val thrusterPower: Double
     val basePower: Double
     var powered: Boolean
+    var currentThrust: Double
 
-    fun enable() {
-        if (thrusterLevel !is ServerLevel) return
-        println("ENABLED")
-        enabled = true
+    fun enable(
+        level: ServerLevel? = thrusterLevel as? ServerLevel,
+        bpos: BlockPos? = worldPosition,
+    ) {
+        if (level !is ServerLevel) return // INITAL FUCKIN SETUP
+        // println("ENABLED")
         if (worldPosition != null) {
             val ship =
-                KontraptionVSUtils.getShipObjectManagingPos((thrusterLevel as ServerLevel), worldPosition)
-                    ?: KontraptionVSUtils.getShipManagingPos((thrusterLevel as ServerLevel), worldPosition)
+                KontraptionVSUtils.getShipObjectManagingPos(level, bpos)
+                    ?: KontraptionVSUtils.getShipManagingPos(level, bpos)
                     ?: return
 
             KontraptionThrusterControl.getOrCreate(ship).let {
-                it.stopThruster(worldPosition!!)
+                it.stopThruster(bpos!!)
                 it.addThruster(
-                    worldPosition!!,
+                    bpos,
                     this.forceDirection
                         .normal
                         .toJOMLD(),
@@ -42,7 +45,7 @@ interface ThrusterInterface {
     }
 
     fun disable() {
-        println("DISABLED THRUSTER INTERFACE") // was wondering tf dis doin
+        // println("DISABLED THRUSTER INTERFACE") // DIS IS FUCKIN NOT DISABLE BUT REMOVE
         if (thrusterLevel !is ServerLevel) return
 
         enabled = false

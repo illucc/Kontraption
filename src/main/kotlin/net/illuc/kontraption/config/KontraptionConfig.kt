@@ -48,22 +48,23 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
                 this,
                 builder
                     .comment("How powerful the large ion thruster is.")
-                    .define("largeionthrust", 90.0),
+                    .define("largeionthrust", 900.0),
             )
         largeIonEnergyConsumption =
             CachedDoubleValue.wrap(
                 this,
                 builder
                     .comment("How much energy does the large ion thruster use")
-                    .define("liquidFuelConsumption", 30.0),
+                    .define("liquidFuelConsumption", 300.0),
             )
+
         builder.comment("Other stuff")
         ionThrust =
             CachedDoubleValue.wrap(
                 this,
                 builder
                     .comment("How powerful the ion thruster is.")
-                    .define("ionThrust", 4.0),
+                    .define("ionThrust", 400.0),
             )
 
         ionConsumption =

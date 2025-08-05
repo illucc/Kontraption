@@ -11,8 +11,8 @@ import it.zerono.mods.zerocore.lib.multiblock.cuboid.AbstractCuboidMultiblockCon
 import it.zerono.mods.zerocore.lib.multiblock.validation.IMultiblockValidator
 import net.illuc.kontraption.GlobalRegistry
 import net.illuc.kontraption.ThrusterInterface
+import net.illuc.kontraption.config.KontraptionConfigs
 import net.illuc.kontraption.multiblocks.largeionring.parts.AbstractRingEntity
-import net.illuc.kontraption.particles.ThrusterParticleData
 import net.illuc.kontraption.util.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -45,6 +45,9 @@ open class LargeIonRingMultiBlock(
     val sizeZ = boundingBox.maxZ - boundingBox.minZ
     val areaBIG = (sizeX * sizeZ) * 2
     val areaSMALL = ((sizeX - 2) * (sizeZ - 2)) * 2
+    var controller: AbstractRingEntity? = null
+
+    // ---- THRUSTER BS ------
     override var enabled = true
     override var thrusterLevel: Level? = world
     override var worldPosition: BlockPos? = center
@@ -52,6 +55,8 @@ open class LargeIonRingMultiBlock(
     override var powered: Boolean = true
     override var thrusterPower: Double = 100.0
     override val basePower: Double = 100.0
+    override var currentThrust: Double = 0.0
+    // ----------------
 
     // energy settings
     private val ENERGY_CAPACITY: Double = 10000000.0
@@ -93,8 +98,6 @@ open class LargeIonRingMultiBlock(
             return
         }
 
-        this.enabled = active
-
         if (active) {
             this.connectedParts.forEach(Consumer { obj: IMultiblockPart<LargeIonRingMultiBlock?> -> obj.onMachineActivated() })
         } else {
@@ -106,24 +109,50 @@ open class LargeIonRingMultiBlock(
 
     fun getEnergyStorage(): IWideEnergyStorage = this.energyInputHandler
 
+    fun addToShip() {
+        ship = KontraptionVSUtils.getShipObjectManagingPos((thrusterLevel as ServerLevel), centerExhaust)
+            ?: KontraptionVSUtils.getShipManagingPos((thrusterLevel as ServerLevel), centerExhaust)
+        if (ship != null) {
+            controller?.let { enable(thrusterLevel as ServerLevel, it.position) } // I would prefer to just rerun assembly tho soo thats a thing to look into
+        }
+    }
+
     override fun onPartAdded(p0: IMultiblockPart<LargeIonRingMultiBlock>) {
-        println("added part to ION RING")
+        // println("added part to ION RING")
+        this.callOnLogicalServer(
+            kotlinx.coroutines.Runnable {
+                val fastPos = BlockPos(boundingBox.minX, boundingBox.minY, boundingBox.minZ)
+                // structureRequirement.previewAllowedBlockOutlines(fastPos, thrusterLevel as ServerLevel)
+            },
+        )
     }
 
     override fun onPartRemoved(p0: IMultiblockPart<LargeIonRingMultiBlock>) {
-        println("removed part from ION RING")
+        // println("removed part from ION RING")
+        this.callOnLogicalServer(
+            kotlinx.coroutines.Runnable {
+                val fastPos = BlockPos(boundingBox.minX, boundingBox.minY, boundingBox.minZ)
+                // structureRequirement.previewAllowedBlockOutlines(fastPos, thrusterLevel as ServerLevel)
+            },
+        )
     }
 
     override fun onMachineRestored() {
-        println("restored ION RING")
+        // println("restored ION RING")
     }
 
     override fun onMachinePaused() {
-        println("paused ION RING")
+        // println("paused ION RING")
     }
 
     override fun onMachineDisassembled() {
-        println("disassembled ION RING")
+        // println("disassembled ION RING")
+        this.callOnLogicalServer(
+            kotlinx.coroutines.Runnable {
+                val fastPos = BlockPos(boundingBox.minX, boundingBox.minY, boundingBox.minZ)
+                // structureRequirement.previewAllowedBlockOutlines(fastPos, thrusterLevel as ServerLevel)
+            },
+        )
     }
 
     override fun getMinimumNumberOfPartsForAssembledMachine(): Int {
@@ -141,7 +170,7 @@ open class LargeIonRingMultiBlock(
 
     override fun updateServer(): Boolean {
         if (powered) {
-            burnFuel(thrusterLevel as Level)
+            burnFuel()
         } else {
             lastBurnRate = 0.0
         }
@@ -154,10 +183,9 @@ open class LargeIonRingMultiBlock(
                     } else {
                         ship!!.transform.shipToWorld.transformDirection(exhaustDirection.normal.multiply(innerVolume).toJOMLD())
                     }
-
-                sendParticleData(thrusterLevel as ServerLevel, pos.toDoubles(), particleDir)
             }
         }
+        if (controller != null) controller?.setEnabledd(enabled && powered)
         return true
     }
 
@@ -208,11 +236,11 @@ open class LargeIonRingMultiBlock(
     ): Boolean = false
 
     override fun onAssimilated(p0: IMultiblockController<LargeIonRingMultiBlock>) {
-        println("WARNING ASSIMILATED")
+        //  println("WARNING ASSIMILATED")
     }
 
     override fun onAssimilate(p0: IMultiblockController<LargeIonRingMultiBlock>) {
-        println("WARNING ASSIMILATING")
+        // println("WARNING ASSIMILATING")
     }
 
     override fun onMachineAssembled() {
@@ -221,7 +249,8 @@ open class LargeIonRingMultiBlock(
     }
 
     fun serverMachineAssembly() {
-        println("ASSEMBLING")
+        // println("ASSEMBLING")
+        center = this.pos
         centerExhaust = this.boundingBox.center
 
         ship = KontraptionVSUtils.getShipObjectManagingPos((thrusterLevel as ServerLevel), centerExhaust)
@@ -241,51 +270,30 @@ open class LargeIonRingMultiBlock(
                         .mul(1.5),
                 ).toMinecraft()
         pos = centerExhaust.offset(exhaustDirection.normal.multiply(1))
-        thrusterPower = (100.0 * innerVolume)
+        thrusterPower = (innerVolume * KontraptionConfigs.kontraption.largeIonThrust.get())
         if (ship != null) {
             thrusterLevel = world
-            worldPosition = center
+            if (controller != null) {
+                worldPosition = controller!!.position
+            }
             forceDirection = exhaustDirection.opposite
-            enable()
+            controller?.let { enable(thrusterLevel as ServerLevel, it.position) }
         }
     }
 
-    private fun burnFuel(world: Level) {
-        val toBurn = (thrusterPower * 100).toInt()
+    private fun burnFuel() {
+        val pwrPrc = currentThrust / thrusterPower
+        val toBurn = KontraptionConfigs.kontraption.largeIonEnergyConsumption.get() * pwrPrc
 
         if (energyStorage.energyStored >= toBurn) {
-            energyStorage.extractEnergy(EnergySystem.ForgeEnergy, toBurn.toDouble(), false)
+            energyStorage.extractEnergy(EnergySystem.ForgeEnergy, toBurn, false)
             if (!enabled) enable()
         } else {
             if (enabled) disable()
         }
 
-        burnRemaining = energyStorage.energyStored.toDouble() % 1
-        lastBurnRate = toBurn.toDouble()
-    }
-
-    private fun sendParticleData(
-        level: Level,
-        pos: Vec3,
-        particleDir: Vector3d,
-    ) {
-        if (level is ServerLevel) {
-            for (player in level.players()) {
-                level.sendParticles(
-                    player,
-                    ThrusterParticleData(particleDir.x, particleDir.y, particleDir.z, innerVolume.toDouble()),
-                    true,
-                    pos.x + 0.5,
-                    pos.y + 0.5,
-                    pos.z + 0.5,
-                    2 * exhaustDiameter,
-                    offset.x,
-                    offset.y,
-                    offset.z,
-                    0.0,
-                )
-            }
-        }
+        burnRemaining = energyStorage.energyStored % 1
+        lastBurnRate = toBurn
     }
 
     override fun isMachineWhole(validatorCallback: IMultiblockValidator): Boolean {
@@ -293,6 +301,7 @@ open class LargeIonRingMultiBlock(
             validatorCallback.setLastError("Invalid Length of the multiblock", *arrayOfNulls(0))
             return false
         }
+        var hasController: Boolean = false
         val hollowVolume = (boundingBox.lengthX - 4) * (boundingBox.lengthZ - 4) * boundingBox.lengthY
         val expectedPartsCount = boundingBox.lengthX * boundingBox.lengthZ * boundingBox.lengthY - hollowVolume
         if (expectedPartsCount != this.partsCount) {
@@ -301,28 +310,40 @@ open class LargeIonRingMultiBlock(
         }
         val (minX, minY, minZ) = arrayOf(boundingBox.minX, boundingBox.minY, boundingBox.minZ)
         val (maxX, maxY, maxZ) = arrayOf(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ)
+        val allowedLayers = OttUtils.generateAllowedLayers(boundingBox.lengthX, boundingBox.lengthY, boundingBox.lengthZ)
         for (x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in minZ..maxZ) {
                     val pos = BlockPos(x, y, z).mutable()
-                    val (isValid, requiredType) = structureRequirement.isValidBlock(world, pos, true, boundingBox)
+                    val (isValid, requiredType) = structureRequirement.isValidBlock(world, pos, true, boundingBox, allowedLayers)
                     if (!isValid) {
+                        // Kontraption.LOGGER.info("Invalid block at $pos, becouse $requiredType is required but ${thrusterLevel!!.getBlockState(pos)} was found")
+                        // Kontraption.LOGGER.info("Bounding Box is from ${boundingBox.minX} .. ${boundingBox.maxX} X and ${boundingBox.minY} .. ${boundingBox.maxY} Y and ${boundingBox.minZ} .. ${boundingBox.maxZ} Z")
                         validatorCallback.setLastError(pos, "Invalid block type for this position $requiredType", *arrayOfNulls(0))
                         return false
                     }
                     val blockEntity = world.getBlockEntity(pos) as? AbstractRingEntity
+                    if (blockEntity?.type == GlobalRegistry.TileEntities.LARGE_ION_THRUSTER_CONTROLLER.get()) {
+                        centerExhaust = this.boundingBox.center
+                        val offset = blockEntity?.worldPosition?.subtract(centerExhaust)
+                        blockEntity?.setRNTags(offset, boundingBox.lengthX)
+                        controller = blockEntity
+                        innerVolume = (boundingBox.lengthX - 4) * (boundingBox.lengthX - 4) * 2
+                        blockEntity.isController = true
+                        hasController = true
+                    }
                     when (requiredType) {
                         3.toByte() -> blockEntity?.isTop = true
                         4.toByte() ->
-                            blockEntity?.let {
-                                it.isTop = true
-                                it.isCorner = true
+                            blockEntity.let {
+                                it?.isTop = true
+                                it?.isCorner = true
                             }
                         else -> blockEntity?.isTop = false
                     }
                 }
             }
         }
-        return true
+        return hasController
     }
 }

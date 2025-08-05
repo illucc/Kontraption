@@ -66,8 +66,8 @@ class ShipTerminalScreen(
         // Start: (1018, 192)
         // End: (1264, 295)
         // Small button clicked:
-        // Start: (1018, 409)
-        // End: (1264, 512)
+        // Start: (1018, 409) (217)
+        // End: (1264, 512) (217)
         menz.combinedList.forEachIndexed { index, pair ->
 
             val buttonX = leftPos + 41

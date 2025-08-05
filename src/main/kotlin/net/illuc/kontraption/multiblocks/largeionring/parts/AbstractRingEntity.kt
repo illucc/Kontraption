@@ -16,13 +16,12 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 
 abstract class AbstractRingEntity(
     type: BlockEntityType<*>,
-    position: BlockPos,
+    var position: BlockPos,
     blockState: BlockState,
 ) : AbstractMultiblockEntity<LargeIonRingMultiBlock>(type, position, blockState),
     IMultiblockPartTypeProvider<LargeIonRingMultiBlock, IIonRingPartType> {
@@ -30,30 +29,12 @@ abstract class AbstractRingEntity(
     var isCorner: Boolean = false
     var rotation: Direction = Direction.WEST
     var changedRotation: Boolean = false
-    private var mbsize = 0
-
-    fun getNBT(): Int = mbsize
-
-    fun setNBT(mbsized: Int) {
-        this.mbsize = mbsized
-        setChanged()
-        if (level != null && !level!!.isClientSide) {
-            level!!.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_CLIENTS)
-        }
-    }
+    var centerPos: BlockPos = position
+    var isController: Boolean = false
+    var mbSize: Int = -1
+    var enabled: Boolean = false
 
     override fun getUpdatePacket(): ClientboundBlockEntityDataPacket = ClientboundBlockEntityDataPacket.create(this)
-
-    override fun getUpdateTag(): CompoundTag {
-        val tag = super.getUpdateTag()
-        tag.putInt("mbsize", this.mbsize)
-        return tag
-    }
-
-    override fun handleUpdateTag(tag: CompoundTag) {
-        super.handleUpdateTag(tag)
-        this.mbsize = tag.getInt("mbsize")
-    }
 
     private fun setBlockState(
         level: Level,
@@ -75,20 +56,29 @@ abstract class AbstractRingEntity(
         changedRotation = true
     }
 
-    private fun changeState() {
+    private fun changeState(SETZERO: Boolean = false) {
         val level = level ?: return
         val pos = blockPos
         val underPos = BlockPos(pos.x, pos.y - 1, pos.z)
         val bbe = level.getBlockEntity(underPos)
         val blockState = level.getBlockState(pos)
         val currentStateType = blockState.getValue(LargeIonMultiblockPartBlockTemplate.STATETYPE)
-        val newStateType =
-            when (bbe) {
-                is LargeIonRingPowerPortEntity -> 1
-                is LargeIonRingController -> 2
-                is LargeIonRingCasingEntity -> 0
-                else -> currentStateType
-            }
+        var newStateType = 0
+        if (!SETZERO) {
+            newStateType =
+                when (bbe) {
+                    is LargeIonRingPowerPortEntity -> 2
+                    is LargeIonRingController -> 3
+                    is LargeIonRingCasingEntity -> 1
+                    else -> 10 // 10 is uh render disabler
+                }
+        }
+        if (!isTop && isMachineAssembled) {
+            newStateType = 10
+        }
+        if (isMachineAssembled && isController) {
+            newStateType = 9
+        }
         if (currentStateType != newStateType) {
             val updatedState = blockState.setValue(LargeIonMultiblockPartBlockTemplate.STATETYPE, newStateType)
             setBlockState(level, pos, updatedState)
@@ -100,15 +90,9 @@ abstract class AbstractRingEntity(
                 (boundbox.maxY),
                 (boundbox.minZ + boundbox.maxZ) / 2,
             )
-        setNBT(boundbox.lengthX)
-        if (!this.isMachineAssembled) {
-            val bStateNonAss = level.getBlockState(pos).setValue(LargeIonMultiblockPartBlockTemplate.ASS, false)
-            setBlockState(level, pos, bStateNonAss)
-        } else {
-            val bState = level.getBlockState(pos).setValue(LargeIonMultiblockPartBlockTemplate.ASS, true).setValue(LargeIonMultiblockPartBlockTemplate.SR, isTop)
-            setBlockState(level, pos, bState)
+        if (this.isMachineAssembled) {
             if (isCorner) {
-                val bStateCorner = this.blockState.setValue(LargeIonMultiblockPartBlockTemplate.STATETYPE, 3)
+                val bStateCorner = this.blockState.setValue(LargeIonMultiblockPartBlockTemplate.STATETYPE, 4)
                 setBlockState(level, pos, bStateCorner)
                 val cornerRot = checkcornerrotation(pos)
                 setRotation(cornerRot, pos)
@@ -195,7 +179,7 @@ abstract class AbstractRingEntity(
     }
 
     override fun onPostMachineBroken() {
-        this.changeState()
+        this.changeState(true)
         super.onPostMachineBroken()
     }
 
@@ -205,5 +189,71 @@ abstract class AbstractRingEntity(
     }
 
     override fun onMachineDeactivated() {
+    }
+
+    fun setRNTags(
+        center: BlockPos?,
+        size: Int,
+    ) {
+        if (center != null) {
+            centerPos = center
+        }
+        mbSize = size
+        changeState()
+    }
+
+    fun setEnabledd(enabled: Boolean) {
+        this.enabled = enabled
+        setChanged()
+        if (level != null && !level!!.isClientSide) {
+            setChanged()
+            level!!.sendBlockUpdated(
+                this.blockPos,
+                this.blockState,
+                this.blockState,
+                3,
+            )
+        }
+    }
+
+    override fun getUpdateTag(): CompoundTag {
+        val tag = super.getUpdateTag()
+        centerPos.let {
+            tag.putInt("centerX", it.x)
+            tag.putInt("centerY", it.y)
+            tag.putInt("centerZ", it.z)
+        }
+        tag.putInt("mbSize", mbSize)
+        tag.putBoolean("enabled", enabled)
+        return tag
+    }
+
+    override fun handleUpdateTag(tag: CompoundTag) {
+        super.handleUpdateTag(tag)
+        if (tag.contains("centerX")) {
+            centerPos = BlockPos(tag.getInt("centerX"), tag.getInt("centerY"), tag.getInt("centerZ"))
+        }
+        if (tag.contains("mbSize")) {
+            mbSize = tag.getInt("mbSize")
+        }
+        if (tag.contains("enabled")) {
+            enabled = tag.getBoolean("enabled")
+        }
+    }
+
+    override fun saveAdditional(tag: CompoundTag) {
+        super.saveAdditional(tag)
+        tag.putInt("centerX", centerPos.x)
+        tag.putInt("centerY", centerPos.y)
+        tag.putInt("centerZ", centerPos.z)
+        tag.putInt("mbSize", mbSize)
+        tag.putBoolean("enabled", enabled)
+    }
+
+    override fun load(tag: CompoundTag) {
+        super.load(tag)
+        centerPos = BlockPos(tag.getInt("centerX"), tag.getInt("centerY"), tag.getInt("centerZ"))
+        mbSize = tag.getInt("mbSize")
+        enabled = tag.getBoolean("enabled")
     }
 }

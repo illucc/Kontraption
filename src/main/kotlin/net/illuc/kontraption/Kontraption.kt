@@ -29,6 +29,7 @@ import net.illuc.kontraption.multiblocks.largeHydrogenThruster.LiquidFuelThruste
 import net.illuc.kontraption.multiblocks.railgun.RailgunMultiblockData
 import net.illuc.kontraption.multiblocks.railgun.RailgunValidator
 import net.illuc.kontraption.network.KontraptionPacketHandler
+import net.illuc.kontraption.renderers.LargeIonExhaustRenderer
 import net.illuc.kontraption.renderers.LargeIonRenderer
 import net.illuc.kontraption.renderers.PlushieRenderer
 import net.illuc.kontraption.util.BlockDamageManager
@@ -216,6 +217,7 @@ class Kontraption : IModModule {
         event.register(ResourceLocation(MODID, "block/large_ion_ring_input"))
         event.register(ResourceLocation(MODID, "block/large_ion_ring_controller"))
         event.register(ResourceLocation(MODID, "block/large_ion_ring_corner"))
+        event.register(ResourceLocation(MODID, "block/ion_exhaust"))
     }
 
     private fun registerBER(event: EntityRenderersEvent.RegisterRenderers) {
@@ -280,6 +282,7 @@ class Kontraption : IModModule {
 
         private fun registerTRenderers() {
             BlockEntityRenderers.register(GlobalRegistry.TileEntities.LARGE_ION_THRUSTER_CASING.get(), ::LargeIonRenderer)
+            BlockEntityRenderers.register(GlobalRegistry.TileEntities.LARGE_ION_THRUSTER_CONTROLLER.get(), ::LargeIonExhaustRenderer)
             BlockEntityRenderers.register(GlobalRegistry.TileEntities.PLUSHIE_ENTITY.get(), ::PlushieRenderer)
         }
 
@@ -334,6 +337,7 @@ class Kontraption : IModModule {
                 output.accept(KontraptionBlocks.GYRO)
                 output.accept(KontraptionBlocks.CONNECTOR)
                 output.accept(KontraptionBlocks.KEY)
+                output.accept(KontraptionBlocks.DRILL)
                 output.accept(GlobalRegistry.Items.LARGE_ION_THRUSTER_CONTROLLER.get())
                 output.accept(GlobalRegistry.Items.LARGE_ION_THRUSTER_VALVE.get())
                 output.accept(GlobalRegistry.Items.LARGE_ION_THRUSTER_COIL.get())

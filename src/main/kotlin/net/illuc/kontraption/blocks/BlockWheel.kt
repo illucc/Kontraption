@@ -16,10 +16,12 @@ import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
 import org.valkyrienskies.core.apigame.physics.VSWheelCollisionShapeData
 import org.valkyrienskies.core.impl.game.ships.ShipInertiaDataImpl
 
-class BlockWheel(type: BlockTypeTile<TileEntityWheel?>?) : BlockTile<TileEntityWheel?, BlockTypeTile<TileEntityWheel?>?>(
-    type,
-    BlockBehaviour.Properties.of(),
-) {
+class BlockWheel(
+    type: BlockTypeTile<TileEntityWheel?>?,
+) : BlockTile<TileEntityWheel?, BlockTypeTile<TileEntityWheel?>?>(
+        type,
+        BlockBehaviour.Properties.of(),
+    ) {
     @SuppressWarnings
     override fun onPlace(
         state: BlockState,
@@ -58,7 +60,7 @@ class BlockWheel(type: BlockTypeTile<TileEntityWheel?>?) : BlockTile<TileEntityW
         ): PhysicsEntityData {
             val inertia = 0.4 * mass * radius * radius
             val inertiaData: ShipInertiaData = ShipInertiaDataImpl(Vector3d(), mass, Matrix3d().scale(inertia))
-            val collisionShapeData = VSWheelCollisionShapeData(radius, 0.25)
+            val collisionShapeData = VSWheelCollisionShapeData(radius, 0.25, 1)
             return PhysicsEntityData(
                 shipId = shipId,
                 transform = transform,

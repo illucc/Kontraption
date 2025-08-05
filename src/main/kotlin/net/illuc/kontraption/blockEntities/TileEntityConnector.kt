@@ -5,6 +5,9 @@ import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.peripherals.ConnectorPeripheral
 import net.illuc.kontraption.util.KontraptionVSUtils
 import net.illuc.kontraption.util.KontraptionVSUtils.getShipObjectManagingPos
+import net.illuc.kontraption.util.OttUtils
+import net.illuc.kontraption.util.OttUtils.fV3V3d
+import net.illuc.kontraption.util.OttUtils.fV3dV3
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -19,7 +22,6 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.fml.ModList
 import org.joml.Vector3d
-import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
@@ -44,17 +46,16 @@ class TileEntityConnector(
     override fun <T> getCapability(
         capability: Capability<T>,
         side: Direction?,
-    ): LazyOptional<T> {
+    ): LazyOptional<T> =
         if (ModList.get().isLoaded("computercraft")) {
             if (capability == Capabilities.CAPABILITY_PERIPHERAL as Capability<T>) {
-                return peripheralCapability as LazyOptional<T>
+                peripheralCapability as LazyOptional<T>
             } else {
-                return super.getCapability(capability, side)
+                super.getCapability(capability, side)
             }
         } else {
-            return super.getCapability(capability, side)
+            super.getCapability(capability, side)
         }
-    }
 
     fun enable() {
         // as ceo intended
@@ -102,7 +103,7 @@ class TileEntityConnector(
                 }
             }
         } else {
-            // Mekanism.logger.info("No block hit.")
+            // Mekanism.logger.info("No block hit.") ALSO UHH too lazy to change its imple XD
         }
         return null
     }
@@ -132,36 +133,14 @@ class TileEntityConnector(
         return Pair(tileEntity2c, ship2)
     }
 
-    fun fVdVdc(vector3d: Vector3d): Vector3dc {
-        val vectors: Vector3dc = vector3d
-        return vectors
-    }
-
-    fun fV3V3d(vec3: Vec3): Vector3d {
-        val xx = vec3.x
-        val xy = vec3.y
-        val xz = vec3.z
-        return Vector3d(xx, xy, xz)
-    }
-
-    fun fV3dV3(vector3d: Vector3d): Vec3 {
-        val xx = vector3d.x
-        val xy = vector3d.y
-        val xz = vector3d.z
-        return Vec3(xx, xy, xz)
-    } // if i ever need to use those again ima just put them in seperate files, NO IDEA why normal .toVector3d or .toVec3 didnt want to work here
-
-    fun getDimID(): ShipId? {
-        val dimID = KontraptionVSUtils.dimensionID(sLevel)
-        val dimshipID = KontraptionVSUtils.getShipObjectWorld(sLevel).dimensionToGroundBodyIdImmutable[dimID]
-        return dimshipID
-    }
-
     fun connectpass() {
         this.connect() // for some VERY WEIRD REASON, no matter if i use this weird passthru or normal .connect it CANNOT get tileEntity for some reason like WTF? Raycast gets correct possition(same as redstone eq) but doesnt get tileentity
     }
 
     fun connect() {
+        if (this.level?.isClientSide!!) {
+            return
+        }
         var shipid2: ShipId?
         val getPaz = check()
         val (tileEntity2, ship2) = getPaz ?: Pair(null, null)
@@ -174,7 +153,7 @@ class TileEntityConnector(
             if (ship2?.id != null) {
                 ship2.id
             } else {
-                tileEntity2c?.getDimID()
+                OttUtils.getDimID(tileEntity2c?.level as ServerLevel)
             }
         if (shipid2 == null || shipid1 == null) {
             // Mekanism.logger.info("SHIPID NULLED AND CONNECTOR NULLED  ID1:$shipid1 ID2:$shipid2")

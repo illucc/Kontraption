@@ -19,18 +19,16 @@ import org.apache.logging.log4j.Logger
 
 class LargeIonRenderer(
     context: BlockEntityRendererProvider.Context?,
-) : BlockEntityRenderer<LargeIonRingCasingEntity?> {
+) : BlockEntityRenderer<LargeIonRingCasingEntity> {
     private val resourcesz = ResourceLocation(Kontraption.MODID, "block/large_ion_ring_segment")
     private val valveresourcesz = ResourceLocation(Kontraption.MODID, "block/large_ion_ring_input")
     private val controllerresourcesz = ResourceLocation(Kontraption.MODID, "block/large_ion_ring_controller")
     private val cornerresourcesz = ResourceLocation(Kontraption.MODID, "block/large_ion_ring_corner")
-    private val exaustresourcesz = ResourceLocation(Kontraption.MODID, "block/exaust_ion_ring")
 
     private val modelz: BakedModel = Minecraft.getInstance().modelManager.getModel(resourcesz)
     private val valvemodelz: BakedModel = Minecraft.getInstance().modelManager.getModel(valveresourcesz)
     private val controllermodelz: BakedModel = Minecraft.getInstance().modelManager.getModel(controllerresourcesz)
     private val cornermodelz: BakedModel = Minecraft.getInstance().modelManager.getModel(cornerresourcesz)
-    private val exaustmodelz: BakedModel = Minecraft.getInstance().modelManager.getModel(exaustresourcesz)
 
     private var fmodelz = Minecraft.getInstance().modelManager.missingModel
     var logger: Logger = LogManager.getLogger(Kontraption::class)
@@ -44,37 +42,26 @@ class LargeIonRenderer(
     private var north = 90f
     private var south = 270f // eh ima move laterz
 
-    init {
-        if (modelz == Minecraft.getInstance().modelManager.missingModel) {
-            logger.error("Failed to load: large_ion_ring_segment model")
-            logger.error("RESOURCE PATHS" + resourcesz.path + " " + resourcesz.namespace)
-        }
-    }
-
     override fun render(
-        blockEntity: LargeIonRingCasingEntity?,
+        blockEntity: LargeIonRingCasingEntity,
         partialTicks: Float,
         poseStack: PoseStack,
         buffer: MultiBufferSource,
         combinedLight: Int,
         combinedOverlay: Int,
     ) {
-        if (blockEntity == null) {
-            return
-        }
         val rotation = blockEntity.blockState.getValue(LargeIonMultiblockPartBlockTemplate.ROT)
-        val assembled = blockEntity.blockState.getValue(LargeIonMultiblockPartBlockTemplate.ASS)
-        val sr = blockEntity.blockState.getValue(LargeIonMultiblockPartBlockTemplate.SR)
         val state = blockEntity.blockState.getValue(LargeIonMultiblockPartBlockTemplate.STATETYPE)
-        val mbsize = blockEntity.getNBT()
 
-        when (state) {
-            0 -> fmodelz = modelz
-            1 -> fmodelz = valvemodelz
-            2 -> fmodelz = controllermodelz
-            3 -> fmodelz = cornermodelz
-            else -> fmodelz = modelz
-        }
+        fmodelz =
+            when (state) {
+                0 -> Minecraft.getInstance().modelManager.missingModel
+                1 -> modelz
+                2 -> valvemodelz
+                3 -> controllermodelz
+                4 -> cornermodelz
+                else -> modelz
+            }
         val rotationAngle =
             when (rotation) {
                 Direction.NORTH -> north
@@ -86,7 +73,7 @@ class LargeIonRenderer(
                 null -> 0f
             }
         poseStack.pushPose()
-        if (assembled && sr == true) {
+        if (state != 0 && state != 10 && state != 9) {
             poseStack.mulPose(Axis.YP.rotation(Math.toRadians(rotationAngle.toDouble()).toFloat()))
             var (ax, az) =
                 when (rotation) {
@@ -97,7 +84,7 @@ class LargeIonRenderer(
                     else -> 0f to 0f
                 }
 
-            if (state == 3) {
+            if (state == 4) {
                 az += 1.0f
             }
 
@@ -115,29 +102,14 @@ class LargeIonRenderer(
                 ModelData.EMPTY,
                 RenderType.cutout(),
             )
-            if (state == 3) {
-                Minecraft.getInstance().blockRenderer.modelRenderer.renderModel(
-                    poseStack.last(),
-                    buffer.getBuffer(RenderType.cutout()),
-                    null,
-                    exaustmodelz,
-                    1.0f,
-                    1.0f,
-                    1.0f,
-                    combinedLight,
-                    combinedOverlay,
-                    ModelData.EMPTY,
-                    RenderType.cutout(),
-                )
-            }
         }
         poseStack.popPose()
     }
 
     override fun shouldRender(
-        blockEntity: LargeIonRingCasingEntity?,
+        blockEntity: LargeIonRingCasingEntity,
         cameraPosition: Vec3,
     ): Boolean = true
 
-    override fun shouldRenderOffScreen(blockEntity: LargeIonRingCasingEntity?): Boolean = true
+    override fun shouldRenderOffScreen(blockEntity: LargeIonRingCasingEntity): Boolean = true
 }

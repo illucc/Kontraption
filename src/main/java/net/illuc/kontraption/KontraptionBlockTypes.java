@@ -128,6 +128,10 @@ public class KontraptionBlockTypes {
             .createBlock(() -> KontraptionTileEntityTypes.KEY, MekanismLang.HOLD_FOR_DESCRIPTION)
             .with(new AttributeStateFacing(BlockStateProperties.FACING))
             .build();
+    public static final BlockTypeTile<TileEntityDrill> DRILL = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> KontraptionTileEntityTypes.DRILL, MekanismLang.HOLD_FOR_DESCRIPTION)
+            .with(new AttributeStateFacing(BlockStateProperties.FACING))
+            .build();
 
 
 
