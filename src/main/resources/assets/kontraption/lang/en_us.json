@@ -38,9 +38,13 @@
   "toolgun.kontraption.second_pos_selected": "Second pos selected",
   "toolgun.kontraption.pos_on_ship": "Selected position is on a ship!",
   "toolgun.kontraption.assembly_successful": "Assembled!",
+  "toolgun.kontraption.assembly_failed": "Assembly failed! Not enough energy, ",
+  "toolgun.kontraption.energy_req": " needed but had ",
   "toolgun.kontraption.selected_ship": "Ship selected!",
   "toolgun.kontraption.ship_not_found": "Please point at a ship and try again",
-  "toolgun.kontraption.moving_successful": "Successfully moved ship!",
+  "toolgun.kontraption.moving_successful": "Moved!",
+  "toolgun.kontraption.move_failed": "Move failed! Not enough energy, ",
+  "toolgun.kontraption.cant_move_on_ship": "Please point the toolgun at something other than a ship!",
 
   "category.kontraption.ship_controls": "Kontraption Ship Controls",
   "key.kontraption.down": "Down",
@@ -55,6 +59,7 @@
   "chat.kontraption.testing_build": "This is a testing build of Kontraption\nnot intended for normal gameplay. \nThere will be game breaking bugs,\nmissing functionality, and placeholder assets!\nPlease report any bugs you find on\nthe issue tracker!\nhttps://github.com/illucc/Kontraption/issues",
   "chat.kontraption.titleborder": "===========[Kontraption]===========",
   "chat.kontraption.border":      "=================================",
+  "chat.kontraption.work_in_progress": "Work in progress :P",
 
   "itemGroup.kontraption": "Kontraption",
 
