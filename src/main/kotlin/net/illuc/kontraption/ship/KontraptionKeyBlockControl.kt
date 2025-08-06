@@ -1,7 +1,6 @@
 package net.illuc.kontraption.ship
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import net.illuc.kontraption.blockEntities.TileEntityKey
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.illuc.kontraption.util.toJOML
 import net.minecraft.core.BlockPos
 import org.joml.Vector3i
@@ -10,11 +9,11 @@ import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
 import java.util.concurrent.CopyOnWriteArrayList
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class KontraptionKeyBlockControl {
     data class KeyStone(
         val position: Vector3i,
         val keybind: Int,
-        @JsonIgnore val be: TileEntityKey?,
     )
 
     private val keyStones = CopyOnWriteArrayList<KeyStone>()
@@ -22,17 +21,15 @@ class KontraptionKeyBlockControl {
     fun addKeys(
         pos: BlockPos,
         keybind: Int,
-        be: TileEntityKey,
     ) {
-        keyStones.add(KeyStone(pos.toJOML(), keybind, be))
+        keyStones.add(KeyStone(pos.toJOML(), keybind))
     }
 
     fun removeKeys(
         pos: BlockPos,
         keybind: Int,
-        be: TileEntityKey,
     ) {
-        keyStones.remove(KeyStone(pos.toJOML(), keybind, be))
+        keyStones.remove(KeyStone(pos.toJOML(), keybind))
     }
 
     fun removeAll(pos: BlockPos) {

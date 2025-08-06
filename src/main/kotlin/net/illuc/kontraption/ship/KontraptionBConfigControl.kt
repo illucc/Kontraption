@@ -1,6 +1,11 @@
 package net.illuc.kontraption.ship
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import net.illuc.kontraption.util.toJOML
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -10,61 +15,67 @@ import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
 import java.util.concurrent.CopyOnWriteArrayList
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class KontraptionBConfigControl {
-    sealed class BlockSetting {
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+    @JsonSubTypes(
+        JsonSubTypes.Type(value = BlockSetting.BooleanSetting::class, name = "boolean"),
+        JsonSubTypes.Type(value = BlockSetting.IntSetting::class, name = "int"),
+        JsonSubTypes.Type(value = BlockSetting.StringSetting::class, name = "string"),
+    )
+    // IMA ABOUT TO PUT SERIALIZATION INTO MY [HYPERLINK BLOCKED]
+    sealed class BlockSetting<T> {
         abstract val name: String
-        open val displayValue: String = "" // ughh i want my any type but somewhy VS HATES IT, prev is just used much simpler BlockSetting class and Type subclass, not i have this bss
+        abstract var value: T
 
-        data class BooleanSetting(
-            override val name: String,
-            var value: Boolean,
-        ) : BlockSetting() {
-            override val displayValue get() = value.toString()
-        }
+        data class BooleanSetting
+            @JsonCreator
+            constructor(
+                @JsonProperty("name") override val name: String,
+                @JsonProperty("value") override var value: Boolean,
+            ) : BlockSetting<Boolean>()
 
-        data class IntSetting(
-            override val name: String,
-            var value: Int,
-        ) : BlockSetting() {
-            override val displayValue get() = value.toString()
-        }
+        data class IntSetting
+            @JsonCreator
+            constructor(
+                @JsonProperty("name") override val name: String,
+                @JsonProperty("value") override var value: Int,
+            ) : BlockSetting<Int>()
 
-        data class StringSetting(
-            override val name: String,
-            var value: String,
-        ) : BlockSetting() {
-            override val displayValue get() = value
-        }
-
-        data class TittleSetting(
-            override val name: String,
-            var value: String,
-        ) : BlockSetting() {
-            override val displayValue get() = value
-        }
+        data class StringSetting
+            @JsonCreator
+            constructor(
+                @JsonProperty("name") override val name: String,
+                @JsonProperty("value") override var value: String,
+            ) : BlockSetting<String>()
     }
 
-    data class ConfigBlock(
-        val pos: Vector3i,
-        @JsonIgnore val blockEntity: BlockEntity?, // Quess who forgot that be only exist server sidee ;3
-        val settings: MutableList<BlockSetting>,
-    )
+    data class ConfigBlock
+        @JsonCreator
+        constructor(
+            @JsonProperty("pos") val pos: Vector3i,
+            @JsonProperty("settings") val settings: MutableList<BlockSetting<*>>,
+            @JsonProperty("blockId") val blockId: String,
+        )
 
     private val blockSettings = CopyOnWriteArrayList<ConfigBlock>()
 
     fun addConfigBlock(
         pos: BlockPos,
         blockEntity: BlockEntity?,
-        settings: List<BlockSetting>,
+        settings: List<BlockSetting<*>>,
     ) {
-        blockSettings.add(ConfigBlock(pos.toJOML(), blockEntity, settings.toMutableList()))
+        val blockId = blockEntity?.blockState?.block?.descriptionId ?: "unknown"
+        blockSettings.add(ConfigBlock(pos.toJOML(), settings.toMutableList(), blockId))
     }
 
     fun removeConfigBlock(pos: BlockPos) {
         blockSettings.removeAll { it.pos == pos.toJOML() }
     }
 
-    fun getConfigBlock(): CopyOnWriteArrayList<ConfigBlock> = blockSettings
+    // FUCKIN SERIALIZER AUTODETECTS GETS
+    @JsonIgnore
+    fun allConfigBlock(): CopyOnWriteArrayList<ConfigBlock> = blockSettings
 
     fun updateConfigBlock(
         pos: BlockPos,
@@ -78,11 +89,21 @@ class KontraptionBConfigControl {
             is BlockSetting.BooleanSetting -> if (newValue is Boolean) setting.value = newValue
             is BlockSetting.IntSetting -> if (newValue is Int) setting.value = newValue
             is BlockSetting.StringSetting -> if (newValue is String) setting.value = newValue
-            is BlockSetting.TittleSetting -> {} // bleh, wonder if ANY was ze issue . . .
         }
     }
 
     companion object {
         fun getOrCreate(ship: ServerShip): KontraptionBConfigControl = ship.getAttachment<KontraptionBConfigControl>() ?: KontraptionBConfigControl().also { ship.saveAttachment(it) }
+
+        @JvmStatic
+        @JsonCreator
+        fun create(
+            @JsonProperty("blockSettings") blockSettings: CopyOnWriteArrayList<ConfigBlock>?,
+        ): KontraptionBConfigControl =
+            KontraptionBConfigControl().apply {
+                if (blockSettings != null) {
+                    this.blockSettings.addAll(blockSettings)
+                }
+            }
     }
 }

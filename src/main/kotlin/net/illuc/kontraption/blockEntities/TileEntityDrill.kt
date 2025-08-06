@@ -1,6 +1,7 @@
 package net.illuc.kontraption.blockEntities
 
 import mekanism.common.tile.base.TileEntityMekanism
+import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.util.KontraptionVSUtils.getShipObjectManagingPos
 import net.illuc.kontraption.util.OttUtils
@@ -21,6 +22,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ForgeCapabilities
 import net.minecraftforge.common.util.LazyOptional
+import net.minecraftforge.energy.EnergyStorage
 import net.minecraftforge.items.ItemStackHandler
 import org.valkyrienskies.core.api.ships.ServerShip
 
@@ -28,8 +30,22 @@ class TileEntityDrill(
     pos: BlockPos?,
     state: BlockState?,
 ) : TileEntityMekanism(KontraptionBlocks.DRILL, pos, state) {
+    // Energy props
+    private val energyCapacity = 100000
+    private val maxTranser = 1000
+    private val energyPerOperation = 120
+    private val energyStorage = EnergyStorage(energyCapacity, maxTranser)
+    private val energyHandlerLazyOptional = LazyOptional.of { energyStorage }
+
     private val ship: ServerShip? get() = getShipObjectManagingPos((level as ServerLevel), this.blockPos)
-    private val sLevel: ServerLevel? get() = level as? ServerLevel
+    private val sLevel: ServerLevel? get() =
+        level as? ServerLevel ?: run {
+            Kontraption.LOGGER.warn("Drill at $worldPosition is SOMEHOW called from ClientLvl")
+            null
+        }
+    // at this point ima do smt simmilar to EVERY sLevel i see
+
+    private val facing: Direction by lazy { blockState.getValue(BlockStateProperties.FACING) }
 
     companion object {
         const val INVENTORY_SIZE: Int = 27 // perchance more
@@ -47,39 +63,42 @@ class TileEntityDrill(
         cap: Capability<T>,
         side: Direction?,
     ): LazyOptional<T> =
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            inventoryHandlerLazyOptional.cast()
-        } else {
-            super.getCapability(cap, side)
+        when {
+            cap == ForgeCapabilities.ITEM_HANDLER -> inventoryHandlerLazyOptional.cast()
+            cap == ForgeCapabilities.ENERGY -> energyHandlerLazyOptional.cast()
+            else -> super.getCapability(cap, side)
         }
 
     override fun invalidateCaps() {
         super.invalidateCaps()
         inventoryHandlerLazyOptional.invalidate()
+        energyHandlerLazyOptional.invalidate()
     }
 
     override fun saveAdditional(tag: CompoundTag) {
         super.saveAdditional(tag)
+        tag.put("energy", energyStorage.serializeNBT())
         tag.put("Inventory", inventory.serializeNBT())
     }
 
     override fun load(tag: CompoundTag) {
         super.load(tag)
+        tag.get("energy")?.let { energyStorage.deserializeNBT(it as CompoundTag) }
         inventory.deserializeNBT(tag.getCompound("Inventory"))
     }
 
     fun tick() {
-        if (sLevel == null) return
-        this.tickCT++
-        if (this.tickCT < DRILL_DELAY) return
-        this.tickCT = 0
+        if (sLevel == null || level?.isClientSide == true) return // CHECKS EVERYWHEERE, might delete later if i get random performance OCD
+        if (++tickCT < DRILL_DELAY) return
+        tickCT = 0
         this.performDrillOperation(sLevel!!, this.blockPos)
     }
 
     private fun performDrillOperation(
         serverLevel: ServerLevel,
         start: BlockPos,
-    ) {
+    ): Boolean {
+        if (energyStorage.energyStored < energyPerOperation) return false
         val step = 5
 
         val drops = NonNullList.create<ItemStack?>()
@@ -111,9 +130,12 @@ class TileEntityDrill(
                         addToInventory(drop)
                     }
                 }
-                serverLevel.removeBlock(targetPos, false)
+                level?.levelEvent(2001, targetPos, Block.getId(blockState))
+                energyStorage.extractEnergy(energyPerOperation, false)
+                return serverLevel.removeBlock(targetPos, false)
             }
         }
+        return false
     }
 
     // APARENTLY SOME MORONS DONT USE TAGS!!! LIKE WHY

@@ -11,8 +11,8 @@ object EventListener {
     fun onKeyEvent(event: KeyBindEvent) {
         val level = event.player.level()
         val klist = KontraptionKeyBlockControl.getOrCreate(event.ship).getKeystones()
-        klist.forEach { (position, keybind, be) ->
-            val blockEntity = level.getBlockEntity(position.toBlockPos())
+        klist.forEach { (position, keybind) ->
+            val blockEntity = level.getBlockEntity(position.toBlockPos()) // WE WERE GETTING BLOCKENTITY FROM POSITION ANYWAY WHY THE FUCK WAS I TRYING TO SERIALIZE IT
             if (blockEntity is TileEntityKey) {
                 blockEntity.fire(event)
             }

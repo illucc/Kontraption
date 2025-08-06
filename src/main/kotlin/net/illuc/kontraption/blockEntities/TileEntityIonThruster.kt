@@ -10,9 +10,12 @@ import mekanism.common.capabilities.holder.energy.EnergyContainerHelper
 import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder
 import mekanism.common.tile.base.TileEntityMekanism
 import mekanism.common.util.MekanismUtils
+import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.KontraptionBlocks
 import net.illuc.kontraption.ThrusterInterface
 import net.illuc.kontraption.config.KontraptionConfigs
+import net.illuc.kontraption.ship.KontraptionBConfigControl
+import net.illuc.kontraption.util.KontraptionVSUtils
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
@@ -20,12 +23,12 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import javax.annotation.Nonnull
 
-// class TileEntityIonThruster(pos: BlockPos?, state: BlockState?) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state) {
 class TileEntityIonThruster(
     pos: BlockPos?,
     state: BlockState?,
 ) : TileEntityMekanism(KontraptionBlocks.ION_THRUSTER, pos, state),
     ThrusterInterface {
+    // TODO: TOUCH THIS MF
     override var enabled = false
     override var thrusterLevel: Level? = null
     override val worldPosition: BlockPos? = pos
@@ -73,9 +76,35 @@ class TileEntityIonThruster(
         clientEnergyUsed = toUse
     }
 
+    fun shipAdd() {
+        if (level !is ServerLevel) return
+        if (worldPosition == null) return
+        val slevel = level as ServerLevel
+        val settings =
+            listOf(
+                KontraptionBConfigControl.BlockSetting.BooleanSetting("enabled", true),
+                KontraptionBConfigControl.BlockSetting.IntSetting("range", (0 until 10).random()),
+                KontraptionBConfigControl.BlockSetting.StringSetting("name", "IonThruster"),
+            )
+
+        val ship =
+            KontraptionVSUtils.getShipObjectManagingPos((level as ServerLevel), worldPosition)
+                ?: KontraptionVSUtils.getShipManagingPos((level as ServerLevel), worldPosition)
+                ?: return
+
+        KontraptionBConfigControl.getOrCreate(ship).let {
+            it.removeConfigBlock(worldPosition)
+
+            it.addConfigBlock(worldPosition, slevel.getBlockEntity(worldPosition), settings)
+            Kontraption.LOGGER.debug("Added to config list, may Asmodeus have mercy over us")
+        }
+        // This has to somehow be called on ship creation . . . ON LOAD XD
+    }
+
     override fun onLoad() {
         if (level is ServerLevel) {
             enable(level as ServerLevel, blockPos)
+            shipAdd()
         }
         super.onLoad()
     }

@@ -66,7 +66,9 @@ class TileEntityShipControlInterface(
 
     // ---- GOOD GOD REMEMBER TO CHAGE THIS TO DIM SPECYFIC GRAVITY ON 2.5 VS TODO: DO ITT MF
     private final var GRAVITY_STAT = Vector3d(0.0, -10.0, 0.0) // so nobody gets weird ideas
+
     //
+    private var dampenersActive = false
 
     private var rotTarget = Quaterniond()
     private var velTarget = Vector3d()
@@ -126,15 +128,23 @@ class TileEntityShipControlInterface(
         return entity
     }
 
-    fun getConfigBlocks(): CopyOnWriteArrayList<KontraptionBConfigControl.ConfigBlock> = KontraptionBConfigControl.getOrCreate(this.ship!!).getConfigBlock()
+    fun getConfigBlocks(): CopyOnWriteArrayList<KontraptionBConfigControl.ConfigBlock> = KontraptionBConfigControl.getOrCreate(this.ship!!).allConfigBlock()
 
     fun tick() {
         val ship = this.ship ?: return
 
         seatedControllingPlayer = ship.getAttachment(KontraptionSeatedControllingPlayer::class.java) ?: return
+
         if (seats.isNotEmpty()) {
             if (seats[0].passengers.isNotEmpty()) {
-                velTarget = Vector3d(seatedControllingPlayer!!.forwardImpulse, seatedControllingPlayer!!.upImpulse, seatedControllingPlayer!!.leftImpulse)
+                val (f, u, l) =
+                    Triple(
+                        seatedControllingPlayer!!.forwardImpulse.coerceIn(-1.0, 1.0),
+                        seatedControllingPlayer!!.upImpulse.coerceIn(-1.0, 1.0),
+                        seatedControllingPlayer!!.leftImpulse.coerceIn(-1.0, 1.0),
+                    )
+                // I had a stroke reading this line. also frick lint
+                velTarget.set(f, u, l)
                 if (seatedControllingPlayer!!.openConfig) {
                     val player = entity.controllingPassenger as ServerPlayer
                     val configBlocks = getConfigBlocks()
@@ -179,36 +189,14 @@ class TileEntityShipControlInterface(
             }
         }
 
-        val thrusters = KontraptionThrusterControl.getOrCreate(ship)
         val gyros = KontraptionGyroControl.getOrCreate(ship)
-        val requestedThrust = mutableMapOf<Vector3d, Double>()
 
-        if (velTarget.x > 0) {
-            requestedThrust[
-                this.direction.opposite.normal
-                    .toJOMLD(),
-            ] = velTarget.x
-        } else if (velTarget.x < 0) {
-            requestedThrust[this.direction.normal.toJOMLD()] = -velTarget.x
+        val thrusters = KontraptionThrusterControl.getOrCreate(ship)
+        if (seats.isEmpty() || seats[0].passengers.isEmpty()) {
+            thrusters.setPlayerInput(Vector3d()) // Finnaly fixing years old bug XD
         }
-        if (velTarget.y > 0) {
-            requestedThrust[Direction.UP.normal.toJOMLD()] = velTarget.y
-        } else if (velTarget.y < 0) {
-            requestedThrust[Direction.DOWN.normal.toJOMLD()] = -velTarget.y
-        }
-        if (velTarget.z > 0) {
-            requestedThrust[
-                this.direction.counterClockWise.normal
-                    .toJOMLD(),
-            ] = velTarget.z
-        } else if (velTarget.z < 0) {
-            requestedThrust[
-                this.direction.clockWise.normal
-                    .toJOMLD(),
-            ] = -velTarget.z
-        }
-        // HATE THIS but still better than old imple
-        thrusters.assignThrustPerDirection(requestedThrust, true) // SHOULD WORK??
+
+        thrusters.setPlayerInput(velTarget) // Yeeting our input to KTC
 
         if (seatedControllingPlayer!!.pitch.absoluteValue + seatedControllingPlayer!!.yaw.absoluteValue + seatedControllingPlayer!!.roll.absoluteValue != 0.0) {
             val sensitivity = 0.1
@@ -367,7 +355,7 @@ class TileEntityShipControlInterface(
         tmp.fromAxisAngleRad(this.direction.normal.toJOMLD(), x * 0.1)
         rotTarget.mul(tmp)
         tmp.fromAxisAngleRad(Vector3d(0.0, 1.0, 0.0), y * 0.1)
-        rotTarget.mul(tmp)
+        rotTarget.mul(tmp) // wait cant we just do Quantenoid.rorateXYZ(x * 0.1,y * 0.1,z * 0.1)?? TODO: REMEMBER TO CHECK DIS SOMEDAY YA ARSEHOLE
     }
 
     fun preciseThrustImpulse(
@@ -395,5 +383,17 @@ class TileEntityShipControlInterface(
         val ship = this.ship ?: return
         val thrusters = KontraptionThrusterControl.getOrCreate(ship)
         thrusters.assignThrustPerDirection(requestedThrust, false)
+    }
+
+    fun toggleDampener() {
+        dampenersActive = !dampenersActive
+        ship?.getAttachment(KontraptionThrusterControl::class.java)?.setDampenersState(dampenersActive)
+    }
+
+    fun getDampenerState(): Boolean = dampenersActive
+
+    fun setDampenerState(state: Boolean) {
+        dampenersActive = state
+        ship?.getAttachment(KontraptionThrusterControl::class.java)?.setDampenersState(state)
     }
 }

@@ -15,6 +15,7 @@ import mekanism.common.item.interfaces.IModeItem
 import mekanism.common.registries.MekanismSounds
 import mekanism.common.util.ItemDataUtils
 import mekanism.common.util.StorageUtils
+import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.KontraptionLang
 import net.illuc.kontraption.client.render.Renderer
 import net.illuc.kontraption.client.render.RenderingData
@@ -37,7 +38,15 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import org.joml.Vector3d
+import org.joml.primitives.AABBd
+import org.valkyrienskies.core.api.ships.ServerShip
+import org.valkyrienskies.core.api.ships.Ship
+import org.valkyrienskies.core.apigame.ShipTeleportData
+import org.valkyrienskies.core.apigame.world.ServerShipWorldCore
+import org.valkyrienskies.core.impl.game.ShipTeleportDataImpl
+import org.valkyrienskies.core.impl.shadow.pl
 import org.valkyrienskies.core.util.datastructures.DenseBlockPosSet
+import org.valkyrienskies.core.util.toAABBd
 import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
@@ -56,6 +65,8 @@ class ItemToolgun(
     var firstPosition: BlockPos? = null
     var secondPosition: BlockPos? = null
     var SelectionZone: RenderingData? = null
+    var SelectedShip: Ship? = null
+    var moved = false
 
     override fun use(
         level: Level,
@@ -92,13 +103,13 @@ class ItemToolgun(
         if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.ASSEMBLE) {
             makeSelection(level, player, interactionHand, pos)
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.MOVE) {
-            player.sendSystemMessage(Component.literal("Work in progress :P"))
+            moveSelection(level, player, interactionHand, pos)
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.LOCK) {
-            player.sendSystemMessage(Component.literal("Work in progress :P"))
+            player.sendSystemMessage(Component.translatable("chat.kontraption.work_in_progress"))
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.PUSH) {
-            player.sendSystemMessage(Component.literal("Work in progress :P"))
+            player.sendSystemMessage(Component.translatable("chat.kontraption.work_in_progress"))
         } else if (getMode(player.getItemInHand(interactionHand)) == ToolgunMode.ROTATE) {
-            player.sendSystemMessage(Component.literal("Work in progress :P"))
+            player.sendSystemMessage(Component.translatable("chat.kontraption.work_in_progress"))
         }
 
         return super.use(level, player, interactionHand)
@@ -185,7 +196,7 @@ class ItemToolgun(
                     if (energyContainer != null) {
                         Mekanism.logger.info("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}")
                         player.sendSystemMessage(
-                            Component.literal("Assembly failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}"),
+                            Component.translatable("toolgun.kontraption.assembly_failed").append(energyPerUse.toString()).append(Component.translatable("toolgun.kontraption.energy_req")).append(energyContainer.energy.toString())
                         )
                     }
                 } else {
@@ -200,6 +211,75 @@ class ItemToolgun(
                 SelectionZone = null
                 firstPosition = null
                 secondPosition = null
+            }
+        }
+    }
+
+    fun moveSelection(
+        level: Level,
+        player: Player,
+        interactionHand: InteractionHand,
+        pos: BlockPos,
+    ) {
+        if (moved) {
+            SelectedShip = null
+        }
+
+        if (!level.isClientSide) {
+            println(level.getBlockState(pos))
+
+            if (player.isShiftKeyDown and (level.getBlockState(pos).isAir)) {
+                player.playSound(MekanismSounds.BEEP.get(), 1F, 1.4F)
+                SelectedShip = null
+                player.sendSystemMessage(Component.translatable("toolgun.kontraption.selection_reset"))
+            } else if (SelectedShip == null) {
+                val res = raycast(level, player, ClipContext.Fluid.NONE)
+                player.playSound(MekanismSounds.BEEP.get(), 1F, 1.4F)
+                if (res != null && KontraptionVSUtils.getShipObjectManagingPos(level, res.blockPos) != null) {
+                    SelectedShip = KontraptionVSUtils.getShipManagingPos(level, res.blockPos)
+                    player.sendSystemMessage(Component.translatable("toolgun.kontraption.selected_ship"))
+
+                    moved = false
+                } else {
+                    player.sendSystemMessage(Component.translatable("toolgun.kontraption.ship_not_found"))
+                }
+            } else {
+                player.playSound(MekanismSounds.BEEP.get(), 1F, 1.4F)
+
+                val energyPerUse = KontraptionConfigs.kontraption.toolgunActionConsumption.get()
+                val energyContainer = StorageUtils.getEnergyContainer(player.getItemInHand(interactionHand), 0)
+
+                if (energyContainer == null || energyContainer.extract(energyPerUse, Action.SIMULATE, AutomationType.MANUAL).smallerThan(energyPerUse)) {
+                    if (energyContainer != null) {
+                        Mekanism.logger.info("Move failed! Not enough energy, $energyPerUse needed but had ${energyContainer.energy}")
+                        player.sendSystemMessage(
+                            Component.translatable("toolgun.kontraption.move_failed").append(energyPerUse.toString()).append(Component.translatable("toolgun.kontraption.energy_req")).append(energyContainer.energy.toString())
+                        )
+                    }
+                } else {
+                    val res = raycast(level, player, ClipContext.Fluid.NONE)
+
+                    if (res != null && KontraptionVSUtils.getShipObjectManagingPos(level, res.blockPos) == null) {
+                        Mekanism.logger.info("now we move this ship")
+
+                        energyContainer.extract(energyPerUse, Action.EXECUTE, AutomationType.MANUAL)
+
+                        val serverShip: ServerShip = SelectedShip as ServerShip
+                        val shipHeight = SelectedShip!!.shipAABB!!.maxY().minus(SelectedShip!!.shipAABB!!.minY()).plus(1)
+                        val teleportData: ShipTeleportData = ShipTeleportDataImpl(Vector3d(res.blockPos.x.toDouble(), res.blockPos.y.toDouble().plus(shipHeight.toDouble()), res.blockPos.z.toDouble()), SelectedShip!!.transform.shipToWorldRotation, Vector3d(), Vector3d(), "minecraft:overworld", null)
+                        val shipWorld: ServerShipWorldCore = KontraptionVSUtils.getShipObjectWorld(level as ServerLevel?)
+
+                        moved = true
+
+                        player.sendSystemMessage(Component.translatable("toolgun.kontraption.moving_successful"))
+
+                        shipWorld.teleportShip(serverShip, teleportData)
+                    } else {
+                        player.sendSystemMessage(Component.translatable("toolgun.kontraption.cant_move_on_ship"))
+
+                        moved = false
+                    }
+                }
             }
         }
     }

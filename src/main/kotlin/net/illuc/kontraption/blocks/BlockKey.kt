@@ -1,8 +1,8 @@
 package net.illuc.kontraption.blocks
 
-import mekanism.common.Mekanism
 import mekanism.common.block.prefab.BlockTile
 import mekanism.common.content.blocktype.BlockTypeTile
+import net.illuc.kontraption.Kontraption
 import net.illuc.kontraption.blockEntities.TileEntityKey
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -89,7 +89,7 @@ class BlockKey(
         world.setBlock(pos, newstate, 3)
         world.updateNeighborsAt(pos, this)
         val bstate = world.getBlockState(pos)
-        Mekanism.logger.info("Switching red state")
+        Kontraption.LOGGER.debug("Switching red state")
         return bstate.getValue(POWERED)
     }
 

@@ -11,9 +11,29 @@ import net.illuc.kontraption.blockEntities.TileEntityConnector
 class ConnectorPeripheral(
     private val blockEntity: TileEntityConnector,
 ) : IDynamicPeripheral {
+    private val attachedComputers = mutableSetOf<IComputerAccess>()
+
     override fun getType(): String = "Connector"
 
-    override fun getMethodNames(): Array<String> = arrayOf("connect", "disconnect", "isconnected", "getconnID", "settocc", "settored") // need to figure out peripetal events, i RLLY want to have raycart one, buuut im not trying to read CC javadocs rn
+    override fun getMethodNames(): Array<String> =
+        arrayOf(
+            "connect",
+            "disconnect",
+            "isConnected",
+            "getConnectionID",
+            "enableCC",
+            "disableCC",
+        )
+
+    private companion object {
+        const val CONNECT = 0
+        const val DISCONNECT = 1
+        const val IS_CONNECTED = 2
+        const val GET_ID = 3
+        const val ENABLE_CC = 4
+        const val DISABLE_CC = 5
+    }
+    // Using magicc numbers WAS annoying
 
     override fun callMethod(
         computer: IComputerAccess?,
@@ -22,58 +42,62 @@ class ConnectorPeripheral(
         arguments: IArguments?,
     ): MethodResult {
         return when (method) {
-            0 -> {
+            CONNECT -> {
                 if (blockEntity.underCC) {
-                    if (!blockEntity.isConnected) {
-                        blockEntity.connectpass() // for now ya gonna have to either run connect in loop and wait for "trying to connect" or fire it perfectly as you hover above connector, could probably be fixed if we somehow apply redstone instead of calling it?
-                        return MethodResult.of("Trying to connect")
+                    return if (!blockEntity.isConnected) {
+                        blockEntity.connect()
+                        MethodResult.of("Trying to connect")
                     } else {
-                        return MethodResult.of("Already Connected")
+                        MethodResult.of("Already connected")
                     }
-                } else {
-                    return MethodResult.of("Connector is not under CC")
                 }
+                MethodResult.of("Connector is not under CC")
             }
-            1 -> {
+
+            DISCONNECT -> {
                 if (blockEntity.underCC) {
-                    if (blockEntity.isConnected) {
+                    return if (blockEntity.isConnected) {
                         blockEntity.disconnect()
+                        MethodResult.of("Disconnected")
                     } else {
-                        return MethodResult.of("Not Connected to anything")
+                        MethodResult.of("Not connected to anything")
                     }
-                } else {
-                    return MethodResult.of("Connector is not under CC")
                 }
-                return MethodResult.of(null)
+                MethodResult.of("Connector is not under CC")
             }
-            2 -> {
-                if (blockEntity.isConnected) {
-                    return MethodResult.of(true)
-                } else {
-                    MethodResult.of(false)
-                }
-                return MethodResult.of(null)
-            }
-            3 -> {
-                return MethodResult.of(blockEntity.conid)
-            }
-            4 -> {
+
+            IS_CONNECTED -> MethodResult.of(blockEntity.isConnected)
+
+            GET_ID -> MethodResult.of(blockEntity.conid)
+
+            ENABLE_CC -> {
                 blockEntity.underCC = true
-                return MethodResult.of(1)
+                MethodResult.of(true)
             }
-            5 -> {
+
+            DISABLE_CC -> {
                 blockEntity.underCC = false
-                return MethodResult.of(1)
+                MethodResult.of(true)
             }
-            else -> {
-                MethodResult.of(null)
-            }
+
+            else -> MethodResult.of(null)
         }
     }
 
-    override fun attach(computer: IComputerAccess) {}
+    fun emitEvent(
+        event: String,
+        vararg args: Any?,
+    ) {
+        attachedComputers.forEach { it.queueEvent(event, *args) }
+    }
 
-    override fun detach(computer: IComputerAccess) {}
+    override fun attach(computer: IComputerAccess) {
+        attachedComputers.add(computer)
+    }
+
+    override fun detach(computer: IComputerAccess) {
+        attachedComputers.remove(computer)
+    }
 
     override fun equals(other: IPeripheral?): Boolean = other is ConnectorPeripheral && other.blockEntity == this.blockEntity
 

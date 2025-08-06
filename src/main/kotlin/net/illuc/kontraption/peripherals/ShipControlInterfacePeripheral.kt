@@ -11,98 +11,111 @@ import net.illuc.kontraption.blockEntities.TileEntityShipControlInterface
 class ShipControlInterfacePeripheral(
     private val blockEntity: TileEntityShipControlInterface,
 ) : IDynamicPeripheral {
+    companion object {
+        private const val GET_ROTATION = 0
+        private const val GET_MOVEMENT = 1
+        private const val GET_POSITION = 2
+        private const val GET_WEIGHT = 3
+        private const val GET_SLUG = 4
+        private const val GET_VELOCITY = 5
+        private const val SET_MOVEMENT = 6
+        private const val SET_ROTATION = 7
+        private const val ROTATE_ALONG_AXIS = 8
+        private const val PRECISE_THRUST_IMPULSE = 9
+    }
+
+    private val attachedComputers = mutableSetOf<IComputerAccess>()
+
     override fun getType(): String = "ShipControlInterface"
 
-    public fun testingcc() { // Left bc i forgot to remove it and now im too lazy to change numbers :3
-    }
-
-    override fun getMethodNames(): Array<String> {
-        return arrayOf("testingcc", "getRotation", "getMovement", "getPosition", "getWeight", "getSlug", "getVelocity", "setMovement", "setRotation", "rotateAlongAxis", "preciseThrustImpulse") // remember to remove testing method before adding other fun
-    }
+    override fun getMethodNames(): Array<String> =
+        arrayOf(
+            "getRotation",
+            "getMovement",
+            "getPosition",
+            "getWeight",
+            "getSlug",
+            "getVelocity",
+            "setMovement",
+            "setRotation",
+            "rotateAlongAxis",
+            "preciseThrustImpulse",
+        )
 
     override fun callMethod(
         computer: IComputerAccess?,
         context: ILuaContext?,
         method: Int,
         arguments: IArguments?,
-    ): MethodResult {
-        return when (method) {
-            0 -> {
-                testingcc()
-                MethodResult.of("MF!!")
+    ): MethodResult =
+        when (method) {
+            GET_ROTATION -> MethodResult.of(blockEntity.getRotation())
+            GET_MOVEMENT -> MethodResult.of(blockEntity.getMovement())
+            GET_POSITION -> MethodResult.of(blockEntity.getPosition())
+            GET_WEIGHT -> MethodResult.of(blockEntity.getWeight())
+            GET_SLUG -> MethodResult.of(blockEntity.getSlug())
+            GET_VELOCITY -> MethodResult.of(blockEntity.getVelocity())
+            SET_MOVEMENT -> {
+                val (x, y, z) = getVec3(arguments, 3)
+                blockEntity.setMovement(x, y, z)
+                MethodResult.of(true)
             }
-            1 -> {
-                return MethodResult.of(blockEntity.getRotation())
-            }
-            2 -> {
-                return MethodResult.of(blockEntity.getMovement())
-            }
-            3 -> {
-                return MethodResult.of(blockEntity.getPosition())
-            }
-            4 -> {
-                return MethodResult.of(blockEntity.getWeight())
-            }
-            5 -> {
-                return MethodResult.of(blockEntity.getSlug())
-            }
-            6 -> {
-                return MethodResult.of(blockEntity.getVelocity())
-            }
-            7 -> {
-                if (arguments?.count() != 3) {
-                    throw LuaException("You must have 3 arguments.\n") // prob could be better
-                }
-                blockEntity.setMovement(
-                    arguments?.getFiniteDouble(0) ?: 0.0,
-                    arguments?.getFiniteDouble(1) ?: 0.0,
-                    arguments?.getFiniteDouble(2) ?: 0.0,
-                ) // AHH i love kotlin
-                return MethodResult.of(true)
-            }
-            8 -> {
-                if (arguments?.count() != 4) {
-                    throw LuaException("You must have 4 arguments.\n")
+            SET_ROTATION -> {
+                if (arguments == null || arguments.count() != 4) {
+                    throw LuaException("setRotation requires 4 arguments")
                 }
                 blockEntity.setRotation(
-                    arguments?.getFiniteDouble(0) ?: 0.0,
-                    arguments?.getFiniteDouble(1) ?: 0.0,
-                    arguments?.getFiniteDouble(2) ?: 0.0,
-                    arguments?.getFiniteDouble(3) ?: 0.0,
+                    arguments.getFiniteDouble(0),
+                    arguments.getFiniteDouble(1),
+                    arguments.getFiniteDouble(2),
+                    arguments.getFiniteDouble(3),
                 )
-                return MethodResult.of(true)
+                MethodResult.of(true)
             }
-            9 -> {
-                if (arguments?.count() != 3) {
-                    throw LuaException("You must have 3 arguments.\n")
-                }
-                blockEntity.rotateAlongAxis(
-                    arguments?.getFiniteDouble(0) ?: 0.0,
-                    arguments?.getFiniteDouble(1) ?: 0.0,
-                    arguments?.getFiniteDouble(2) ?: 0.0,
-                )
-                return MethodResult.of(true)
+            ROTATE_ALONG_AXIS -> {
+                val (x, y, z) = getVec3(arguments, 3)
+                blockEntity.rotateAlongAxis(x, y, z)
+                MethodResult.of(true)
             }
-            10 -> {
-                if (arguments?.count() != 3) {
-                    throw LuaException("You must have 3 arguments.\n")
-                }
-                blockEntity.preciseThrustImpulse(
-                    arguments?.getFiniteDouble(0) ?: 0.0,
-                    arguments?.getFiniteDouble(1) ?: 0.0,
-                    arguments?.getFiniteDouble(2) ?: 0.0,
-                )
-                return MethodResult.of(true)
+            PRECISE_THRUST_IMPULSE -> {
+                val (x, y, z) = getVec3(arguments, 3)
+                blockEntity.preciseThrustImpulse(x, y, z)
+                MethodResult.of(true)
             }
-            else -> MethodResult.of(null)
+            else -> throw LuaException("Invalid method index $method")
         }
+
+    override fun attach(computer: IComputerAccess) {
+        attachedComputers.add(computer)
     }
 
-    override fun attach(computer: IComputerAccess) {}
+    override fun detach(computer: IComputerAccess) {
+        attachedComputers.remove(computer)
+    }
 
-    override fun detach(computer: IComputerAccess) {}
+    fun emitEvent(
+        event: String,
+        vararg args: Any?,
+    ) {
+        attachedComputers.forEach { it.queueEvent(event, *args) }
+    }
 
     override fun equals(other: IPeripheral?): Boolean = other is ShipControlInterfacePeripheral && other.blockEntity == this.blockEntity
 
     override fun hashCode(): Int = blockEntity.hashCode()
+
+    private fun getVec3(
+        arguments: IArguments?,
+        expectedCount: Int,
+    ): Triple<Double, Double, Double> {
+        // maybe used smw else? CC INTERFACE CONFIRMED??
+        if (arguments == null || arguments.count() != expectedCount) {
+            throw LuaException("Expected $expectedCount arguments")
+        }
+        return Triple(
+            arguments.getFiniteDouble(0),
+            arguments.getFiniteDouble(1),
+            arguments.getFiniteDouble(2),
+        )
+    }
 }

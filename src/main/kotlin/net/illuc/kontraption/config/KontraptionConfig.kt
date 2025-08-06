@@ -22,17 +22,22 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
     val toolgunChargeRate: CachedFloatingLongValue
     val dampeningStrength: CachedDoubleValue
     val zeroGravity: CachedBooleanValue
+    val dampeningP: CachedDoubleValue
+    val dampeningI: CachedDoubleValue
+    val dampeningD: CachedDoubleValue
 
     init {
         val builder = ForgeConfigSpec.Builder()
         builder.comment("Kontraption Config. This config is synced between server and client.").push("kontraption")
-        builder.comment("Large Thrusters Config")
+
+        // Thrusters Config
+        builder.comment("Large Thrusters Config").push("thrusters")
         liquidFuelThrust =
             CachedDoubleValue.wrap(
                 this,
                 builder
                     .comment("How powerful the liquid fuel thruster is. (3x3)")
-                    .define("liquidFuelThrust", 90.0),
+                    .defineInRange("liquidFuelThrust", 90.0, 0.0, Double.MAX_VALUE),
             )
 
         liquidFuelConsumption =
@@ -40,7 +45,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
                 this,
                 builder
                     .comment("How much fuel does the liquid fuel thruster use")
-                    .define("liquidFuelConsumption", 30.0),
+                    .defineInRange("liquidFuelConsumption", 30.0, 0.0, Double.MAX_VALUE),
             )
 
         largeIonThrust =
@@ -48,23 +53,26 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
                 this,
                 builder
                     .comment("How powerful the large ion thruster is.")
-                    .define("largeionthrust", 900.0),
+                    .defineInRange("largeIonThrust", 900.0, 0.0, Double.MAX_VALUE),
             )
+
         largeIonEnergyConsumption =
             CachedDoubleValue.wrap(
                 this,
                 builder
                     .comment("How much energy does the large ion thruster use")
-                    .define("liquidFuelConsumption", 300.0),
+                    .defineInRange("largeIonEnergyConsumption", 300.0, 0.0, Double.MAX_VALUE),
             )
+        builder.pop()
 
-        builder.comment("Other stuff")
+        // Small Thrusters Config
+        builder.comment("Small Thrusters Config").push("small_thrusters")
         ionThrust =
             CachedDoubleValue.wrap(
                 this,
                 builder
                     .comment("How powerful the ion thruster is.")
-                    .define("ionThrust", 400.0),
+                    .defineInRange("ionThrust", 400.0, 0.0, Double.MAX_VALUE),
             )
 
         ionConsumption =
@@ -72,30 +80,82 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
                 this,
                 builder
                     .comment("How much energy does the ion thruster use.")
-                    .define("ionConsumption", 100.0),
+                    .defineInRange("ionConsumption", 100.0, 0.0, Double.MAX_VALUE),
             )
+        builder.pop()
 
+        // Gyro Config
+        builder.comment("Gyroscope Settings").push("gyro")
         gyroTorqueStrength =
             CachedDoubleValue.wrap(
                 this,
                 builder
                     .comment("How powerful the gyro is.")
-                    .define("gyroTorqueStrength", 100.0),
+                    .defineInRange("gyroTorqueStrength", 100.0, 0.0, Double.MAX_VALUE),
             )
+        builder.pop()
 
+        // Physics Settings
+        builder.comment("Physics Settings").push("physics")
         thrusterSpeedLimit =
             CachedDoubleValue.wrap(
                 this,
                 builder
                     .comment("At what speed the thruster starts slowing down")
-                    .define("thrusterSpeedLimit", 20.0),
+                    .defineInRange("thrusterSpeedLimit", 20.0, 0.0, Double.MAX_VALUE),
             )
 
+        dampeningStrength =
+            CachedDoubleValue.wrap(
+                this,
+                builder
+                    .comment("Base dampening strength (air resistance-like effect)")
+                    .defineInRange("dampeningStrength", 1.0, 0.0, Double.MAX_VALUE),
+            )
+
+        zeroGravity =
+            CachedBooleanValue.wrap(
+                this,
+                builder
+                    .comment("Turns the gravity off (only gets switched off after placing a gyro)")
+                    .define("zeroGravity", false),
+            )
+        builder.pop()
+
+        // PID Settings for Inertia Dampener
+        builder.comment("Inertia Dampener PID Settings").push("dampener")
+        dampeningP =
+            CachedDoubleValue.wrap(
+                this,
+                builder
+                    .comment("Proportional gain for inertia dampener - higher values make more aggressive corrections")
+                    .defineInRange("dampeningP", 1.0, 0.0, 10.0),
+            )
+
+        dampeningI =
+            CachedDoubleValue.wrap(
+                this,
+                builder
+                    .comment("Integral gain for inertia dampener - helps eliminate steady-state error")
+                    .defineInRange("dampeningI", 0.1, 0.0, 2.0),
+            )
+
+        dampeningD =
+            CachedDoubleValue.wrap(
+                this,
+                builder
+                    .comment("Derivative gain for inertia dampener - reduces overshoot and oscillation")
+                    .defineInRange("dampeningD", 0.5, 0.0, 5.0),
+            )
+        builder.pop()
+
+        // Toolgun Settings
+        builder.comment("Toolgun Settings").push("toolgun")
         toolgunActionConsumption =
             CachedFloatingLongValue.define(
                 this,
                 builder,
-                ("How much power does the toolgun consume when used"),
+                "How much power does the toolgun consume when used",
                 "toolgunActionConsumption",
                 FloatingLong.createConst(1000),
             )
@@ -104,7 +164,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
             CachedFloatingLongValue.define(
                 this,
                 builder,
-                ("How much power does the toolgun consume per block when assembling a ship (including air blocks!)"),
+                "How much power does the toolgun consume per block when assembling a ship (including air blocks!)",
                 "toolgunAssembleConsumption",
                 FloatingLong.createConst(1000),
             )
@@ -113,7 +173,7 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
             CachedFloatingLongValue.define(
                 this,
                 builder,
-                ("How much power does the toolgun store"),
+                "How much power does the toolgun store",
                 "toolgunStorage",
                 FloatingLong.createConst(20000000),
             )
@@ -122,26 +182,11 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
             CachedFloatingLongValue.define(
                 this,
                 builder,
-                ("How fast does the toolgun charge"),
+                "How fast does the toolgun charge",
                 "toolgunChargeRate",
                 FloatingLong.createConst(100000),
             )
-
-        dampeningStrength =
-            CachedDoubleValue.wrap(
-                this,
-                builder
-                    .comment("How strong the dampening is")
-                    .define("dampeningAmount", 1.0),
-            )
-
-        zeroGravity =
-            CachedBooleanValue.wrap(
-                this,
-                builder
-                    .comment("Turns the gravity off (only gets swithced off after placing a gyro)")
-                    .define("zeroGravity", false),
-            )
+        builder.pop() // HUH i was wondering how ya do that fancy config :P
 
         configSpec = builder.build()
     }
@@ -151,13 +196,4 @@ class KontraptionConfig internal constructor() : BaseMekanismConfig() {
     override fun getConfigSpec(): ForgeConfigSpec = configSpec
 
     override fun getConfigType(): Type = Type.SERVER
-
-    companion object {
-        /*private const val TURBINE_CATEGORY = "turbine"
-        private const val WIND_CATEGORY = "wind_generator"
-        private const val HEAT_CATEGORY = "heat_generator"
-        private const val HOHLRAUM_CATEGORY = "hohlraum"
-        private const val FUSION_CATEGORY = "fusion_reactor"
-        private const val FISSION_CATEGORY = "fission_reactor"*/
-    }
 }

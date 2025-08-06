@@ -40,6 +40,6 @@ class LargeIonRingController(
 
     override fun load(tag: CompoundTag) {
         super.load(tag)
-        multiblockController.get().addToShip()
+        multiblockController.ifPresent { it.addToShip() }
     }
 }
