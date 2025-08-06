@@ -38,9 +38,13 @@
   "toolgun.kontraption.second_pos_selected": "已选择第二个位置",
   "toolgun.kontraption.pos_on_ship": "所选位置处于物理结构上！",
   "toolgun.kontraption.assembly_successful": "组装成功！",
+  "toolgun.kontraption.assembly_failed": "组装失败！没有足够的能量， ",
+  "toolgun.kontraption.energy_req": " 需要但是只有 ",
   "toolgun.kontraption.selected_ship": "已选择物理结构！",
   "toolgun.kontraption.ship_not_found": "请指向一个物理结构并重试",
   "toolgun.kontraption.moving_successful": "物理结构移动成功！",
+  "toolgun.kontraption.move_failed": "移动失败！没有足够的能量， ",
+  "toolgun.kontraption.cant_move_on_ship": "请不要将工具枪对准物理结构！",
 
   "category.kontraption.ship_controls": "精致机械 物理结构控制",
   "key.kontraption.down": "下降",
@@ -55,6 +59,7 @@
   "chat.kontraption.testing_build": "这是精致机械的测试版本\n不适用于正常游戏！\n可能会遇到恶性漏洞、\n功能缺失和占位用的资源！\n请将发现的任何漏洞报告至问题追踪器！\nhttps://github.com/illucc/Kontraption/issues",
   "chat.kontraption.titleborder": "===========[精致机械]===========",
   "chat.kontraption.border":      "=================================",
+  "chat.kontraption.work_in_progress": "此功能仍在开发中 qwq",
 
   "itemGroup.kontraption": "精致机械",
 
