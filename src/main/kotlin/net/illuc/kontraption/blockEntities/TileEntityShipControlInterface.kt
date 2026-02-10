@@ -39,7 +39,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.fml.ModList
-import net.minecraftforge.network.NetworkHooks
+import net.minecraftforge.network.NetworkHooks     
 import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.joml.Vector3dc
@@ -142,8 +142,20 @@ class TileEntityShipControlInterface(
                         seatedControllingPlayer!!.upImpulse.coerceIn(-1.0, 1.0),
                         seatedControllingPlayer!!.leftImpulse.coerceIn(-1.0, 1.0),
                     )
-                // I had a stroke reading this line. also frick lint
-                velTarget.set(f, u, l)
+                // Transform input based on block facing direction and ship rotation
+                val facing = this.direction
+                val forwardDir = facing.opposite.normal.toJOMLD()
+                val leftDir = facing.counterClockWise.normal.toJOMLD()
+
+                // Calculate ship velocity target
+                val shipLocalX = forwardDir.x() * f + leftDir.x() * l
+                val shipLocalZ = forwardDir.z() * f + leftDir.z() * l
+                val shipLocalVelocity = Vector3d(shipLocalX, u, shipLocalZ)
+
+                // Transform from local to world coordinates using the ship rotation
+                val shipTransform = ship.transform
+                val worldVelocity = shipTransform.shipToWorld.transformDirection(shipLocalVelocity, Vector3d())
+                velTarget.set(worldVelocity)
                 if (seatedControllingPlayer!!.openConfig) {
                     val player = entity.controllingPassenger as ServerPlayer
                     val configBlocks = getConfigBlocks()
