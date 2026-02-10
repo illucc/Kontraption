@@ -192,10 +192,6 @@ repositories {
         name = "Valkyrien Skies Internal"
         url = 'https://maven.valkyrienskies.org'
     }
-    maven {
-       name "zerocore"//MF IS DEAD
-        url "https://maven.zerono.it/"
-    }
 
 
 }
@@ -208,8 +204,7 @@ dependencies {
 
 
     //ZEROCORE
-    compileOnly group: "it.zerono.mods.zerocore", name: "ZeroCore2", version: "1.20.1-2.1.47"
-    implementation 'it.zerono.mods.zerocore:ZeroCore2:1.20.1-2.1.47'
+    implementation fg.deobf("curse.maven:zerocore-247921:7344725")
 
     implementation         ("org.valkyrienskies.core:api:${vs_core_version}")
     implementation         ("org.valkyrienskies.core:impl:${vs_core_version}")
